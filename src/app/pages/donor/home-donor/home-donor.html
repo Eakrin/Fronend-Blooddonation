@@ -1,0 +1,86 @@
+<div class="donor-container">
+
+  <!-- HERO -->
+  <div class="hero">
+
+    <div class="hero-left">
+
+      <h1>
+        สวัสดีคุณ {{userName}}
+        <br>
+        <span>พร้อมที่จะส่งต่อโลหิต เพื่อช่วยชีวิตผู้อื่นแล้วหรือยัง?</span>
+      </h1>
+
+      <p>
+        การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน
+      </p>
+
+      <button class="btn-donate" routerLink="/booking">
+        จองคิวบริจาคโลหิต
+      </button>
+    </div>
+
+    <div class="hero-right">
+      <img src="assets/blood.png">
+    </div>
+
+  </div>
+
+  <!-- GRID -->
+  <div class="dashboard-grid">
+
+    <!-- นัดหมาย -->
+    <div class="card">
+
+      <h3>การนัดหมายที่กำลังจะมาถึง</h3>
+
+      <div class="empty-box">
+        <p>ยังไม่มีการจองคิวในขณะนี้</p>
+        <span>เริ่มจองครั้งแรกของคุณเลย</span>
+      </div>
+
+    </div>
+
+    <!-- สุขภาพ -->
+    <div class="card">
+
+      <h3>ผลการประเมินสุขภาพล่าสุด</h3>
+
+      <div class="status">
+        ✔ ร่างกายพร้อมสำหรับการบริจาค
+      </div>
+
+      <div class="health-grid">
+
+        <div class="health-box">
+          <p>ความดันโลหิต</p>
+          <h4>{{bloodPressure}}</h4>
+        </div>
+
+        <div class="health-box">
+          <p>ค่า Hemoglobin</p>
+          <h4>{{hemoglobin}}</h4>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TIP -->
+  <div class="tip">
+
+    <div>
+      <h3>เตรียมตัวก่อนบริจาคโลหิต</h3>
+      <p>
+        ดื่มน้ำมาก ๆ อย่างน้อย 3-4 แก้ว และนอนหลับพักผ่อนให้เพียงพอ
+        ไม่น้อยกว่า 5 ชั่วโมงก่อนการบริจาค
+      </p>
+    </div>
+
+    <button>อ่านเพิ่มเติม</button>
+
+  </div>
+
+</div>

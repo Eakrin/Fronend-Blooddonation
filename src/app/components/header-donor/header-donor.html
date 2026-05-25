@@ -1,0 +1,43 @@
+<header class="header">
+  <div class="container">
+
+    <div class="logo">
+      <img src="assets/logo.png">
+      <div>
+        <h3>สุทธาเวช</h3>
+        <span>SUTTAVEJ BLOOD CENTER</span>
+      </div>
+    </div>
+
+    <nav class="menu">
+      <a routerLink="/home-donor">หน้าหลัก</a>
+      <a routerLink="/booking">บริจาคโลหิต</a>
+      <a routerLink="/location">สถานที่บริจาค</a>
+      <a routerLink="/location">ประวัติ</a>
+      <a routerLink="/contact">ติดต่อเรา</a>
+    </nav>
+
+    <div class="user-info">
+      <div class="user-text">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-role">ผู้บริจาคโลหิต</span>
+      </div>
+      <div class="avatar" (click)="toggleDropdown()">
+        <span>{{ userName.charAt(0) }}</span>
+      </div>
+
+      <!-- Dropdown -->
+      <div class="dropdown" *ngIf="showDropdown">
+        <div class="dropdown-item" (click)="goToProfile()">
+          👤 โปรไฟล์
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item logout" (click)="logout()">
+          🚪 ออกจากระบบ
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</header>

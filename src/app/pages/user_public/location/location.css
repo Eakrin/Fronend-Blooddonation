@@ -1,0 +1,208 @@
+.location-container{
+padding:40px 10%;
+background:#f6f8fb;
+font-family:"Prompt",sans-serif;
+}
+
+/* breadcrumb */
+
+.breadcrumb{
+color:#888;
+font-size:14px;
+margin-bottom:10px;
+}
+
+/* title */
+
+.location-container h1{
+font-size:36px;
+margin-bottom:10px;
+color:#1f2937;
+}
+
+.subtitle{
+color:#6b7280;
+margin-bottom:30px;
+}
+
+/* search */
+
+.search-box{
+display:flex;
+gap:15px;
+margin-bottom:35px;
+}
+
+.search-box input,
+.search-box select{
+padding:14px 16px;
+border-radius:10px;
+border:1px solid #e2e8f0;
+font-size:15px;
+flex:1;
+background:white;
+}
+
+.search-box input:focus,
+.search-box select:focus{
+outline:none;
+border-color:#6b8e63;
+box-shadow:0 0 0 2px rgba(107,142,99,0.15);
+}
+
+/* location card */
+
+.location-card{
+display:flex;
+align-items:center;
+background:white;
+border-radius:16px;
+padding:18px;
+margin-bottom:20px;
+box-shadow:0 6px 20px rgba(0,0,0,0.06);
+transition:0.3s;
+}
+
+.location-card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.location-card img{
+width:200px;
+height:140px;
+object-fit:cover;
+border-radius:12px;
+margin-right:20px;
+}
+
+.location-info{
+flex:1;
+}
+
+.location-info h3{
+font-size:20px;
+margin-bottom:6px;
+}
+
+.address{
+color:#6b7280;
+font-size:14px;
+margin-bottom:10px;
+}
+
+.meta span{
+margin-right:20px;
+font-size:14px;
+color:#555;
+}
+
+/* booking */
+
+.booking{
+text-align:right;
+}
+
+.booking p{
+margin-bottom:10px;
+color:#666;
+}
+
+.btn-book{
+background:#6b8e63;
+border:none;
+color:white;
+padding:12px 24px;
+border-radius:30px;
+font-size:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.btn-book:hover{
+background:#5a7a52;
+}
+
+/* table */
+
+.table-title{
+margin:50px 0 20px;
+font-size:26px;
+}
+
+.schedule{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+.schedule th{
+background:#f3f4f6;
+padding:14px;
+text-align:left;
+font-size:14px;
+color:#555;
+}
+
+.schedule td{
+padding:14px;
+border-top:1px solid #eee;
+font-size:14px;
+}
+
+/* status */
+
+.status-open{
+color:#16a34a;
+font-weight:600;
+}
+
+.status-full{
+color:#ef4444;
+font-weight:600;
+}
+
+/* contact box */
+
+.contact-box{
+margin-top:60px;
+background:#eef3ea;
+border-radius:20px;
+padding:50px;
+text-align:center;
+}
+
+.contact-box h2{
+margin-bottom:10px;
+}
+
+.contact-box p{
+color:#555;
+margin-bottom:25px;
+}
+
+.contact-btns{
+display:flex;
+justify-content:center;
+gap:15px;
+}
+
+.btn-main{
+background:#6b8e63;
+border:none;
+padding:14px 26px;
+color:white;
+border-radius:30px;
+cursor:pointer;
+}
+
+.btn-outline{
+border:1px solid #ccc;
+background:white;
+padding:14px 26px;
+border-radius:30px;
+cursor:pointer;
+}

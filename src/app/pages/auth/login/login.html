@@ -1,0 +1,83 @@
+<div class="login-container">
+
+  <!-- ฝั่งซ้าย -->
+  <div class="left">
+
+    <div class="welcome">
+      <p class="badge">โครงการบริจาคโลหิตออนไลน์</p>
+
+      <h1>
+        ยินดีต้อนรับสู่ <br>
+        <span>สุทธาเวช</span>
+      </h1>
+
+      <p class="desc">
+        การบริจาคของคุณช่วยต่อชีวิตผู้ป่วย
+        มาร่วมเป็นส่วนหนึ่งในการให้ที่ยิ่งใหญ่
+      </p>
+
+      <div class="stats">
+        <div class="box">
+          <h3>1,200+</h3>
+          <p>ผู้บริจาคในเดือนนี้</p>
+        </div>
+
+        <div class="box">
+          <h3>24/7</h3>
+          <p>จองคิวได้ตลอดเวลา</p>
+        </div>
+      </div>
+
+      <img src="assets/blood.png" class="blood-img">
+
+    </div>
+
+  </div>
+
+
+  <!-- ฝั่งขวา -->
+  <div class="right">
+
+    <div class="login-box">
+
+      <h2>เข้าสู่ระบบ</h2>
+
+      <p>กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
+
+<input
+  type="email"
+  placeholder="example@email.com"
+  [(ngModel)]="email"
+>
+
+      <input
+        type="password"
+        placeholder="อย่างน้อย 8 ตัวอักษร"
+        [(ngModel)]="password"
+      >
+
+<button
+  class="login-btn"
+  (click)="login()"
+>
+  เข้าสู่ระบบตอนนี้
+</button>
+
+      <div class="divider">
+        หรือสมัครด้วย
+      </div>
+
+      <button class="google-btn">
+        สมัครด้วย Google Account
+      </button>
+
+      <p class="register">
+        ยังไม่มีบัญชี?
+        <span routerLink="/register">สมัครสมาชิก</span>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

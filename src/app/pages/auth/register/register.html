@@ -1,0 +1,112 @@
+<div class="register-page">
+
+  <!-- ฝั่งซ้าย -->
+  <div class="left">
+
+    <div class="welcome">
+      <span class="badge">โครงการบริจาคโลหิตออนไลน์</span>
+
+      <h1>
+        ยินดีต้อนรับสู่ <br>
+        <span class="brand">สุทธาเวช</span>
+      </h1>
+
+      <p>
+        การบริจาคของคุณช่วยต่อชีวิตผู้ป่วย
+        มาร่วมเป็นส่วนหนึ่งในการให้ที่ยิ่งใหญ่ผ่านแพลตฟอร์มที่ทันสมัย
+        และปลอดภัย
+      </p>
+
+      <div class="stats">
+        <div class="box">
+          <h3>1,200+</h3>
+          <span>ผู้บริจาคในเดือนนี้</span>
+        </div>
+
+        <div class="box">
+          <h3>24/7</h3>
+          <span>จองคิวได้ตลอดเวลา</span>
+        </div>
+      </div>
+
+      <img src="assets/blood.png" class="blood-img">
+
+    </div>
+
+  </div>
+
+
+  <!-- ฝั่งขวา -->
+  <div class="right">
+
+    <div class="form">
+
+      <h2>สร้างบัญชีผู้บริจาค</h2>
+      <p class="subtitle">
+        กรุณากรอกข้อมูลเพื่อเริ่มต้นการจองคิวและบันทึกประวัติการบริจาค
+      </p>
+
+      <div class="upload">
+        <div class="circle">
+          <span>+</span>
+        </div>
+        <p>คลิกเพื่ออัปโหลด</p>
+      </div>
+
+      <div class="row">
+        <input type="text" placeholder="ชื่อจริง" [(ngModel)]="name">
+        <input type="text" placeholder="นามสกุล" [(ngModel)]="lastname">
+      </div>
+
+      <div class="row">
+        <select [(ngModel)]="blood_type">
+          <option value="">เลือกหมู่โลหิต</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="AB">AB</option>
+          <option value="O">O</option>
+        </select>
+
+        <input type="text" placeholder="08x-xxx-xxxx" [(ngModel)]="phone">
+      </div>
+
+      <div class="row">
+        <input type="number" placeholder="น้ำหนัก (กก.)" [(ngModel)]="weight">
+        <input type="number" placeholder="ส่วนสูง (ซม.)" [(ngModel)]="height">
+      </div>
+
+      <input type="date" [(ngModel)]="birthday">
+
+      <input type="email" placeholder="example@email.com" [(ngModel)]="email">
+
+      <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
+
+      <select [(ngModel)]="gender">
+        <option value="">เลือกเพศ</option>
+        <option value="male">ชาย</option>
+        <option value="female">หญิง</option>
+        <option value="other">อื่นๆ</option>
+      </select>
+
+      <button class="register-btn" (click)="register()">
+        ลงทะเบียนตอนนี้
+      </button>
+
+      <div class="or">
+        หรือสมัครด้วย
+      </div>
+
+      <button class="google">
+        สมัครด้วย Google Account
+      </button>
+
+      <p class="login">
+        มีบัญชีอยู่แล้ว?
+        <span routerLink="/login">เข้าสู่ระบบ</span>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
