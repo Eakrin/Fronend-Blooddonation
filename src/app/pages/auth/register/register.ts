@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './register.css',
 })
 export class Register {
-
   name = '';
   lastname = '';
   email = '';
@@ -22,7 +21,22 @@ export class Register {
   weight = '';
   height = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  // สถานะโหมดสายตา (เริ่มต้นสว่าง = false)
+  isDarkMode = false;
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }
 
   register() {
     const data = {
@@ -35,18 +49,17 @@ export class Register {
       birthday: this.birthday,
       gender: this.gender,
       weight: this.weight,
-      height: this.height
+      height: this.height,
     };
 
-    this.http.post('http://localhost:3000/register', data)
-      .subscribe({
-        next: (res: any) => {
-          alert('สมัครสมาชิกสำเร็จ!');
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          alert(err.error.message);
-        }
-      });
+    this.http.post('http://localhost:3000/api/auth/register', data).subscribe({
+      next: (res: any) => {
+        alert('สมัครสมาชิกสำเร็จ!');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        alert(err.error.message);
+      },
+    });
   }
 }

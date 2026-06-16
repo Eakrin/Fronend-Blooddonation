@@ -1,127 +1,256 @@
-.login-container{
-display:flex;
-height:100vh;
+/* --- Base Page Layout --- */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Kanit', 'Sarabun', sans-serif;
+  background-color: #fcefee; /* พื้นหลังชมพูอ่อนรอบนอก */
+  box-sizing: border-box;
 }
 
-/* ซ้าย */
-
-.left{
-flex:1;
-background:#dbe8e1;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:40px;
+/* --- ฝั่งซ้าย (Welcome Banner เหมือนหน้า Register) --- */
+.left {
+  flex: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  background: #f8f9fa; /* สีพื้นหลังการ์ดซ้าย */
+  border-radius: 0 30px 30px 0;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.03);
 }
 
-.welcome{
-max-width:450px;
+.welcome {
+  max-width: 500px;
+  position: relative;
 }
 
-.badge{
-background:#cfe0d8;
-display:inline-block;
-padding:6px 12px;
-border-radius:20px;
-font-size:12px;
-margin-bottom:20px;
+.badge {
+  background-color: #eed6d6;
+  color: #a83232;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 24px;
 }
 
-h1{
-font-size:36px;
-margin-bottom:10px;
+h1 {
+  font-size: 42px;
+  color: #333;
+  line-height: 1.3;
+  margin: 0 0 16px 0;
+  font-weight: 700;
 }
 
-h1 span{
-color:#e74c3c;
+h1 span {
+  color: #611717; /* สีแดงเข้มสุทธาเวช */
 }
 
-.desc{
-color:#555;
-margin-bottom:30px;
+.desc {
+  color: #666;
+  line-height: 1.6;
+  font-size: 16px;
+  margin-bottom: 30px;
 }
 
-.stats{
-display:flex;
-gap:20px;
-margin-bottom:30px;
+/* กล่องสถิติ */
+.stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-.box{
-background:white;
-padding:15px;
-border-radius:10px;
-width:150px;
+.stats .box {
+  border: 2px solid #611717;
+  border-radius: 12px;
+  padding: 15px 25px;
+  min-width: 120px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.7);
 }
 
-.blood-img{
-width:280px;
-margin-top:20px;
+.stats .box h3 {
+  margin: 0 0 5px 0;
+  font-size: 26px;
+  color: #333;
+  font-weight: 700;
+}
+
+.stats .box p {
+  margin: 0;
+  font-size: 12px;
+  color: #777;
+}
+
+/* รูปเม็ดเลือดแดงลอยด้านขวา */
+.blood-img {
+  position: absolute;
+  right: -80px;
+  top: 30%;
+  width: 250px;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 1;
 }
 
 
-/* ขวา */
-
-.right{
-flex:1;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#f5f5f5;
+/* --- ฝั่งขวา (Login Form) --- */
+.right {
+  flex: 1;
+  background: linear-gradient(135deg, #a82929 0%, #4a0d0d 100%); /* แดงไล่เฉด */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
 }
 
-.login-box{
-width:350px;
+.login-box {
+  background: rgba(255, 255, 255, 0.85); /* กระจกโปร่งแสง */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px 35px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.login-box h2{
-margin-bottom:5px;
+.login-box h2 {
+  color: #333;
+  font-size: 26px;
+  margin: 0 0 8px 0;
+  text-align: center;
+  font-weight: 600;
 }
 
-.login-box p{
-color:#666;
-margin-bottom:20px;
+.sub {
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-input{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border-radius:8px;
-border:1px solid #ccc;
+/* Input Groups */
+.input-group {
+  margin-bottom: 16px;
 }
 
-.login-btn{
-width:100%;
-padding:12px;
-background:#e74c3c;
-color:white;
-border:none;
-border-radius:8px;
-font-weight:bold;
-margin-bottom:20px;
+.input-group input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
-.divider{
-text-align:center;
-margin:15px 0;
-color:#999;
+.input-group input:focus {
+  border-color: #a82929;
+  box-shadow: 0 0 0 3px rgba(168, 41, 41, 0.15);
 }
 
-.google-btn{
-width:100%;
-padding:12px;
-border-radius:8px;
-border:1px solid #ccc;
-background:white;
+/* ปุ่มเข้าสู่ระบบ */
+.login-btn {
+  width: 100%;
+  background: #500a0a;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
 }
 
-.register{
-text-align:center;
-margin-top:15px;
+.login-btn:hover {
+  background: #380707;
 }
 
-.register span{
-color:#e74c3c;
-cursor:pointer;
+/* เส้นคั่น "หรือ" (Divider) */
+.divider {
+  text-align: center;
+  margin: 24px 0;
+  font-size: 13px;
+  color: #777;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ccc;
+}
+
+/* ปุ่ม Google Account */
+.google-btn {
+  width: 100%;
+  background: #380707;
+  color: white;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.google-btn:hover {
+  background: #240404;
+}
+
+/* ลิงก์ไปหน้าสมัครสมาชิกด้านล่าง */
+.register {
+  text-align: center;
+  margin-top: 25px;
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.register span {
+  color: #a82929;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+
+/* --- Responsive สําหรับมือถือ --- */
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+  }
+  .left {
+    border-radius: 0;
+    padding: 30px 20px;
+  }
+  .blood-img {
+    display: none; /* ซ่อนรูปบนจอมือถือ */
+  }
+  .right {
+    padding: 20px 15px;
+  }
+  .login-box {
+    padding: 30px 20px;
+  }
 }

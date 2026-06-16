@@ -10,38 +10,76 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.css',
 })
 export class Login {
-
   email = '';
   password = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   login() {
     const data = {
       email: this.email,
-      password: this.password
+      password: this.password,
     };
 
-    this.http.post('http://localhost:3000/login', data)
-      .subscribe({
-        next: (res: any) => {
-          // เก็บ Token ไว้ใน localStorage
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('user', JSON.stringify({
-  id: res.user.id,
-  name: res.user.name,
-  lastname: res.user.lastname,
-  email: res.user.email,
-  blood_type: res.user.blood_type
-}));
+    this.http.post('http://localhost:3000/api/auth/login', data).subscribe({
+      next: (res: any) => {
+        const role = res.role;
+        const backendUser = res.user || {};
 
-          alert('เข้าสู่ระบบสำเร็จ!');
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('role', role);
+
+        if (role === 'donor') {
+          const userPayload = {
+            id: backendUser.id,
+            name: backendUser.name || '',
+            lastname: backendUser.lastname || '',
+            email: backendUser.email || '',
+            phone: backendUser.phone || '',
+            gender: backendUser.gender || '',
+            blood_type: backendUser.blood_type || '',
+            birthday: backendUser.birthday || '',
+            weight:
+              backendUser.weight !== undefined && backendUser.weight !== null
+                ? backendUser.weight
+                : '',
+            height:
+              backendUser.height !== undefined && backendUser.height !== null
+                ? backendUser.height
+                : '',
+            profile: backendUser.profile || null,
+          };
+          localStorage.setItem('user', JSON.stringify(userPayload));
           this.router.navigate(['/home-donor']);
-        },
-        error: (err) => {
-          alert(err.error.message);
+        } else if (role === 'staff') {
+          const staffPayload = {
+            id: backendUser.id,
+            name: backendUser.name || '',
+            lastname: backendUser.lastname || '',
+            email: backendUser.email || '',
+            phone: backendUser.phone || '',
+            role: backendUser.role || 'staff',
+            status: backendUser.status || 'active',
+          };
+          localStorage.setItem('user', JSON.stringify(staffPayload));
+          this.router.navigate(['/home-staff']);
+        } else if (role === 'admin') {
+          const adminPayload = {
+            id: backendUser.id,
+            name: backendUser.name || '',
+            email: backendUser.email || '',
+            phone: backendUser.phone || '',
+          };
+          localStorage.setItem('user', JSON.stringify(adminPayload));
+          this.router.navigate(['/home-admin']);
         }
-      });
+      },
+      error: (err) => {
+        alert(err.error.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
+      },
+    });
   }
-
 }

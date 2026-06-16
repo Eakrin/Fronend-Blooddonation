@@ -11,10 +11,10 @@
 
     <nav class="menu">
       <a routerLink="/home-donor">หน้าหลัก</a>
-      <a routerLink="/booking">บริจาคโลหิต</a>
+      <a routerLink="/assessment-quiz">บริจาคโลหิต</a>
       <a routerLink="/location">สถานที่บริจาค</a>
       <a routerLink="/location">ประวัติ</a>
-      <a routerLink="/contact">ติดต่อเรา</a>
+
     </nav>
 
     <div class="user-info">
@@ -28,7 +28,7 @@
 
       <!-- Dropdown -->
       <div class="dropdown" *ngIf="showDropdown">
-        <div class="dropdown-item" (click)="goToProfile()">
+        <div class="dropdown-item" routerLink="/edit-profile">
           👤 โปรไฟล์
         </div>
         <div class="dropdown-divider"></div>

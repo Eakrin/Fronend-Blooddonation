@@ -1,77 +1,201 @@
-.header{
-  width:100%;
-  background:#ffffff;
-  border-bottom:1px solid #eee;
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  /* กลับไปธีมแดงแบบต้นฉบับ */
+  background: #c62828;
+  backdrop-filter: none;
+
+  border-bottom: none;
+  box-shadow: none;
 }
 
-.container{
-  width:100%;
-  margin:0;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:15px 40px;
-  box-sizing:border-box;
+.container {
+  width: 100%;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 15px 40px;
+  box-sizing: border-box;
 }
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.logo img{
-  width:35px;
+.logo img {
+  width: 35px;
 }
 
-.logo h3{
-  margin:0;
-  font-size:16px;
+.logo h3 {
+  margin: 0;
+  font-size: 16px;
+  color: white;
+  font-weight: 600;
 }
 
-.logo span{
-  font-size:11px;
-  color:gray;
+.logo span {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
 }
 
-.menu{
-  display:flex;
-  gap:30px;
+/* MENU */
+.menu {
+  display: flex;
+  gap: 30px;
 }
 
-.menu a{
-  text-decoration:none;
-  color:#333;
-  font-weight:500;
+.menu a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  position: relative;
+  transition: 0.2s ease;
 }
 
-.menu a:hover{
-  color:#c62828;
+/* hover แบบเรียบ (ตามต้นฉบับ) */
+.menu a:hover {
+  color: rgba(255,255,255,0.7);
+  transform: none;
 }
 
-.login button{
-  padding:8px 18px;
-  border:1px solid #7aa27a;
-  background:white;
-  border-radius:6px;
-  color:#4a6f4a;
-  cursor:pointer;
+/* ลบ underline animation ออกให้ตรงต้นฉบับ */
+.menu a::after {
+  display: none;
 }
 
-.login button:hover{
-  background:#e8f5e9;
+/* USER INFO */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  position: relative;
 }
 
-/* responsive */
+.user-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 
-@media (max-width:768px){
+.user-name {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
 
-  .container{
-    padding:12px 16px;
+.user-role {
+  color: rgba(255,255,255,0.7);
+  font-size: 11px;
+}
+
+/* AVATAR */
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+
+  background: white;
+  color: #c62828;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 16px;
+
+  transition: 0.2s ease;
+}
+
+.avatar:hover {
+  background: rgba(255,255,255,0.8);
+}
+
+/* DROPDOWN */
+.dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+
+  min-width: 160px;
+  z-index: 999;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-item.logout {
+  color: #c62828;
+}
+
+.dropdown-item.logout:hover {
+  background: #ffebee;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #eee;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    padding: 12px 16px;
   }
 
-  .menu{
-    display:none;
+  .menu {
+    display: none;
   }
+}
+.login button {
+  padding: 9px 18px;
 
+  border-radius: 12px;
+  border: none;
+
+  cursor: pointer;
+
+  background: white;
+  color: #c62828;
+
+  font-weight: 600;
+  font-size: 14px;
+
+  transition: 0.25s ease;
+}
+
+/* hover */
+.login button:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* click */
+.login button:active {
+  transform: scale(0.97);
 }

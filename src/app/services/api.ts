@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
-  private api = 'http://localhost:3000';
+  private api = 'http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
@@ -21,16 +20,16 @@ export class AuthService {
   createBooking(data: any, token: string) {
     return this.http.post(`${this.api}/booking`, data, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
   getBooking(token: string) {
     return this.http.get(`${this.api}/booking`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 

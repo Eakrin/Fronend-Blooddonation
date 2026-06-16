@@ -1,0 +1,471 @@
+/* ==========================================================================
+   1. คอนเทนเนอร์หลักและส่วนหัวข้อ (Layout & Header)
+   ========================================================================== */
+.assessment-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333333;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.page-header h2 {
+  color: #bd2130; /* สีแดงสภากาชาด */
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.page-header .subtitle {
+  color: #666;
+  font-size: 15px;
+}
+
+/* ==========================================================================
+   2. การ์ดแบบประเมินและแถบความคืบหน้า (Card & Progress Bar)
+   ========================================================================== */
+.assessment-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  margin-bottom: 25px;
+}
+
+.progress-section {
+  margin-bottom: 30px;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.step-label {
+  font-weight: bold;
+  color: #bd2130;
+}
+
+.step-title {
+  color: #495057;
+  font-weight: 500;
+}
+
+.percent-label {
+  color: #6c757d;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #dc3545;
+  transition: width 0.3s ease;
+}
+
+/* ==========================================================================
+   3. ส่วนกรอกประวัติการบริจาค (Step 0)
+   ========================================================================== */
+.section-divider-title {
+  font-size: 18px;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group-box {
+  margin-bottom: 20px;
+}
+
+.form-main-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.font-bold-text {
+  font-weight: bold;
+}
+
+/* ส่วนขยายย่อยเวลาเลือกตัวเลือกที่มีเงื่อนไข */
+.sub-form-box {
+  background: #fff5f5;
+  border-left: 4px solid #dc3545;
+  padding: 15px;
+  border-radius: 0 8px 8px 0;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+/* การจัดกลุ่ม Radio และ Checkbox */
+.radio-group-horizontal {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radio-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.radio-item, .check-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.radio-item input, .check-item input {
+  margin-right: 8px;
+  width: 18px;
+  height: 18px;
+  accent-color: #dc3545;
+}
+
+/* ช่องพิมพ์ข้อความแบบขีดเส้นใต้ */
+.flex-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.text-underline-input {
+  border: none;
+  border-bottom: 1px solid #ced4da;
+  padding: 2px 5px;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+  flex: 1;
+}
+
+.text-underline-input:focus {
+  border-bottom: 2px solid #dc3545;
+}
+
+/* ==========================================================================
+   4. ส่วนรายการข้อคำถาม (Step 1, 2, 3)
+   ========================================================================== */
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.question-item {
+  border-bottom: 1px solid #f1f3f5;
+  padding-bottom: 20px;
+}
+
+.question-text {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.q-number {
+  background: #e9ecef;
+  color: #495057;
+  font-weight: bold;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.question-text p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* ปุ่มตอบ ใช่ / ไม่ใช่ และตัวเลือกพิเศษข้อ 13 */
+.answer-options {
+  display: flex;
+  gap: 15px;
+  padding-left: 40px;
+}
+
+.checkbox-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 40px;
+  background: #fdf2f2;
+  padding: 15px 15px 15px 40px;
+  border-radius: 8px;
+}
+
+.opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.opt-btn.outline {
+  background: #ffffff;
+  border: 2px solid #dee2e6;
+  color: #495057;
+}
+
+.opt-btn.outline:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* สถานะเมื่อกดเลือกตอบ */
+.active-yes {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.active-no {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+/* ปุ่มควบคุม ย้อนกลับ-ถัดไป ด้านล่าง */
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+
+.btn-back, .btn-next {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-back {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.btn-back:disabled {
+  background: #f1f3f5;
+  color: #ced4da;
+  cursor: not-allowed;
+}
+
+.btn-next {
+  background: #bd2130;
+  color: #ffffff;
+}
+
+.btn-next:hover:not(:disabled) {
+  background: #9c1a25;
+}
+
+.arrow {
+  font-size: 18px;
+}
+
+/* ==========================================================================
+   5. หน้าจอสรุปผลลัพธ์การประเมิน (Step 4 - จบในหน้าเดียว)
+   ========================================================================== */
+.result-container {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.result-box {
+  padding: 40px 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+/* กรณีประเมินผ่านเกณฑ์ (กล่องสีเขียว) */
+.result-box.pass {
+  background-color: #ebfbee;
+  border: 2px solid #28a745;
+  color: #1e7e34;
+}
+.result-box.pass .result-icon-circle {
+  background-color: #28a745;
+}
+
+/* กรณีไม่ผ่านเกณฑ์ (กล่องสีแดง) */
+.result-box.fail {
+  background-color: #fff5f5;
+  border: 2px solid #dc3545;
+  color: #bd2130;
+}
+.result-box.fail .result-icon-circle {
+  background-color: #dc3545;
+}
+
+.result-icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  color: white;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.fail-notice {
+  color: #666666;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+/* กล่องแสดงข้อพกพร่องที่ทำให้ไม่ผ่านเกณฑ์ */
+.failed-reasons-box {
+  background: #ffffff;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.failed-reasons-box h4 {
+  margin-top: 0;
+  color: #495057;
+  font-size: 16px;
+  border-bottom: 1px solid #eed3d7;
+  padding-bottom: 8px;
+}
+
+.failed-reasons-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.failed-reasons-box li {
+  margin-bottom: 12px;
+  color: #555555;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.user-ans {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+/* ปุ่มควบคุมในหน้าสรุปผล */
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-retry {
+  background-color: #495057;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-retry:hover {
+  background-color: #343a40;
+}
+
+/* ปุ่มสีเขียวเด่นๆ สำหรับลิงก์ไปหน้า Booking จองคิวต่อ */
+.btn-go-booking {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 14px 35px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-go-booking:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+}
+
+/* ==========================================================================
+   6. กล่องข้อความแจ้งเตือนความปลอดภัยด้านล่างสุด (Footer Note)
+   ========================================================================== */
+.note-box {
+  display: flex;
+  gap: 15px;
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 15px 20px;
+  border-radius: 0 8px 8px 0;
+  color: #856404;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.note-icon {
+  background: #ffc107;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}

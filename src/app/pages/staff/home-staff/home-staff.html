@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการตารางรับบริจาค - โรงพยาบาลสุทธาเวช</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div>
+            <div class="brand-section">
+                <div class="brand-logo"><i class="fa-solid fa-hospital"></i></div>
+                <div>
+                    <div class="brand-title">โรงพยาบาลสุทธาเวช</div>
+                    <div class="brand-subtitle">Schedule Management</div>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-link active"><i class="fa-solid fa-calendar-days"></i> ตารางรับบริจาค</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-users"></i> รายชื่อผู้จอง</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-bullhorn"></i> ประชาสัมพันธ์</a>
+                <a href="#" class="nav-link"><i class="fa-solid fa-clipboard-user"></i> บันทึกการเข้าใช้บริการ</a>
+            </nav>
+        </div>
+        <a href="#" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</a>
+    </aside>
+
+    <div class="main-wrapper">
+
+        <header class="top-header">
+            <div class="back-btn">
+                <i class="fa-solid fa-chevron-left" style="font-size: 10px;"></i>
+                <span>จัดการตารางรับบริจาค</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="user-name">สมชาย ใจดี</div>
+                    <div class="user-role">เจ้าหน้าที่ระบบ</div>
+                </div>
+                <div class="user-avatar">สม</div>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="content-header">
+                <div>
+                    <h2 class="page-title">รายการรับบริจาคที่เปิดรับ</h2>
+                    <p class="page-subtitle">แสดงรายการทั้งหมดในเดือน ตุลาคม 2566</p>
+                </div>
+                <button class="btn-add"><i class="fa-solid fa-plus"></i> เพิ่มวันและช่วงเวลา</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>สถานที่</th>
+                            <th>วันที่</th>
+                            <th>ช่วงเวลา</th>
+                            <th>จำนวนโควตา</th>
+                            <th style="text-align: center;">การจัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="location-main">อาคารเฉลิมพระเกียรติ ชั้น 1</span>
+                                <span class="location-sub">โซนจุดรับบริจาคหลัก</span>
+                            </td>
+                            <td class="text-datetime">12 ต.ค. 2566</td>
+                            <td class="text-datetime">09:00 - 12:00</td>
+                            <td>
+                                <div class="quota-wrapper">
+                                    <div class="quota-label full">เต็ม (50/50)</div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill bg-red" style="width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions-group">
+                                    <button class="btn-action edit" title="แก้ไข"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn-action delete" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="location-main">อาคารเฉลิมพระเกียรติ ชั้น 1</span>
+                                <span class="location-sub">โซนจุดรับบริจาคหลัก</span>
+                            </td>
+                            <td class="text-datetime">12 ต.ค. 2566</td>
+                            <td class="text-datetime">13:00 - 16:00</td>
+                            <td>
+                                <div class="quota-wrapper">
+                                    <div class="quota-label available">35 / 50</div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill bg-green" style="width: 70%;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions-group">
+                                    <button class="btn-action edit"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn-action delete"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="location-main">หอประชุมอเนกประสงค์</span>
+                                <span class="location-sub">โซนหน้าเวที</span>
+                            </td>
+                            <td class="text-datetime">15 ต.ค. 2566</td>
+                            <td class="text-datetime">08:30 - 11:30</td>
+                            <td>
+                                <div class="quota-wrapper">
+                                    <div class="quota-label available">20 / 100</div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill bg-green" style="width: 20%;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions-group">
+                                    <button class="btn-action edit"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn-action delete"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="location-main">หน่วยเคลื่อนที่ คณะแพทยศาสตร์</span>
+                                <span class="location-sub">Mobile Unit A</span>
+                            </td>
+                            <td class="text-datetime">18 ต.ค. 2566</td>
+                            <td class="text-datetime">09:00 - 15:00</td>
+                            <td>
+                                <div class="quota-wrapper">
+                                    <div class="quota-label empty">0 / 40 (ว่าง)</div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill bg-grey" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions-group">
+                                    <button class="btn-action edit"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn-action delete"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="table-footer">
+                    <div>แสดง 1 ถึง 4 จากทั้งหมด 12 รายการ</div>
+                    <div class="pagination-buttons">
+                        <button class="page-btn"><i class="fa-solid fa-chevron-left" style="font-size: 10px;"></i></button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn"><i class="fa-solid fa-chevron-right" style="font-size: 10px;"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

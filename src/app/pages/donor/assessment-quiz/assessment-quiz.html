@@ -1,0 +1,210 @@
+<div class="assessment-page">
+
+  <div class="page-header" *ngIf="currentStep !== 4">
+    <h2>แบบประเมินสุขภาพออนไลน์</h2>
+    <p class="subtitle">เพื่อความปลอดภัยของท่านและผู้รับโลหิต โปรดตอบคำถามตามความเป็นจริงตามเกณฑ์สภากาชาดไทย</p>
+  </div>
+
+  <div class="assessment-card">
+
+    <div class="progress-section" *ngIf="currentStep !== 4">
+      <div class="progress-info">
+        <span class="step-label">ขั้นตอนที่ {{currentStep}} จาก 3</span>
+        <span class="step-title">{{stepTitles[currentStep]}}</span>
+        <span class="percent-label">{{progressPercent}}% เสร็จสิ้น</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" [style.width.%]="progressPercent"></div>
+      </div>
+    </div>
+
+    <div class="step-zero-container" *ngIf="currentStep === 0">
+      <h3 class="section-divider-title">สำหรับท่านที่เคยบริจาคโลหิต</h3>
+
+      <div class="form-group-box">
+        <label class="form-main-label">ครั้งที่ผ่านมา ท่านได้บริจาค:</label>
+        <div class="radio-group-horizontal">
+          <label class="radio-item">
+            <input type="radio" name="donationType" value="whole" [(ngModel)]="donorHistory.donationType">
+            <span class="radio-text">โลหิตรวม</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="donationType" value="apheresis" [(ngModel)]="donorHistory.donationType">
+            <span class="radio-text">โลหิตเฉพาะส่วน</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sub-form-box" *ngIf="donorHistory.donationType === 'apheresis'">
+        <label class="form-main-label sub-label">โลหิตเฉพาะส่วน โปรดระบุ:</label>
+        <div class="radio-group-grid">
+          <label class="radio-item">
+            <input type="radio" name="specificType" value="rbc" [(ngModel)]="donorHistory.specificType">
+            <span class="radio-text">เม็ดเลือดแดง</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="specificType" value="plt" [(ngModel)]="donorHistory.specificType">
+            <span class="radio-text">เกล็ดเลือด</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="specificType" value="plasma" [(ngModel)]="donorHistory.specificType">
+            <span class="radio-text">พลาสมา</span>
+          </label>
+          <label class="radio-item flex-input">
+            <input type="radio" name="specificType" value="other" [(ngModel)]="donorHistory.specificType">
+            <span class="radio-text">อื่นๆ</span>
+            <input type="text" class="text-underline-input" placeholder="โปรดระบุ..." [disabled]="donorHistory.specificType !== 'other'">
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group-box">
+        <label class="form-main-label">ปัญหาในการบริจาคครั้งที่ผ่านมา:</label>
+        <div class="radio-group-vertical">
+          <label class="radio-item">
+            <input type="radio" name="hasProblem" [value]="false" [(ngModel)]="donorHistory.hasProblem" (change)="donorHistory.problemDetail = ''">
+            <span class="radio-text">ไม่มี</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="hasProblem" [value]="true" [(ngModel)]="donorHistory.hasProblem">
+            <span class="radio-text">มีปัญหา โปรดระบุ:</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sub-form-box" *ngIf="donorHistory.hasProblem === true">
+        <div class="radio-group-grid">
+          <label class="radio-item">
+            <input type="radio" name="problemDetail" value="faint" [(ngModel)]="donorHistory.problemDetail">
+            <span class="radio-text">เป็นลม</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="problemDetail" value="bruise" [(ngModel)]="donorHistory.problemDetail">
+            <span class="radio-text">เขียวช้ำ</span>
+          </label>
+          <label class="radio-item">
+            <input type="radio" name="problemDetail" value="hard-vein" [(ngModel)]="donorHistory.problemDetail">
+            <span class="radio-text">หาเส้นเลือดยาก</span>
+          </label>
+          <label class="radio-item flex-input">
+            <input type="radio" name="problemDetail" value="other_prob" [(ngModel)]="donorHistory.problemDetail">
+            <span class="radio-text">อื่นๆ</span>
+            <input type="text" class="text-underline-input" placeholder="โปรดระบุปัญหา..." [disabled]="donorHistory.problemDetail !== 'other_prob'">
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group-box">
+        <div class="radio-group-vertical">
+          <label class="radio-item">
+            <input type="checkbox" name="isDeferred" [value]="true" [(ngModel)]="donorHistory.isDeferred" (change)="donorHistory.deferredReason = ''">
+            <span class="radio-text font-bold-text">ขอให้งดบริจาคชั่วคราวเนื่องจาก:</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="sub-form-box" *ngIf="donorHistory.isDeferred">
+        <div class="radio-group-vertical">
+          <label class="radio-item">
+            <input type="radio" name="deferredReason" value="low-hb" [(ngModel)]="donorHistory.deferredReason">
+            <span class="radio-text">ความเข้มโลหิตไม่ผ่านเกณฑ์</span>
+          </label>
+          <label class="radio-item flex-input">
+            <input type="radio" name="deferredReason" value="other_def" [(ngModel)]="donorHistory.deferredReason">
+            <span class="radio-text">อื่นๆ</span>
+            <input type="text" class="text-underline-input" placeholder="โปรดระบุสาเหตุ..." [disabled]="donorHistory.deferredReason !== 'other_def'">
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="question-list" *ngIf="currentStep > 0 && currentStep < 4">
+      <div class="question-item" *ngFor="let q of filteredQuestions">
+        <div class="question-text">
+          <span class="q-number">{{q.id}}</span>
+          <p>{{q.question}}</p>
+        </div>
+
+        <div class="checkbox-options" *ngIf="q.id === 13">
+          <label class="check-item">
+            <input type="checkbox" (change)="selectAnswer(13, false)">
+            <span class="check-text">มีเพศสัมพันธ์กับเพศกำเนิดตรงข้าม</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" (change)="selectAnswer(13, false)">
+            <span class="check-text">มีเพศสัมพันธ์กับเพศกำเนิดเดียวกัน</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" (change)="selectAnswer(13, true)">
+            <span class="check-text">ไม่มีเพศสัมพันธ์</span>
+          </label>
+        </div>
+
+        <div class="answer-options" *ngIf="q.id !== 13">
+          <button class="opt-btn"
+                  [class.active-yes]="q.userAnswer === true"
+                  [class.outline]="q.userAnswer !== true"
+                  (click)="selectAnswer(q.id, true)">
+            <span class="icon">✓</span> ใช่
+          </button>
+          <button class="opt-btn"
+                  [class.active-no]="q.userAnswer === false"
+                  [class.outline]="q.userAnswer !== false"
+                  (click)="selectAnswer(q.id, false)">
+            <span class="icon">✕</span> ไม่ใช่
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-actions" *ngIf="currentStep !== 4">
+      <button class="btn-back" (click)='prevStep()' [disabled]="currentStep === 0">
+        <span class="arrow">←</span> ย้อนกลับ
+      </button>
+      <button class="btn-next" (click)="nextStep()">
+        {{ currentStep === 3 ? 'ส่งแบบประเมิน' : 'ขั้นตอนถัดไป' }} <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <div class="result-container" *ngIf="currentStep === 4">
+
+      <div class="result-box pass" *ngIf="isAssessmentPassed">
+        <div class="result-icon-circle">✓</div>
+        <h2>ท่านผ่านเกณฑ์การประเมินสุขภาพเบื้องต้น</h2>
+        <p>คุณสมบัติของท่านพร้อมสำหรับการบริจาคโลหิต โปรดติดต่อเจ้าหน้าที่ ณ จุดลงทะเบียนถัดไป</p>
+
+        <div style="margin-top: 25px;">
+          <button routerLink="/booking" class="btn-go-booking">ขั้นตอนถัดไป: จองคิวบริจาคโลหิต →</button>
+        </div>
+      </div>
+
+      <div class="result-box fail" *ngIf="!isAssessmentPassed">
+        <div class="result-icon-circle">✕</div>
+        <h2>ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
+        <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
+
+        <div class="failed-reasons-box">
+          <h4>หัวข้อที่ท่านควรปรึกษาเจ้าหน้าที่เพิ่มเติม:</h4>
+          <ul>
+            <li *ngFor="let q of failedQuestions">
+              <strong>ข้อที่ {{q.id}}:</strong> {{q.question}}
+              <span class="user-ans">(ท่านตอบว่า: {{q.userAnswer ? 'ใช่' : 'ไม่ใช่'}})</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-retry" (click)="resetAssessment()">ทำแบบประเมินใหม่อีกครั้ง</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="note-box" *ngIf="currentStep !== 4">
+    <div class="note-icon">i</div>
+    <p><strong>คำเตือนที่สำคัญ:</strong> หากท่านไม่มั่นใจว่าโลหิตของท่านมีความปลอดภัยหรือปลอดเชื้อหรือไม่ กรุณาเลือกตอบตามความเป็นจริงหรือเปลี่ยนใจงดบริจาคโลหิต เพื่อความปลอดภัยสูงสุดของผู้ป่วยที่จะรับโลหิตของท่าน</p>
+  </div>
+
+</div>

@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+// 🌟 1. เพิ่มการ Import RouterModule เข้ามาจากแองกูลาร์ด้านบนนี้ครับ
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/api';
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  // 🌟 2. เอา RouterModule มาใส่เพิ่มในกล่องก้อนอิมพอร์ตตรงนี้ด้วยครับ
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './booking.html',
-  styleUrl: './booking.css'
+  styleUrl: './booking.css',
 })
 export class BookingComponent {
-
   donationType = 'whole';
   location = 'sutthavej';
   selectedDate = 10;
@@ -43,20 +45,16 @@ export class BookingComponent {
       return;
     }
 
-    const booking_datetime =
-      `2026-05-${this.selectedDate}T${this.selectedTime}:00`;
+    const booking_datetime = `2026-05-${this.selectedDate}T${this.selectedTime}:00`;
 
-    this.auth.createBooking(
-      { booking_datetime },
-      token
-    ).subscribe({
+    this.auth.createBooking({ booking_datetime }, token).subscribe({
       next: () => {
         alert('✅ จองสำเร็จ');
       },
       error: (err) => {
         console.log(err);
         alert(err.error?.message || '❌ เกิดข้อผิดพลาด');
-      }
+      },
     });
   }
 }

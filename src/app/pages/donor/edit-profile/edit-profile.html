@@ -1,0 +1,231 @@
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+<div class="profile-container">
+
+  <!-- PAGE TITLE -->
+  <div class="page-title-section">
+    <div class="page-title-left">
+      <div class="page-title-icon">
+        <span class="material-icons-round">manage_accounts</span>
+      </div>
+      <div>
+        <h1 class="page-title">โปรไฟล์ของฉัน</h1>
+        <p class="page-subtitle">จัดการข้อมูลส่วนตัวและความปลอดภัยของบัญชีคุณ</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEFT COL -->
+  <div class="left-col">
+
+    <div class="profile-card avatar-card">
+      <div class="avatar-card-bg"></div>
+      <div class="avatar-section">
+        <div class="avatar-wrapper">
+          <div class="avatar-ring"></div>
+          <div class="avatar-circle">
+            <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-img" alt="Profile">
+            <span *ngIf="!avatarPreview" class="material-icons-round avatar-icon">person</span>
+          </div>
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+          <button type="button" class="upload-btn" (click)="fileInput.click()" [disabled]="isReadOnly">
+            <span class="material-icons-round">photo_camera</span>
+          </button>
+        </div>
+
+        <h2 class="profile-name">
+          {{ profileForm.get('name')?.value || 'ชื่อ' }}
+          {{ profileForm.get('lastname')?.value || 'นามสกุล' }}
+        </h2>
+        <span class="profile-role">
+          <span class="material-icons-round role-icon">favorite</span>
+          ผู้บริจาคโลหิต
+        </span>
+
+        <div class="profile-stats">
+          <div class="stat-item" *ngIf="profileForm.get('blood_type')?.value">
+            <span class="stat-label">หมู่เลือด</span>
+            <span class="stat-value blood">{{ profileForm.get('blood_type')?.value }}</span>
+          </div>
+          <div class="stat-divider" *ngIf="profileForm.get('blood_type')?.value && profileForm.get('weight')?.value"></div>
+          <div class="stat-item" *ngIf="profileForm.get('weight')?.value">
+            <span class="stat-label">น้ำหนัก</span>
+            <span class="stat-value">{{ profileForm.get('weight')?.value }} กก.</span>
+          </div>
+          <div class="stat-divider" *ngIf="profileForm.get('weight')?.value && profileForm.get('height')?.value"></div>
+          <div class="stat-item" *ngIf="profileForm.get('height')?.value">
+            <span class="stat-label">ส่วนสูง</span>
+            <span class="stat-value">{{ profileForm.get('height')?.value }} ซม.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card tips-card">
+      <div class="tips-header">
+        <span class="material-icons-round tips-icon">lightbulb</span>
+        <span class="tips-title">คำแนะนำ</span>
+      </div>
+      <ul class="tips-list">
+        <li>
+          <span class="tip-dot"></span>
+          กรุณาใช้อีเมลที่ติดต่อได้จริงเพื่อรับผลตรวจทางออนไลน์
+        </li>
+        <li>
+          <span class="tip-dot"></span>
+          ข้อมูลส่วนตัวจะถูกเก็บเป็นความลับตามโยบาย PDPA
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COL -->
+  <form class="right-col" [formGroup]="profileForm" (ngSubmit)="onSave()">
+
+    <div class="profile-card info-card">
+      <div class="card-header">
+        <div class="card-header-icon-wrap">
+          <span class="material-icons-round">person</span>
+        </div>
+        <span class="card-header-title">ข้อมูลส่วนตัว</span>
+        <div class="edit-status-badge" [class.editing]="!isReadOnly">
+          <span class="status-dot"></span>
+          {{ isReadOnly ? 'โหมดดูข้อมูล' : 'กำลังแก้ไข' }}
+        </div>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-row-half">
+          <div class="form-group">
+            <label class="form-label">ชื่อ</label>
+            <input type="text" formControlName="name" [readonly]="isReadOnly" class="form-input" placeholder="ชื่อ">
+          </div>
+          <div class="form-group">
+            <label class="form-label">นามสกุล</label>
+            <input type="text" formControlName="lastname" [readonly]="isReadOnly" class="form-input" placeholder="นามสกุล">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            อีเมล
+            <span class="label-tag">ใช้สำหรับล็อกอิน</span>
+          </label>
+          <div class="input-icon-wrap">
+            <span class="input-prefix-icon material-icons-round">alternate_email</span>
+            <input type="email" formControlName="email" [readonly]="true" class="form-input has-prefix-icon input-locked" placeholder="อีเมล">
+            <span class="input-suffix-icon material-icons-round">lock</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">เบอร์โทรศัพท์</label>
+          <div class="input-icon-wrap">
+            <span class="input-prefix-icon material-icons-round">call</span>
+            <input type="text" formControlName="phone" [readonly]="isReadOnly" class="form-input has-prefix-icon" placeholder="เบอร์โทรศัพท์">
+          </div>
+        </div>
+
+        <div class="form-separator">
+          <span>ข้อมูลสุขภาพ</span>
+        </div>
+
+        <div class="form-row-half">
+          <div class="form-group">
+            <label class="form-label">เพศ</label>
+            <div class="select-wrap" [class.is-disabled]="isReadOnly">
+              <span class="input-prefix-icon material-icons-round">wc</span>
+              <select formControlName="gender" [attr.disabled]="isReadOnly ? true : null" class="form-input form-select has-prefix-icon">
+                <option value="">เลือกเพศ</option>
+                <option value="male">ชาย</option>
+                <option value="female">หญิง</option>
+                <option value="other">อื่น ๆ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">กรุ๊ปเลือด</label>
+            <div class="select-wrap" [class.is-disabled]="isReadOnly">
+              <span class="input-prefix-icon material-icons-round">water_drop</span>
+              <select formControlName="blood_type" [attr.disabled]="isReadOnly ? true : null" class="form-input form-select has-prefix-icon">
+                <option value="">เลือกกรุ๊ปเลือด</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="O">O</option>
+                <option value="AB">AB</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">วันเกิด</label>
+          <div class="input-icon-wrap">
+            <span class="input-prefix-icon material-icons-round">cake</span>
+            <input type="date" formControlName="birthday" [attr.disabled]="isReadOnly ? true : null" class="form-input has-prefix-icon">
+          </div>
+        </div>
+
+        <div class="form-row-half">
+          <div class="form-group">
+            <label class="form-label">น้ำหนัก (กก.)</label>
+            <input type="number" formControlName="weight" [readonly]="isReadOnly" class="form-input" placeholder="กก.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ส่วนสูง (ซม.)</label>
+            <input type="number" formControlName="height" [readonly]="isReadOnly" class="form-input" placeholder="ซม.">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Security Card -->
+    <div class="profile-card security-card">
+      <div class="card-header">
+        <div class="card-header-icon-wrap green">
+          <span class="material-icons-round">shield</span>
+        </div>
+        <span class="card-header-title">ความปลอดภัย</span>
+      </div>
+      <div class="security-row">
+        <div class="security-left">
+          <div class="security-icon-box">
+            <span class="material-icons-round">key</span>
+          </div>
+          <div>
+            <p class="security-title">รหัสผ่าน</p>
+            <p class="security-desc">เปลี่ยนรหัสผ่านล่าสุดเมื่อ 3 เดือนที่แล้ว</p>
+          </div>
+        </div>
+        <button type="button" class="btn-change-pw">
+          เปลี่ยนรหัสผ่าน
+          <span class="material-icons-round">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="profile-actions">
+      <ng-container *ngIf="isReadOnly">
+        <button type="button" (click)="onEdit()" class="btn-edit">
+          <span class="material-icons-round">edit</span>
+          แก้ไขข้อมูล
+        </button>
+      </ng-container>
+      <ng-container *ngIf="!isReadOnly">
+        <button type="button" (click)="onCancel()" class="btn-cancel">ยกเลิก</button>
+        <button type="submit" class="btn-save">
+          <span class="material-icons-round">save</span>
+          บันทึกการเปลี่ยนแปลง
+        </button>
+      </ng-container>
+    </div>
+
+  </form>
+
+</div>

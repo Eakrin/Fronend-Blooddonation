@@ -1,0 +1,584 @@
+/* ==========================================================================
+   BASE & LAYOUT CONFIG
+   ========================================================================== */
+:host {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f8fafc;
+}
+
+/* Custom Scrollbar สำหรับตารางและหน้าเพจ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ==========================================================================
+   SIDEBAR COMPONENT
+   ========================================================================== */
+.sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    border-right: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    flex-shrink: 0;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.01);
+    z-index: 10;
+}
+
+.sidebar-brand {
+    padding: 24px;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #dcfce7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.brand-text h1 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+.brand-text p {
+    font-size: 11px;
+    color: #16a34a;
+    font-weight: 500;
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+}
+
+/* Sidebar Navigation Links */
+.sidebar-nav {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+.nav-item.active {
+    background-color: #f2fcf5;
+    color: #15803d;
+    font-weight: 600;
+    border-right: 3px solid #22c55e;
+    border-radius: 12px 0 0 12px;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.03);
+}
+
+.nav-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    transition: color 0.2s;
+}
+
+.nav-item.active i {
+    color: #16a34a;
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.logout-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    color: #ef4444;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: #fef2f2;
+}
+
+/* ==========================================================================
+   MAIN WORKSPACE & NAVBAR
+   ========================================================================== */
+.main-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.top-navbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+}
+
+.navbar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: 0.02em;
+}
+
+.navbar-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.noti-trigger {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    background-color: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.noti-trigger:hover {
+    color: #475569;
+    background-color: #f8fafc;
+}
+
+.noti-dot {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+.user-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-left: 1px solid #e2e8f0;
+    padding-left: 20px;
+}
+
+.user-text {
+    text-align: right;
+}
+
+.user-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.user-mail {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.avatar-circle {
+    width: 36px;
+    height: 36px;
+    background-color: #ffedd5;
+    color: #ea580c;
+    border: 1px solid #fed7aa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* Page Body Container */
+.page-container {
+    padding: 32px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+}
+
+/* ==========================================================================
+   COMPONENTS: SEARCH & ACTION BUTTON
+   ========================================================================== */
+.action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.search-control {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.search-control:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(209, 250, 229, 0.5);
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #71c043; /* รหัสสีเขียวโลโก้สุทธาเวชตามรูป */
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(113, 192, 67, 0.2);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #62a837;
+    box-shadow: 0 4px 16px rgba(113, 192, 67, 0.3);
+}
+
+/* ==========================================================================
+   COMPONENTS: DASHBOARD CARDS
+   ========================================================================== */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.metric-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.005);
+}
+
+.icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+/* Card States Color Variant */
+.metric-card.total .icon-box { background-color: #f0fdf4; color: #16a34a; border: 1px solid rgba(187,247,208,0.4); }
+.metric-card.active .icon-box { background-color: #f0fdf4; color: #16a34a; border: 1px solid rgba(187,247,208,0.4); }
+.metric-card.suspended .icon-box { background-color: #fff7ed; color: #ea580c; border: 1px solid #ffedd5; }
+
+.metric-label {
+    font-size: 11.5px;
+    color: #94a3b8;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.metric-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 2px;
+}
+
+.metric-unit {
+    font-size: 12px;
+    font-weight: 400;
+    color: #64748b;
+    margin-left: 4px;
+}
+
+/* ==========================================================================
+   COMPONENTS: MODERN DATA TABLE
+   ========================================================================== */
+.data-table-card {
+    background-color: #ffffff;
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.responsive-scroller {
+    overflow-x: auto;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: #f8fafc;
+    padding: 14px 24px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* คุมสัดส่วนตามรูปภาพหน้าจอ */
+.custom-table th:nth-child(1) { width: 30%; }
+.custom-table th:nth-child(2) { width: 25%; }
+.custom-table th:nth-child(3) { width: 15%; }
+.custom-table th:nth-child(4) { width: 15%; }
+.custom-table th:nth-child(5) { width: 15%; text-align: center; }
+
+.custom-table td {
+    padding: 16px 24px;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.custom-table tr:hover td {
+    background-color: rgba(248, 250, 252, 0.6);
+}
+
+/* Table Profile Cell elements */
+.profile-cell-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-mini {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid rgba(187,247,208,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.email-txt {
+    font-size: 13px;
+    color: #475569;
+}
+
+/* Badges Status */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-badge::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+}
+
+.status-badge.active {
+    background-color: #e8fbf0;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+.status-badge.active::before { background-color: #22c55e; }
+
+.status-badge.suspended {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+.status-badge.suspended::before { background-color: #94a3b8; }
+
+.time-txt {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Actions Menu Buttons */
+.action-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: #94a3b8;
+}
+
+.btn-icon-action {
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+
+.btn-icon-action:hover { background-color: #f1f5f9; color: #475569; }
+.btn-icon-action.delete:hover { background-color: #fef2f2; color: #ef4444; }
+
+/* ==========================================================================
+   COMPONENTS: PAGINATION CONTROLS
+   ========================================================================== */
+.table-pagination-bar {
+    padding: 14px 24px;
+    background-color: rgba(248, 250, 252, 0.5);
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.pagination-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.page-control-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    color: #475569;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.page-control-btn:hover {
+    background-color: #f8fafc;
+}
+
+.page-control-btn.active {
+    background-color: #71c043;
+    color: #ffffff;
+    border-color: #71c043;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(113,192,67,0.1);
+}
+
+.page-control-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.dots-spacer {
+    color: #94a3b8;
+    padding: 0 4px;
+}
+
+/* ==========================================================================
+   FOOTER COMPONENT
+   ========================================================================== */
+.app-footer {
+    text-align: center;
+    padding: 14px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #94a3b8;
+    background-color: #ffffff;
+    border-top: 1px solid #f1f5f9;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+}
