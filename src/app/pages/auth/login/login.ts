@@ -72,7 +72,7 @@ export class Login {
             phone: backendUser.phone || '',
           };
           localStorage.setItem('user', JSON.stringify(adminPayload));
-          this.router.navigate(['/home-admin']);
+          this.router.navigate(['/home-staff']);
         }
       },
       error: (err: any) => {

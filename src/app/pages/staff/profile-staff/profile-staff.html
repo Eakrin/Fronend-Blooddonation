@@ -1,0 +1,117 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <div class="header-left">
+      <div class="page-title-icon">
+        <span class="icon">manage_accounts</span>
+      </div>
+      <div>
+        <h2>ตั้งค่าโปรไฟล์ส่วนตัว</h2>
+        <p>จัดการข้อมูลบัญชีของคุณและตั้งค่ารหัสผ่านเพื่อความปลอดภัย</p>
+      </div>
+    </div>
+    <button class="btn-edit" *ngIf="isReadOnly" (click)="startEdit()">
+      <span class="icon">edit</span> แก้ไขข้อมูล
+    </button>
+  </header>
+
+  <!-- ข้อมูลพื้นฐาน -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon"><span class="icon">person</span></div>
+        <h3>ข้อมูลพื้นฐาน</h3>
+      </div>
+      <div class="edit-badge" [class.editing]="!isReadOnly">
+        <span class="badge-dot"></span>
+        {{ isReadOnly ? 'โหมดดูข้อมูล' : 'กำลังแก้ไข' }}
+      </div>
+    </div>
+
+    <div class="avatar-section">
+      <div class="avatar-wrapper">
+        <div class="avatar-circle">
+          <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-img">
+          <span *ngIf="!avatarPreview" class="icon avatar-icon">person</span>
+        </div>
+        <button class="avatar-edit-btn" (click)="fileInput.click()" [disabled]="isReadOnly">
+          <span class="icon">photo_camera</span>
+        </button>
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
+      </div>
+      <div class="avatar-info">
+        <p class="staff-name-display">{{ name }}</p>
+        <p class="staff-role-display">เจ้าหน้าที่คัดกรอง</p>
+        <p class="avatar-hint">ไฟล์ JPG, PNG ขนาดแนะนำ 400×400 px</p>
+        <div class="avatar-actions" *ngIf="!isReadOnly">
+          <button class="btn-change-photo" (click)="fileInput.click()">เปลี่ยนรูปภาพ</button>
+          <button class="btn-remove-photo" (click)="removePhoto()">ลบรูปภาพ</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>ชื่อ-นามสกุล</label>
+        <input type="text" [(ngModel)]="name" placeholder="ชื่อ-นามสกุล" [readonly]="isReadOnly" [class.readonly]="isReadOnly">
+      </div>
+      <div class="form-group">
+        <label>อีเมลผู้ใช้งาน <span class="label-tag">ใช้สำหรับล็อกอิน</span></label>
+        <div class="input-locked-wrapper">
+          <input type="email" [value]="email" readonly class="input-locked">
+          <span class="icon lock-icon">verified</span>
+        </div>
+        <p class="input-hint">* อีเมลใช้สำหรับเข้าสู่ระบบและไม่สามารถเปลี่ยนได้ด้วยตนเอง</p>
+      </div>
+      <div class="form-group">
+        <label>เบอร์โทรศัพท์ติดต่อ</label>
+        <input type="tel" [(ngModel)]="phone" placeholder="0xx-xxx-xxxx" [readonly]="isReadOnly" [class.readonly]="isReadOnly">
+      </div>
+    </div>
+  </div>
+
+  <!-- ความปลอดภัย -->
+  <div class="section-card" *ngIf="!isReadOnly">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="section-icon green"><span class="icon">shield</span></div>
+        <h3>ความปลอดภัย</h3>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>รหัสผ่านใหม่</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">lock</span>
+          <input type="password" [(ngModel)]="newPassword" placeholder="••••••••">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>ยืนยันรหัสผ่าน</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">lock_reset</span>
+          <input type="password" [(ngModel)]="confirmPassword" placeholder="••••••••">
+        </div>
+      </div>
+    </div>
+
+    <div class="password-hint">
+      <span class="icon">info</span>
+      <p>เว้นว่างไว้หากไม่ต้องการเปลี่ยนรหัสผ่าน หากต้องการเปลี่ยน รหัสผ่านควรมีความยาวอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวอักษรใหญ่ เล็ก และตัวเลข</p>
+    </div>
+  </div>
+
+  <div class="error-box" *ngIf="errorMsg">
+    <span class="icon">error</span> {{ errorMsg }}
+  </div>
+
+  <div class="form-actions" *ngIf="!isReadOnly">
+    <button class="btn-cancel" (click)="cancel()">ยกเลิก</button>
+    <button class="btn-save" (click)="save()" [disabled]="isLoading">
+      <span class="icon">save</span>
+      {{ isLoading ? 'กำลังบันทึก...' : 'บันทึกการเปลี่ยนแปลง' }}
+    </button>
+  </div>
+
+</main>

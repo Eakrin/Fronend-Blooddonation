@@ -1,0 +1,159 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <div class="header-left">
+      <h2>จัดการตารางรับบริจาค</h2>
+      <p>แสดงรายการทั้งหมดในเดือน มิถุนายน 2569</p>
+    </div>
+    <button class="btn-add" (click)="openModal()">
+      <span class="icon">add_circle</span> เพิ่มวันและช่วงเวลา
+    </button>
+  </header>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>สถานที่</th>
+          <th>วันที่</th>
+          <th>ช่วงเวลา</th>
+          <th>จำนวนโควตา</th>
+          <th class="text-center">การจัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let slot of slots">
+          <td>
+            <span class="location-main">{{ slot.location_name }}</span>
+            <span class="location-sub">{{ slot.location_zone }}</span>
+          </td>
+          <td class="text-datetime">{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
+          <td class="text-datetime">{{ slot.Start_time }} - {{ slot.End_time }}</td>
+          <td>
+            <div class="quota-wrapper">
+              <div class="quota-label"
+                [class.full]="slot.booked >= slot.max_quota"
+                [class.available]="slot.booked < slot.max_quota && slot.booked > 0"
+                [class.empty]="slot.booked === 0">
+                {{ slot.booked >= slot.max_quota ? 'เต็ม' : '' }}
+                ({{ slot.booked }}/{{ slot.max_quota }})
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill"
+                  [class.bg-red]="slot.booked >= slot.max_quota"
+                  [class.bg-green]="slot.booked < slot.max_quota"
+                  [style.width.%]="(slot.booked / slot.max_quota) * 100">
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="actions-group">
+              <button class="btn-action edit" (click)="openEditModal(slot)">
+                <span class="icon">edit</span>
+              </button>
+              <button class="btn-action delete" (click)="deleteSlot(slot.DonationD_ID)">
+                <span class="icon">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Empty -->
+        <tr *ngIf="slots.length === 0">
+          <td colspan="5" class="empty-row">
+            <span class="icon">event_busy</span>
+            <p>ยังไม่มีรายการ</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="table-footer">
+      <span class="entry-info">ทั้งหมด {{ slots.length }} รายการ</span>
+      <div class="pagination">
+        <button class="pag-btn"><span class="icon">chevron_left</span></button>
+        <button class="pag-btn active">1</button>
+        <button class="pag-btn">2</button>
+        <button class="pag-btn">3</button>
+        <button class="pag-btn"><span class="icon">chevron_right</span></button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Modal เพิ่ม/แก้ไข -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon"><span class="icon">calendar_add_on</span></div>
+        <div>
+          <h2>{{ editingId ? 'แก้ไขช่วงเวลา' : 'เพิ่มช่วงเวลารับบริจาค' }}</h2>
+          <p>กรอกรายละเอียดเพื่อเปิดช่วงเวลาใหม่</p>
+        </div>
+      </div>
+      <button class="btn-close" (click)="closeModal()">
+        <span class="icon">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="error-box" *ngIf="errorMsg">
+        <span class="icon">error</span> {{ errorMsg }}
+      </div>
+
+      <div class="form-group">
+        <label>ชื่อสถานที่</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">location_on</span>
+          <input type="text" [(ngModel)]="locationName" placeholder="ระบุชื่อสถานที่ เช่น ห้องรับบริจาคชั้น 2">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>วันที่รับบริจาค</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">calendar_today</span>
+          <input type="date" [(ngModel)]="donationDate">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>เวลาเริ่ม</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">schedule</span>
+            <input type="time" [(ngModel)]="startTime">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>เวลาสิ้นสุด</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">schedule</span>
+            <input type="time" [(ngModel)]="endTime">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>จำนวนโควตาที่รับได้ (คน)</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">groups</span>
+          <input type="number" [(ngModel)]="maxQuota" placeholder="ระบุจำนวน เช่น 50" min="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">ยกเลิก</button>
+      <button class="btn-submit" (click)="saveSlot()" [disabled]="isLoading">
+        <span class="icon">save</span>
+        {{ isLoading ? 'กำลังบันทึก...' : 'บันทึกข้อมูล' }}
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -15,21 +15,21 @@
       <div class="kpi-icon-wrapper"><span class="icon">badge</span></div>
       <div class="kpi-info">
         <span class="kpi-label">เจ้าหน้าที่ทั้งหมด</span>
-        <h2 class="kpi-value">48 <small>คน</small></h2>
+        <h2 class="kpi-value">{{ staffList.length }} <small>คน</small></h2>
       </div>
     </div>
     <div class="kpi-card active">
       <div class="kpi-icon-wrapper"><span class="icon">check_circle</span></div>
       <div class="kpi-info">
         <span class="kpi-label">กำลังใช้งาน</span>
-        <h2 class="kpi-value text-success">42 <small>คน</small></h2>
+        <h2 class="kpi-value text-success">{{ activeCount }} <small>คน</small></h2>
       </div>
     </div>
     <div class="kpi-card suspended">
       <div class="kpi-icon-wrapper"><span class="icon">block</span></div>
       <div class="kpi-info">
         <span class="kpi-label">ระงับการใช้งาน</span>
-        <h2 class="kpi-value text-warning">6 <small>คน</small></h2>
+        <h2 class="kpi-value text-warning">{{ suspendedCount }} <small>คน</small></h2>
       </div>
     </div>
   </section>
@@ -40,77 +40,40 @@
         <tr>
           <th>ชื่อ-นามสกุล</th>
           <th>อีเมล</th>
+          <th>บทบาท</th>
           <th>สถานะ</th>
-          <th>เข้าใช้ล่าสุด</th>
           <th class="text-center">จัดการ</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr *ngFor="let staff of staffList">
           <td>
             <div class="user-profile">
-              <div class="avatar av-1">สม</div>
-              <span class="user-name">นายสมชาย ใจดี</span>
+              <div class="avatar av-1">{{ staff.name?.charAt(0) }}</div>
+              <span class="user-name">{{ staff.name }} {{ staff.lastname }}</span>
             </div>
           </td>
-          <td class="text-muted">somchai@hospital.com</td>
-          <td><span class="badge badge-success">กำลังใช้งาน</span></td>
-          <td class="text-muted">10 นาทีที่แล้ว</td>
+          <td class="text-muted">{{ staff.email }}</td>
+          <td class="text-muted">{{ staff.role }}</td>
+          <td>
+            <span class="badge"
+              [class.badge-success]="staff.status === 'active'"
+              [class.badge-suspended]="staff.status === 'suspended'">
+              {{ staff.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
+            </span>
+          </td>
           <td>
             <div class="action-buttons">
-              <button class="btn-icon edit-btn"><span class="icon">edit</span></button>
-              <button class="btn-icon delete-btn"><span class="icon">delete</span></button>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="user-profile">
-              <div class="avatar av-2">สศ</div>
-              <span class="user-name">นางสาวสมศรี รักเรียน</span>
-            </div>
-          </td>
-          <td class="text-muted">somsri.r@hospital.com</td>
-          <td><span class="badge badge-success">กำลังใช้งาน</span></td>
-          <td class="text-muted">วานนี้, 14:30</td>
-          <td>
-            <div class="action-buttons">
-              <button class="btn-icon edit-btn"><span class="icon">edit</span></button>
-              <button class="btn-icon delete-btn"><span class="icon">delete</span></button>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="user-profile">
-              <div class="avatar av-3">มน</div>
-              <span class="user-name">นายมานะ อดทน</span>
-            </div>
-          </td>
-          <td class="text-muted">mana.a@hospital.com</td>
-          <td><span class="badge badge-suspended">ระงับการใช้งาน</span></td>
-          <td class="text-muted">3 วันที่แล้ว</td>
-          <td>
-            <div class="action-buttons">
-              <button class="btn-icon edit-btn"><span class="icon">edit</span></button>
-              <button class="btn-icon delete-btn"><span class="icon">delete</span></button>
+              <button class="btn-icon edit-btn" (click)="openEditModal(staff)">
+                <span class="icon">edit</span>
+              </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-
     <footer class="table-footer">
-      <span class="entry-info">แสดง 1 ถึง 10 จากทั้งหมด 48 รายการ</span>
-      <div class="pagination">
-        <button class="pag-btn"><span class="icon">chevron_left</span></button>
-        <button class="pag-btn active">1</button>
-        <button class="pag-btn">2</button>
-        <button class="pag-btn">3</button>
-        <span class="pag-dots">...</span>
-        <button class="pag-btn">5</button>
-        <button class="pag-btn"><span class="icon">chevron_right</span></button>
-      </div>
+      <span class="entry-info">ทั้งหมด {{ staffList.length }} รายการ</span>
     </footer>
   </section>
 
@@ -118,11 +81,11 @@
     © 2026 โรงพยาบาลสุทธาเวช - ระบบบริหารจัดการเจ้าหน้าที่และคิวบริจาคโลหิต
   </footer>
 
+</main>
 
-  <!-- Modal -->
+<!-- Create Modal -->
 <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
   <div class="modal-card" (click)="$event.stopPropagation()">
-
     <div class="modal-header">
       <div class="modal-title-group">
         <div class="modal-icon"><span class="icon">person_add</span></div>
@@ -131,68 +94,151 @@
           <p>กรอกข้อมูลเพื่อสร้างบัญชีเจ้าหน้าที่</p>
         </div>
       </div>
-      <button class="btn-close" (click)="closeModal()">
-        <span class="icon">close</span>
-      </button>
+      <button class="btn-close" (click)="closeModal()"><span class="icon">close</span></button>
     </div>
-
-<div class="modal-body">
-  <div class="form-group">
-    <label>ชื่อ-นามสกุล</label>
-    <div class="input-wrapper">
-      <span class="icon input-icon">person</span>
-      <input type="text" placeholder="ระบุชื่อและนามสกุล">
+    <div class="modal-body">
+      <div class="error-box" *ngIf="errorMsg">
+        <span class="icon">error</span> {{ errorMsg }}
+      </div>
+      <div class="form-group">
+        <label>ชื่อ</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">person</span>
+          <input type="text" placeholder="ชื่อ" [(ngModel)]="name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>นามสกุล</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">person</span>
+          <input type="text" placeholder="นามสกุล" [(ngModel)]="lastname">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label-row">
+          <label>อีเมล</label>
+          <span class="error-hint">* ไม่สามารถซ้ำได้</span>
+        </div>
+        <div class="input-wrapper">
+          <span class="icon input-icon">mail</span>
+          <input type="email" placeholder="example@suthawet.go.th" [(ngModel)]="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>รหัสผ่าน</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">lock</span>
+          <input type="password" placeholder="กำหนดรหัสผ่านเริ่มต้น" [(ngModel)]="password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>เบอร์โทรศัพท์</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">phone</span>
+          <input type="tel" placeholder="0xx-xxx-xxxx" [(ngModel)]="phone">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>บทบาท</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">badge</span>
+          <select class="select-input" [(ngModel)]="role">
+            <option value="" disabled selected>เลือกบทบาท</option>
+            <option value="staff">เจ้าหน้าที่</option>
+            <option value="admin">ผู้ดูแลระบบ</option>
+          </select>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="form-group">
-    <div class="label-row">
-      <label>อีเมล</label>
-      <span class="error-hint">* ไม่สามารถซ้ำได้</span>
-    </div>
-    <div class="input-wrapper">
-      <span class="icon input-icon">mail</span>
-      <input type="email" placeholder="example@suthawet.go.th">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label>รหัสผ่าน</label>
-    <div class="input-wrapper">
-      <span class="icon input-icon">lock</span>
-      <input type="password" placeholder="กำหนดรหัสผ่านเริ่มต้น">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label>เบอร์โทรศัพท์</label>
-    <div class="input-wrapper">
-      <span class="icon input-icon">phone</span>
-      <input type="tel" placeholder="0xx-xxx-xxxx">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label>บทบาท</label>
-    <div class="input-wrapper">
-      <span class="icon input-icon">badge</span>
-      <select class="select-input">
-        <option value="" disabled selected>เลือกบทบาท</option>
-        <option value="staff">เจ้าหน้าที่</option>
-        <option value="admin">ผู้ดูแลระบบ</option>
-      </select>
-    </div>
-  </div>
-</div>
-
     <div class="modal-footer">
       <button class="btn-cancel" (click)="closeModal()">ยกเลิก</button>
-      <button class="btn-submit">
-        <span class="icon">save</span> บันทึก
+      <button class="btn-submit" (click)="createStaff()" [disabled]="isLoading">
+        <span class="icon">save</span>
+        {{ isLoading ? 'กำลังบันทึก...' : 'บันทึก' }}
       </button>
     </div>
-
   </div>
 </div>
 
-</main>
+<!-- Edit Modal -->
+<div class="modal-backdrop" *ngIf="isEditModalOpen" (click)="closeEditModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon"><span class="icon">manage_accounts</span></div>
+        <div>
+          <h2>แก้ไขข้อมูลเจ้าหน้าที่</h2>
+          <p>รหัส: STF-{{ editStaff?.Staff_ID }}</p>
+        </div>
+      </div>
+      <button class="btn-close" (click)="closeEditModal()"><span class="icon">close</span></button>
+    </div>
+    <div class="modal-body">
+
+      <div class="error-box" *ngIf="editErrorMsg">
+        <span class="icon">error</span> {{ editErrorMsg }}
+      </div>
+
+      <div class="suspend-toggle">
+        <div class="suspend-left">
+          <span class="icon suspend-icon">block</span>
+          <div>
+            <p class="suspend-title">ระงับการใช้งานชั่วคราว</p>
+            <p class="suspend-desc">เจ้าหน้าที่จะไม่สามารถเข้าสู่ระบบได้จนกว่าจะยกเลิกการระงับ</p>
+          </div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" [(ngModel)]="editIsSuspended">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>ชื่อ</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">person</span>
+          <input type="text" [(ngModel)]="editName" placeholder="ชื่อ">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>นามสกุล</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">person</span>
+          <input type="text" [(ngModel)]="editLastname" placeholder="นามสกุล">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>อีเมล (ใช้เข้าสู่ระบบ)</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">mail</span>
+          <input type="email" [(ngModel)]="editEmail" placeholder="อีเมล">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>เบอร์โทรศัพท์</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">phone</span>
+          <input type="tel" [(ngModel)]="editPhone" placeholder="0xx-xxx-xxxx">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label-row">
+          <label>รหัสผ่านใหม่</label>
+          <span class="error-hint">* เว้นว่างถ้าไม่ต้องการเปลี่ยน</span>
+        </div>
+        <div class="input-wrapper">
+          <span class="icon input-icon">lock</span>
+          <input type="password" [(ngModel)]="editPassword" placeholder="กรอกรหัสผ่านใหม่">
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeEditModal()">ยกเลิก</button>
+      <button class="btn-submit" (click)="saveEdit()" [disabled]="editLoading">
+        <span class="icon">save</span>
+        {{ editLoading ? 'กำลังบันทึก...' : 'บันทึกการเปลี่ยนแปลง' }}
+      </button>
+    </div>
+  </div>
+</div>

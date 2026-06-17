@@ -1,0 +1,132 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <div>
+      <h2>จัดการประกาศประชาสัมพันธ์</h2>
+      <p>สร้างและแก้ไขข้อมูลข่าวสารการรับบริจาคเลือดสำหรับประชาชน</p>
+    </div>
+  </header>
+
+  <div class="content-grid">
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="icon">add_circle</span>
+        <h3>{{ editingId ? 'แก้ไขประกาศ' : 'เพิ่มประกาศใหม่' }}</h3>
+      </div>
+
+      <div class="form-body">
+        <div class="form-group">
+          <label>หัวข้อประชาสัมพันธ์</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">title</span>
+            <input type="text" [(ngModel)]="topic" placeholder="เช่น ขอเชิญร่วมบริจาคโลหิต กู้วิกฤตเลือดขาดแคลน">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>วันรับบริจาค</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">calendar_today</span>
+            <input type="date" [(ngModel)]="donationDate">
+          </div>
+        </div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>เวลาเริ่มต้น</label>
+    <div class="input-wrapper">
+      <span class="icon input-icon">schedule</span>
+      <select class="select-input" [(ngModel)]="startTime">
+        <option value="">เลือกเวลา</option>
+        <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>เวลาสิ้นสุด</label>
+    <div class="input-wrapper">
+      <span class="icon input-icon">schedule</span>
+      <select class="select-input" [(ngModel)]="endTime">
+        <option value="">เลือกเวลา</option>
+        <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+        <div class="form-group">
+          <label>สถานที่</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">location_on</span>
+            <select class="select-input" [(ngModel)]="locationId">
+              <option [ngValue]="null" disabled>เลือกสถานที่</option>
+              <option *ngFor="let loc of locations" [ngValue]="loc.Location_ID">
+                {{ loc.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>รายละเอียด/เงื่อนไขเพิ่มเติม</label>
+          <textarea [(ngModel)]="text" placeholder="ระบุคุณสมบัติของผู้บริจาค หรือสิ่งที่ต้องเตรียมมา" rows="5"></textarea>
+        </div>
+
+        <div class="error-box" *ngIf="errorMsg">
+          <span class="icon">error</span> {{ errorMsg }}
+        </div>
+
+        <div class="btn-group">
+          <button class="btn-cancel-form" *ngIf="editingId" (click)="resetForm()">ยกเลิก</button>
+          <button class="btn-save" (click)="savePost()" [disabled]="isLoading">
+            <span class="icon">save</span>
+            {{ isLoading ? 'กำลังบันทึก...' : editingId ? 'บันทึกการแก้ไข' : 'บันทึกประกาศ' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="list-card">
+      <div class="list-card-header">
+        <div class="list-title">
+          <span class="icon">list_alt</span>
+          <h3>รายการประกาศล่าสุด</h3>
+        </div>
+        <span class="total-badge">ทั้งหมด {{ posts.length }} รายการ</span>
+      </div>
+
+      <div class="post-list">
+        <div class="post-item" *ngFor="let post of posts">
+          <div class="post-item-header">
+            <span class="post-status active">● กำลังแสดงผล</span>
+            <div class="post-actions">
+              <button class="btn-icon-sm edit" (click)="editPost(post)">
+                <span class="icon">edit</span>
+              </button>
+              <button class="btn-icon-sm delete" (click)="deletePost(post.Post_ID)">
+                <span class="icon">delete</span>
+              </button>
+            </div>
+          </div>
+          <h4 class="post-title">{{ post.Toppic }}</h4>
+          <div class="post-meta">
+            <span><span class="icon">calendar_today</span> {{ post.Start_time | date:'d MMM yyyy' }}</span>
+            <span><span class="icon">schedule</span> {{ post.Start_time | date:'HH:mm' }} - {{ post.End_time | date:'HH:mm' }}</span>
+            <span><span class="icon">location_on</span> {{ getLocationName(post.Location_ID) }}</span>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="posts.length === 0">
+          <span class="icon empty-icon">campaign</span>
+          <p>ยังไม่มีประกาศ</p>
+          <span>เพิ่มประกาศใหม่จากฟอร์มด้านซ้าย</span>
+        </div>
+      </div>
+
+      <a href="#" class="view-all">ดูประกาศทั้งหมด →</a>
+    </div>
+
+  </div>
+
+</main>

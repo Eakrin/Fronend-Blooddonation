@@ -1,0 +1,59 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+
+  <div class="sidebar-header">
+    <div class="logo-icon">🩸</div>
+    <div class="logo-text" *ngIf="!isCollapsed">
+      <h3>สุทธาเวช</h3>
+      <p>ระบบจัดการผู้บริจาคเลือด</p>
+    </div>
+    <button class="toggle-btn" (click)="toggle()">
+      <span class="icon">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</span>
+    </button>
+  </div>
+
+  <nav class="sidebar-menu">
+    <a routerLink="/home-staff" routerLinkActive="active" class="menu-item"
+      [title]="isCollapsed ? 'รายชื่อผู้จอง' : ''">
+      <span class="icon">groups</span>
+      <span class="menu-text" *ngIf="!isCollapsed">รายชื่อผู้จอง</span>
+    </a>
+    <a routerLink="/schedule-staff" routerLinkActive="active" class="menu-item"
+      [title]="isCollapsed ? 'ตารางรับบริจาค' : ''">
+      <span class="icon">calendar_month</span>
+      <span class="menu-text" *ngIf="!isCollapsed">จัดการตารางรับบริจาค</span>
+    </a>
+    <a routerLink="/post-staff" routerLinkActive="active" class="menu-item"
+      [title]="isCollapsed ? 'ประชาสัมพันธ์' : ''">
+      <span class="icon">campaign</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ประชาสัมพันธ์</span>
+    </a>
+    <a routerLink="/record-staff" routerLinkActive="active" class="menu-item">
+      <span class="icon">assignment</span>
+      <span class="menu-text" *ngIf="!isCollapsed">บันทึกการเข้าใช้บริการ</span>
+    </a>
+    <a routerLink="/location-staff" routerLinkActive="active" class="menu-item">
+      <span class="icon">location_on</span>
+      <span class="menu-text" *ngIf="!isCollapsed">จัดการสถานที่</span>
+    </a>
+    <a routerLink="/profile-staff" routerLinkActive="active" class="menu-item">
+      <span class="icon">person</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ข้อมูลส่วนตัว</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="staff-profile" *ngIf="!isCollapsed">
+      <div class="staff-avatar">{{ staffName.charAt(0) }}</div>
+      <div class="staff-info">
+        <p class="staff-name">{{ staffName }}</p>
+        <p class="staff-role">เจ้าหน้าที่คัดกรอง</p>
+      </div>
+    </div>
+    <div class="staff-avatar-only" *ngIf="isCollapsed">{{ staffName.charAt(0) }}</div>
+    <button class="logout-btn" (click)="logout()">
+      <span class="icon">logout</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ออกจากระบบ</span>
+    </button>
+  </div>
+
+</aside>

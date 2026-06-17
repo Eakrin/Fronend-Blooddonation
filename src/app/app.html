@@ -1,6 +1,7 @@
-<app-header *ngIf="!auth.isLoggedIn() || (auth.isAdmin() && !isAdminRoute())"></app-header>
-<app-header-donor *ngIf="auth.isLoggedIn() && !auth.isAdmin()"></app-header-donor>
+<app-header *ngIf="!auth.isLoggedIn() || (auth.isAdmin() && !isAdminRoute()) || (isStaff() && !isStaffRoute())"></app-header>
+<app-header-donor *ngIf="auth.isLoggedIn() && !auth.isAdmin() && !isStaff()"></app-header-donor>
 
+<!-- Admin Layout -->
 <div class="admin-layout" *ngIf="auth.isAdmin() && isAdminRoute()">
   <app-sidebar-admin></app-sidebar-admin>
   <div class="admin-main">
@@ -8,4 +9,13 @@
   </div>
 </div>
 
-<router-outlet *ngIf="!auth.isAdmin() || !isAdminRoute()"></router-outlet>
+<!-- Staff Layout -->
+<div class="admin-layout" *ngIf="isStaff() && isStaffRoute()">
+  <app-sidebar-staff></app-sidebar-staff>
+  <div class="admin-main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<!-- Public / Donor Layout -->
+<router-outlet *ngIf="(!auth.isAdmin() || !isAdminRoute()) && (!isStaff() || !isStaffRoute())"></router-outlet>

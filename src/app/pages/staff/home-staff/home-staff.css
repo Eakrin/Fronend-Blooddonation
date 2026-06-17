@@ -1,400 +1,354 @@
-/* ==========================================================================
-   1. RESET & BASE STYLES (ตั้งค่าเริ่มต้น)
-   ========================================================================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Noto Sans Thai', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+
+:host {
+  display: block;
+  font-family: 'Sarabun', sans-serif;
+  background: #f8fafc;
+  width: 100%;
 }
 
-body {
-    background-color: #f8fafc;
-    color: #334155;
-    display: flex;
-    min-height: 100vh;
+.icon {
+  font-family: 'Material Icons Outlined';
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  vertical-align: middle;
 }
 
-/* ==========================================================================
-   2. SIDEBAR STYLES (ส่วนเมนูด้านซ้าย)
-   ========================================================================== */
-.sidebar {
-    width: 280px;
-    background-color: #ffffff;
-    border-right: 1px solid #f1f5f9;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-shrink: 0;
+.main-content {
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.brand-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 24px;
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.brand-logo {
-    width: 40px;
-    height: 40px;
-    background-color: #059669;
-    color: white;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);
+.page-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px 0;
 }
 
-.brand-title {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #0f172a;
-    line-height: 1.2;
+.page-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
 }
 
-.brand-subtitle {
-    font-size: 0.75rem;
-    color: #94a3b8;
+.header-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px rgba(193,18,31,.06);
 }
 
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+.stat-icon {
+  width: 40px; height: 40px;
+  background: #fef2f2;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #c1121f;
 }
 
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    color: #64748b;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    border-radius: 12px;
-    transition: all 0.2s ease;
+.stat-label {
+  font-size: 11px;
+  color: #64748b;
+  margin: 0;
 }
 
-.nav-link:hover {
-    background-color: #f8fafc;
-    color: #1e293b;
+.stat-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
 }
 
-.nav-link.active {
-    background-color: #ecfdf5;
-    color: #065f46;
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
 }
 
-.logout-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    color: #ef4444;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    border-radius: 12px;
-    transition: all 0.2s ease;
+.search-box {
+  position: relative;
+  flex: 1;
 }
 
-.logout-link:hover {
-    background-color: #fef2f2;
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 18px;
 }
 
-/* ==========================================================================
-   3. MAIN CONTENT LAYOUT (พื้นที่เนื้อหาหลักฝั่งขวา)
-   ========================================================================== */
-.main-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+.search-box input {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  background: #f9fafb;
+  color: #1f2937;
+  transition: all 0.2s;
 }
 
-/* ส่วนหัวด้านบน (Top Header) */
-.top-header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 32px;
-    flex-shrink: 0;
+.search-box input:focus {
+  border-color: #c1121f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(193,18,31,.08);
 }
 
-.back-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #475569;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s;
+.filter-select {
+  padding: 10px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #374151;
+  background: #f9fafb;
+  outline: none;
+  cursor: pointer;
 }
 
-.back-btn:hover {
-    color: #0f172a;
+.date-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #374151;
+  background: #f9fafb;
+  white-space: nowrap;
 }
 
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.date-box .icon { font-size: 16px; color: #94a3b8; }
+
+.btn-export {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(193,18,31,.25);
+  transition: all 0.2s;
 }
 
-.user-info {
-    text-align: right;
-}
+.btn-export:hover { transform: translateY(-1px); }
 
-.user-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.user-role {
-    font-size: 0.75rem;
-    color: #94a3b8;
-}
-
-.user-avatar {
-    width: 36px;
-    height: 36px;
-    background-color: #e2e8f0;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: #475569;
-    border: 2px solid white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-/* พื้นที่แสดงตารางรับบริจาค */
-.content-body {
-    padding: 32px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
-}
-
-.page-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.page-subtitle {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    margin-top: 2px;
-}
-
-/* ปุ่มกดสไตล์พรีเมียม */
-.btn-add {
-    background-color: #059669;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 12px;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);
-    transition: all 0.2s ease;
-}
-
-.btn-add:hover {
-    background-color: #047857;
-    transform: translateY(-1px);
-}
-
-.btn-add:active {
-    transform: translateY(0);
-}
-
-/* ==========================================================================
-   4. DATA TABLE STYLES (สไตล์ของตาราง)
-   ========================================================================== */
+/* Table */
 .table-container {
-    background-color: #ffffff;
-    border-radius: 16px;
-    border: 1px solid #f1f5f9;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-    overflow: hidden;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  overflow: hidden;
 }
 
 .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
 }
 
 .data-table th {
-    background-color: #f8fafc;
-    padding: 16px 24px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid #f1f5f9;
+  background: #f8fafc;
+  padding: 14px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .data-table td {
-    padding: 20px 24px;
-    border-bottom: 1px solid #f8fafc;
-    vertical-align: middle;
-    font-size: 0.875rem;
+  padding: 14px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
 }
 
-.data-table tr:hover td {
-    background-color: #fafafa;
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #fafafa; }
+
+.donor-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.location-main {
-    font-weight: 600;
-    color: #1e293b;
-    display: block;
+.donor-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
-.location-sub {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    margin-top: 2px;
-    display: block;
+.av-1 { background: #dbeafe; color: #1e40af; }
+.av-2 { background: #fce7f3; color: #9d174d; }
+.av-3 { background: #e0f2fe; color: #0369a1; }
+
+.donor-name { font-weight: 600; color: #1e293b; }
+
+.text-muted { color: #64748b; }
+.text-center { text-align: center; }
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.text-datetime {
-    color: #475569;
-    font-weight: 500;
+.status-badge.ready { background: #dcfce7; color: #16a34a; }
+.status-badge.pending { background: #fef3c7; color: #d97706; }
+.status-badge.failed { background: #fee2e2; color: #c1121f; }
+
+.btn-more {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
 }
 
-/* โควตา & แถบแสดงสถานะ (Progress Bar) */
-.quota-wrapper {
-    width: 220px;
-}
+.btn-more:hover { background: #f1f5f9; color: #1e293b; }
 
-.quota-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.quota-label.full { color: #ef4444; }
-.quota-label.available { color: #059669; }
-.quota-label.empty { color: #94a3b8; }
-
-.progress-bar-bg {
-    width: 100%;
-    background-color: #f1f5f9;
-    height: 8px;
-    border-radius: 9999px;
-    overflow: hidden;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-}
-.bg-red { background-color: #f43f5e; }
-.bg-green { background-color: #10b981; }
-.bg-grey { background-color: #cbd5e1; }
-
-/* ปุ่มจัดการ (แก้ไข / ลบ) */
-.actions-group {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn-action {
-    background: none;
-    border: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    color: #94a3b8;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.btn-action.edit:hover {
-    color: #059669;
-    background-color: #ecfdf5;
-}
-
-.btn-action.delete:hover {
-    color: #ef4444;
-    background-color: #fef2f2;
-}
-
-/* ==========================================================================
-   5. PAGINATION STYLES (ส่วนท้ายตารางและการเปลี่ยนหน้า)
-   ========================================================================== */
+/* Table Footer */
 .table-footer {
-    background-color: #f8fafc;
-    padding: 16px 24px;
-    border-top: 1px solid #f1f5f9;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #64748b;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
 }
 
-.pagination-buttons {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+.entry-info { font-size: 13px; color: #64748b; }
+
+.pagination { display: flex; align-items: center; gap: 4px; }
+
+.pag-btn {
+  min-width: 32px; height: 32px;
+  padding: 0 6px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #475569;
+  transition: all 0.2s;
 }
 
-.page-btn {
-    background: none;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #64748b;
-    font-weight: 500;
-    transition: background 0.2s;
+.pag-btn:hover { border-color: #c1121f; color: #c1121f; }
+
+.pag-btn.active {
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  border-color: #c1121f;
+  color: #fff;
+  font-weight: 600;
 }
 
-.page-btn:hover {
-    background-color: #e2e8f0;
+.pag-dots { color: #94a3b8; padding: 0 4px; }
+
+/* Bottom Grid */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 16px;
 }
 
-.page-btn.active {
-    background-color: #059669;
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+.info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #fde68a;
+  background: #fffbeb;
 }
+
+.info-card-icon { color: #d97706; }
+.info-card-icon .icon { font-size: 20px; }
+
+.info-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400e;
+  margin: 0 0 4px 0;
+}
+
+.info-card-desc {
+  font-size: 12px;
+  color: #78350f;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+.stat-card-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.pending-icon { background: #fef3c7; color: #d97706; }
+.success-icon { background: #dcfce7; color: #16a34a; }
+
+.stat-card-label { font-size: 12px; color: #64748b; margin: 0 0 4px 0; }
+.stat-card-num { font-size: 20px; font-weight: 700; color: #1e293b; margin: 0; }

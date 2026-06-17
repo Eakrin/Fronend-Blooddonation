@@ -1,0 +1,167 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <div class="header-top">
+      <div>
+        <h2>บันทึกข้อมูลสุขภาพและประเมินผล</h2>
+        <div class="donor-tag">
+          <span class="tag-badge">รหัสผู้บริจาค: BD-67001</span>
+          <span class="donor-info">นายวีรพงษ์ สุขสันต์ | อายุ 32 ปี | เพศชาย</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-history">
+          <span class="icon">history</span> ดูประวัติย้อนหลัง
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. ข้อมูลสุขภาพพื้นฐาน -->
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num">1</div>
+      <div class="section-icon red"><span class="icon">monitor_heart</span></div>
+      <h3>ข้อมูลสุขภาพพื้นฐาน <span class="en-title">(Basic Health)</span></h3>
+    </div>
+
+    <div class="health-grid">
+      <div class="health-field">
+        <label>ความดันโลหิต (BP)</label>
+        <div class="input-unit-wrapper">
+          <input type="text" [(ngModel)]="bp" placeholder="120/80">
+          <span class="unit">mmHg</span>
+        </div>
+      </div>
+      <div class="health-field">
+        <label>ชีพจร (PULSE)</label>
+        <div class="input-unit-wrapper">
+          <input type="number" [(ngModel)]="pulse" placeholder="72">
+          <span class="unit">bpm</span>
+        </div>
+      </div>
+      <div class="health-field">
+        <label>อุณหภูมิร่างกาย (TEMP)</label>
+        <div class="input-unit-wrapper">
+          <input type="number" [(ngModel)]="temp" placeholder="36.5" step="0.1">
+          <span class="unit">°C</span>
+        </div>
+      </div>
+      <div class="health-field">
+        <label>ส่วนสูง (HEIGHT)</label>
+        <div class="input-unit-wrapper">
+          <input type="number" [(ngModel)]="height" placeholder="175">
+          <span class="unit">cm</span>
+        </div>
+      </div>
+      <div class="health-field">
+        <label>น้ำหนัก (WEIGHT)</label>
+        <div class="input-unit-wrapper">
+          <input type="number" [(ngModel)]="weight" placeholder="70.5" step="0.1">
+          <span class="unit">kg</span>
+        </div>
+      </div>
+      <div class="health-field">
+        <label>ค่าฮีโมโกลบิน (HB)</label>
+        <div class="input-unit-wrapper">
+          <input type="number" [(ngModel)]="hb" placeholder="14.2" step="0.1">
+          <span class="unit">g/dL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ข้อมูลการบริจาค -->
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num orange">2</div>
+      <div class="section-icon orange"><span class="icon">water_drop</span></div>
+      <h3>ข้อมูลการบริจาค <span class="en-title">(Donation Data)</span></h3>
+    </div>
+
+    <div class="donation-grid">
+      <div class="health-field">
+        <label>หมู่โลหิต (BLOOD TYPE)</label>
+        <select [(ngModel)]="bloodType" class="select-field">
+          <option value="">เลือกหมู่โลหิต</option>
+          <option value="A Positive">A Positive</option>
+          <option value="A Negative">A Negative</option>
+          <option value="B Positive">B Positive</option>
+          <option value="B Negative">B Negative</option>
+          <option value="O Positive">O Positive</option>
+          <option value="O Negative">O Negative</option>
+          <option value="AB Positive">AB Positive</option>
+          <option value="AB Negative">AB Negative</option>
+        </select>
+      </div>
+      <div class="health-field">
+        <label>ปริมาณที่บริจาค (AMOUNT)</label>
+        <div class="input-unit-wrapper">
+          <input type="number" [(ngModel)]="bloodVolume" placeholder="450">
+          <span class="unit">ml</span>
+        </div>
+      </div>
+      <div class="health-field">
+        <label>บริจาคครั้งล่าสุด</label>
+        <input type="date" [(ngModel)]="lastDonation">
+      </div>
+      <div class="health-field">
+        <label>บริจาคครั้งแรก</label>
+        <input type="date" [(ngModel)]="firstDonation">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. แบบประเมินสุขภาพ -->
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num green">3</div>
+      <div class="section-icon green"><span class="icon">fact_check</span></div>
+      <h3>แบบประเมินสุขภาพ <span class="en-title">(Health Assessment Checklist)</span></h3>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item" *ngFor="let q of questions; let i = index">
+        <div class="check-content">
+          <p class="check-q">{{ i + 1 }}. {{ q.th }}</p>
+          <p class="check-en">{{ q.en }}</p>
+        </div>
+        <div class="check-btns">
+          <button class="btn-yes" [class.active]="q.answer === true" (click)="q.answer = true">
+            ใช่ (Yes)
+          </button>
+          <button class="btn-no" [class.active]="q.answer === false" (click)="q.answer = false">
+            ไม่ใช่ (No)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. บันทึกเพิ่มเติม -->
+  <div class="section-card">
+    <div class="section-title">
+      <div class="section-num blue">4</div>
+      <div class="section-icon blue"><span class="icon">note_alt</span></div>
+      <h3>บันทึกเพิ่มเติมโดยเจ้าหน้าที่ <span class="en-title">(Internal Notes)</span></h3>
+    </div>
+    <div class="notes-wrapper">
+      <textarea [(ngModel)]="notes" placeholder="กรอกหมายเหตุ หรือข้อสังเกตเพิ่มเติม..." rows="5"></textarea>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="bottom-bar">
+    <div class="status-indicator" [class.ready]="isReady" [class.not-ready]="!isReady">
+      <span class="icon">{{ isReady ? 'check_circle' : 'pending' }}</span>
+      {{ isReady ? 'ข้อมูลพร้อมสำหรับการประเมินผล' : 'กรุณากรอกข้อมูลให้ครบถ้วน' }}
+    </div>
+    <div class="bottom-actions">
+      <button class="btn-cancel">ยกเลิก</button>
+      <button class="btn-confirm" (click)="saveAll()">
+        <span class="icon">verified</span> ยืนยันและบันทึกข้อมูล
+      </button>
+    </div>
+  </div>
+
+</main>

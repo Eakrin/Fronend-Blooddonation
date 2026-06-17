@@ -15,6 +15,13 @@ import { ManageAccounts } from './pages/admin/manage-accounts/manage-accounts';
 import { HomeAdmin } from './pages/admin/home-admin/home-admin';
 import { Settings } from './pages/admin/settings/settings';
 import { profileAdmin } from './pages/admin/profile-admin/profile-admin';
+import { HomeStaff } from './pages/staff/home-staff/home-staff';
+
+import { PostStaff } from './pages/staff/post-staff/post-staff';
+import { DonationDay } from './pages/staff/donation-day/donation-day';
+import { ProfileStaff } from './pages/staff/profile-staff/profile-staff';
+import { RecordStaff } from './pages/staff/record-staff/record-staff';
+import { LocationStaff } from './pages/staff/location-staff/location-staff';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -34,4 +41,12 @@ export const routes: Routes = [
   { path: 'manage-accounts', component: ManageAccounts }, // 👈 3. ส่วนหน้านี้เอาไว้กดลิงก์ไปทีหลังเมื่อล็อกอินเข้าหน้าหลักแล้ว
   { path: 'settings', component: Settings }, // 👈 4. ส่วนหน้านี้เอาไว้กดลิงก์ไปทีหลังเมื่อล็อกอินเข้าหน้าหลักแล้ว
   { path: 'profile-admin', component: profileAdmin },
+
+  // โซนของ Staff
+  { path: 'home-staff', component: HomeStaff },
+  { path: 'post-staff', component: PostStaff },
+  { path: 'schedule-staff', component: DonationDay },
+  { path: 'profile-staff', component: ProfileStaff },
+  { path: 'record-staff', component: RecordStaff },
+  { path: 'location-staff', component: LocationStaff },
 ];

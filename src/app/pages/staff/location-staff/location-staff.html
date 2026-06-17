@@ -1,0 +1,178 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <div class="header-left">
+      <div class="page-title-icon">
+        <span class="icon">location_on</span>
+      </div>
+      <div>
+        <h2>จัดการสถานที่รับบริจาค</h2>
+        <p>เพิ่มและแก้ไขข้อมูลสถานที่สำหรับการรับบริจาคโลหิต</p>
+      </div>
+    </div>
+    <button class="btn-add" (click)="openModal()">
+      <span class="icon">add</span> เพิ่มสถานที่ใหม่
+    </button>
+  </header>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon"><span class="icon">location_on</span></div>
+      <div>
+        <p class="kpi-label">สถานที่ทั้งหมด</p>
+        <h3 class="kpi-value">{{ locations.length }} <small>แห่ง</small></h3>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green"><span class="icon">local_hospital</span></div>
+      <div>
+        <p class="kpi-label">ประเภทโรงพยาบาล</p>
+        <h3 class="kpi-value green">{{ hospitalCount }} <small>แห่ง</small></h3>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon orange"><span class="icon">directions_car</span></div>
+      <div>
+        <p class="kpi-label">หน่วยเคลื่อนที่</p>
+        <h3 class="kpi-value orange">{{ mobileCount }} <small>แห่ง</small></h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ชื่อสถานที่</th>
+          <th>ที่อยู่</th>
+          <th>ประเภท</th>
+          <th>ติดต่อ</th>
+          <th class="text-center">จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let loc of locations">
+          <td>
+            <div class="location-name">
+              <div class="location-avatar">
+                <span class="icon">location_on</span>
+              </div>
+              <span>{{ loc.name }}</span>
+            </div>
+          </td>
+          <td class="text-muted">{{ loc.address || '-' }}</td>
+          <td>
+            <span class="type-badge" [class.hospital]="loc.type === 'hospital'" [class.hall]="loc.type === 'hall'" [class.mobile]="loc.type === 'mobile'">
+              {{ getTypeName(loc.type) }}
+            </span>
+          </td>
+          <td class="text-muted">
+            <div class="contact-info">
+              <span *ngIf="loc.phone"><span class="icon">phone</span> {{ loc.phone }}</span>
+              <span *ngIf="loc.email"><span class="icon">mail</span> {{ loc.email }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-action edit" (click)="openEditModal(loc)">
+                <span class="icon">edit</span>
+              </button>
+              <button class="btn-action delete" (click)="deleteLocation(loc.Location_ID)">
+                <span class="icon">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="locations.length === 0">
+          <td colspan="5" class="empty-row">
+            <span class="icon">location_off</span>
+            <p>ยังไม่มีสถานที่</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-footer">
+      <span class="entry-info">ทั้งหมด {{ locations.length }} รายการ</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon"><span class="icon">{{ editingId ? 'edit_location' : 'add_location' }}</span></div>
+        <div>
+          <h2>{{ editingId ? 'แก้ไขสถานที่' : 'เพิ่มสถานที่ใหม่' }}</h2>
+          <p>กรอกข้อมูลสถานที่รับบริจาคโลหิต</p>
+        </div>
+      </div>
+      <button class="btn-close" (click)="closeModal()"><span class="icon">close</span></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="error-box" *ngIf="errorMsg">
+        <span class="icon">error</span> {{ errorMsg }}
+      </div>
+
+      <div class="form-group">
+        <label>ชื่อสถานที่ *</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">location_on</span>
+          <input type="text" [(ngModel)]="form.name" placeholder="เช่น อาคารเฉลิมพระเกียรติ ชั้น 1">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ที่อยู่</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">home</span>
+          <input type="text" [(ngModel)]="form.address" placeholder="ระบุที่อยู่สถานที่">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>เบอร์โทรศัพท์</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">phone</span>
+            <input type="tel" [(ngModel)]="form.phone" placeholder="0xx-xxx-xxxx">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>อีเมล</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">mail</span>
+            <input type="email" [(ngModel)]="form.email" placeholder="example@hospital.go.th">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ประเภท</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">category</span>
+          <select class="select-input" [(ngModel)]="form.type">
+            <option value="">เลือกประเภท</option>
+            <option value="hospital">โรงพยาบาล</option>
+            <option value="hall">หอประชุม</option>
+            <option value="mobile">หน่วยเคลื่อนที่</option>
+            <option value="other">อื่นๆ</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">ยกเลิก</button>
+      <button class="btn-submit" (click)="save()" [disabled]="isLoading">
+        <span class="icon">save</span>
+        {{ isLoading ? 'กำลังบันทึก...' : 'บันทึก' }}
+      </button>
+    </div>
+  </div>
+</div>
