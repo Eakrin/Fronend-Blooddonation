@@ -20,39 +20,65 @@
           <h3>1,200+</h3>
           <p>ผู้บริจาคเดือนนี้</p>
         </div>
-
         <div class="box">
           <h3>24/7</h3>
           <p>จองคิวได้ตลอดเวลา</p>
         </div>
       </div>
 
-      <img src="assets/blood.png" class="blood-img" alt="Blood Donation">
+      <div class="features">
+        <div class="feature-item">
+          <div class="feature-icon">verified</div>
+          <span>ระบบจองคิวออนไลน์ที่ปลอดภัย</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">notifications</div>
+          <span>แจ้งเตือนนัดหมายอัตโนมัติ</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">history</div>
+          <span>ติดตามประวัติการบริจาคได้ทันที</span>
+        </div>
+      </div>
 
+      <img src="assets/blood.png" class="blood-img" alt="Blood Donation">
     </div>
   </div>
 
   <div class="right">
     <div class="login-box">
 
-      <h2>เข้าสู่ระบบ</h2>
-      <p class="sub">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
-
-      <div class="input-group">
-        <input type="email" placeholder="example@email.com" [(ngModel)]="email">
+      <div class="logo-area">
+        <div class="logo-circle">🩸</div>
+        <h2>เข้าสู่ระบบ</h2>
+        <p class="sub">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
       </div>
 
       <div class="input-group">
-        <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
+        <label class="input-label">อีเมล</label>
+        <div class="input-wrapper">
+          <span class="input-icon">mail</span>
+          <input type="email" placeholder="example@email.com" [(ngModel)]="email">
+        </div>
       </div>
 
-      <button class="login-btn" (click)="login()">
-        เข้าสู่ระบบ
-      </button>
-
-      <div class="divider">
-        <span>หรือ</span>
+      <div class="input-group">
+        <label class="input-label">รหัสผ่าน</label>
+        <div class="input-wrapper">
+          <span class="input-icon">lock</span>
+          <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
+        </div>
       </div>
+
+      <div class="forgot">
+        <a href="#">ลืมรหัสผ่าน?</a>
+      </div>
+
+<button class="login-btn" (click)="login()">
+  เข้าสู่ระบบ
+</button>
+
+      <div class="divider"><span>หรือ</span></div>
 
       <button class="google-btn">
         🔵 Continue with Google

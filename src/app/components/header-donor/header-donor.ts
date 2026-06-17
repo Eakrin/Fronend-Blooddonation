@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, RouterLinkActive } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { AuthService } from '../../services/api'; // ✅ เพิ่ม
 
 @Component({
   selector: 'app-header-donor',
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink, RouterLinkActive, NgIf],
   templateUrl: './header-donor.html',
-  styleUrl: './header-donor.css'
+  styleUrl: './header-donor.css',
 })
 export class HeaderDonor implements OnInit {
-
   userName = '';
   showDropdown = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private auth: AuthService,
+  ) {} // ✅ เพิ่ม
 
   ngOnInit() {
     const user = localStorage.getItem('user');
@@ -29,14 +32,12 @@ export class HeaderDonor implements OnInit {
 
   goToProfile() {
     this.showDropdown = false;
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/edit-profile']);
   }
 
   logout() {
     this.showDropdown = false;
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+    this.auth.logout(); // ✅ ล้างทุกอย่างพร้อม signal
+    this.router.navigate(['/']);
   }
-
 }

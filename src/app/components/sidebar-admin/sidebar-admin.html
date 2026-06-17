@@ -1,0 +1,38 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-header">
+    <div class="logo-icon">H</div>
+    <div class="logo-text" *ngIf="!isCollapsed">
+      <h1>สุทธาเวช</h1>
+      <p>ระบบจัดการคิวบริจาค</p>
+    </div>
+    <button class="toggle-btn" (click)="toggle()">
+      <span class="icon">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</span>
+    </button>
+  </div>
+
+  <nav class="sidebar-menu">
+    <a routerLink="/home-admin" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'หน้าแรก' : ''">
+      <span class="icon">home</span>
+      <span class="menu-text" *ngIf="!isCollapsed">หน้าแรก</span>
+    </a>
+    <a routerLink="/manage-accounts" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'จัดการเจ้าหน้าที่' : ''">
+      <span class="icon">people</span>
+      <span class="menu-text" *ngIf="!isCollapsed">จัดการเจ้าหน้าที่</span>
+    </a>
+    <a routerLink="/settings" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'ตั้งค่าหน่วยงาน' : ''">
+      <span class="icon">apartment</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ตั้งค่าหน่วยงาน</span>
+    </a>
+    <a routerLink="/profile-admin" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'ข้อมูลส่วนตัว' : ''">
+      <span class="icon">person</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ข้อมูลส่วนตัว</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="logout()">
+      <span class="icon">logout</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ออกจากระบบ</span>
+    </button>
+  </div>
+</aside>

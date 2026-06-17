@@ -1,46 +1,56 @@
-/* ==========================================================================
-   1. คอนเทนเนอร์หลักและส่วนหัวข้อ (Layout & Header)
-   ========================================================================== */
-.assessment-page {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #333333;
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+
+:host {
+  display: block;
+  font-family: 'Sarabun', sans-serif;
+  background: linear-gradient(180deg, #fef2f2 0%, #f8fafc 100%);
+  min-height: 100vh;
 }
 
+.assessment-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
 .page-header {
   text-align: center;
-  margin-bottom: 30px;
 }
 
 .page-header h2 {
-  color: #bd2130; /* สีแดงสภากาชาด */
+  color: #991b1b;
   font-size: 28px;
-  margin-bottom: 10px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
 }
 
 .page-header .subtitle {
-  color: #666;
-  font-size: 15px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
 }
 
-/* ==========================================================================
-   2. การ์ดแบบประเมินและแถบความคืบหน้า (Card & Progress Bar)
-   ========================================================================== */
+/* Card */
 .assessment-card {
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 30px;
-  margin-bottom: 25px;
+  border-radius: 20px;
+  border: 1px solid #fecaca;
+  box-shadow: 0 4px 16px rgba(193, 18, 31, 0.06);
+  padding: 32px;
 }
 
+/* Progress */
 .progress-section {
-  margin-bottom: 30px;
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
+  margin-bottom: 28px;
+  background: #fef2f2;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #fecaca;
 }
 
 .progress-info {
@@ -48,45 +58,45 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .step-label {
-  font-weight: bold;
-  color: #bd2130;
+  font-weight: 700;
+  color: #c1121f;
 }
 
 .step-title {
-  color: #495057;
-  font-weight: 500;
+  color: #374151;
+  font-weight: 600;
 }
 
 .percent-label {
-  color: #6c757d;
+  color: #64748b;
 }
 
 .progress-bar-container {
   width: 100%;
   height: 8px;
-  background: #e9ecef;
-  border-radius: 4px;
+  background: #fecaca;
+  border-radius: 20px;
   overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  background: #dc3545;
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #991b1b, #c1121f);
+  border-radius: 20px;
+  transition: width 0.4s ease;
 }
 
-/* ==========================================================================
-   3. ส่วนกรอกประวัติการบริจาค (Step 0)
-   ========================================================================== */
+/* Step 0 */
 .section-divider-title {
-  font-size: 18px;
-  color: #495057;
-  border-bottom: 2px solid #dee2e6;
-  padding-bottom: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1e293b;
+  border-bottom: 2px solid #fecaca;
+  padding-bottom: 10px;
   margin-bottom: 20px;
 }
 
@@ -98,24 +108,23 @@
   display: block;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #333;
+  color: #374151;
+  font-size: 15px;
 }
 
 .font-bold-text {
-  font-weight: bold;
+  font-weight: 700;
 }
 
-/* ส่วนขยายย่อยเวลาเลือกตัวเลือกที่มีเงื่อนไข */
 .sub-form-box {
-  background: #fff5f5;
-  border-left: 4px solid #dc3545;
-  padding: 15px;
-  border-radius: 0 8px 8px 0;
-  margin-top: -10px;
+  background: #fef2f2;
+  border-left: 4px solid #c1121f;
+  padding: 16px;
+  border-radius: 0 12px 12px 0;
+  margin-top: -8px;
   margin-bottom: 20px;
 }
 
-/* การจัดกลุ่ม Radio และ Checkbox */
 .radio-group-horizontal {
   display: flex;
   gap: 20px;
@@ -138,16 +147,16 @@
   align-items: center;
   cursor: pointer;
   font-size: 15px;
+  color: #374151;
 }
 
 .radio-item input, .check-item input {
   margin-right: 8px;
   width: 18px;
   height: 18px;
-  accent-color: #dc3545;
+  accent-color: #c1121f;
 }
 
-/* ช่องพิมพ์ข้อความแบบขีดเส้นใต้ */
 .flex-input {
   display: flex;
   align-items: center;
@@ -157,21 +166,21 @@
 
 .text-underline-input {
   border: none;
-  border-bottom: 1px solid #ced4da;
+  border-bottom: 1.5px solid #e5e7eb;
   padding: 2px 5px;
   outline: none;
   font-size: 14px;
   background: transparent;
   flex: 1;
+  font-family: inherit;
+  color: #374151;
 }
 
 .text-underline-input:focus {
-  border-bottom: 2px solid #dc3545;
+  border-bottom: 2px solid #c1121f;
 }
 
-/* ==========================================================================
-   4. ส่วนรายการข้อคำถาม (Step 1, 2, 3)
-   ========================================================================== */
+/* Questions */
 .question-list {
   display: flex;
   flex-direction: column;
@@ -179,52 +188,53 @@
 }
 
 .question-item {
-  border-bottom: 1px solid #f1f3f5;
+  border-bottom: 1px solid #f1f5f9;
   padding-bottom: 20px;
 }
 
 .question-text {
   display: flex;
   gap: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .q-number {
-  background: #e9ecef;
-  color: #495057;
-  font-weight: bold;
-  width: 28px;
-  height: 28px;
+  background: #fef2f2;
+  color: #c1121f;
+  font-weight: 700;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 13px;
   flex-shrink: 0;
+  border: 1.5px solid #fecaca;
 }
 
 .question-text p {
   margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
   font-weight: 500;
+  color: #1e293b;
+  padding-top: 4px;
 }
 
-/* ปุ่มตอบ ใช่ / ไม่ใช่ และตัวเลือกพิเศษข้อ 13 */
 .answer-options {
   display: flex;
-  gap: 15px;
-  padding-left: 40px;
+  gap: 12px;
+  padding-left: 42px;
 }
 
 .checkbox-options {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-left: 40px;
-  background: #fdf2f2;
-  padding: 15px 15px 15px 40px;
-  border-radius: 8px;
+  background: #fef2f2;
+  padding: 16px 16px 16px 42px;
+  border-radius: 10px;
 }
 
 .opt-btn {
@@ -232,45 +242,45 @@
   align-items: center;
   gap: 6px;
   padding: 10px 24px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 2px solid transparent;
+  font-family: inherit;
 }
 
 .opt-btn.outline {
   background: #ffffff;
-  border: 2px solid #dee2e6;
-  color: #495057;
+  border: 1.5px solid #e5e7eb;
+  color: #64748b;
 }
 
 .opt-btn.outline:hover {
-  background: #f8f9fa;
-  border-color: #adb5bd;
+  border-color: #c1121f;
+  color: #c1121f;
+  background: #fef2f2;
 }
 
-/* สถานะเมื่อกดเลือกตอบ */
 .active-yes {
-  background: #d4edda;
-  border-color: #28a745;
-  color: #155724;
+  background: #dcfce7;
+  border: 1.5px solid #16a34a;
+  color: #166534;
 }
 
 .active-no {
-  background: #f8d7da;
-  border-color: #dc3545;
-  color: #721c24;
+  background: #fef2f2;
+  border: 1.5px solid #c1121f;
+  color: #991b1b;
 }
 
-/* ปุ่มควบคุม ย้อนกลับ-ถัดไป ด้านล่าง */
+/* Actions */
 .card-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 35px;
+  margin-top: 32px;
   padding-top: 20px;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid #f1f5f9;
 }
 
 .btn-back, .btn-next {
@@ -278,75 +288,73 @@
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
   border: none;
+  font-family: inherit;
 }
 
 .btn-back {
-  background: #e9ecef;
-  color: #495057;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1.5px solid #e2e8f0;
 }
 
 .btn-back:disabled {
-  background: #f1f3f5;
-  color: #ced4da;
+  background: #f8fafc;
+  color: #cbd5e1;
   cursor: not-allowed;
 }
 
-.btn-next {
-  background: #bd2130;
-  color: #ffffff;
+.btn-back:not(:disabled):hover {
+  background: #e2e8f0;
 }
 
-.btn-next:hover:not(:disabled) {
-  background: #9c1a25;
+.btn-next {
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(193, 18, 31, 0.3);
+}
+
+.btn-next:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(193, 18, 31, 0.4);
 }
 
 .arrow {
   font-size: 18px;
 }
 
-/* ==========================================================================
-   5. หน้าจอสรุปผลลัพธ์การประเมิน (Step 4 - จบในหน้าเดียว)
-   ========================================================================== */
+/* Result */
 .result-container {
   text-align: center;
-  padding: 20px 10px;
+  padding: 20px 0;
 }
 
 .result-box {
-  padding: 40px 20px;
-  border-radius: 12px;
-  margin-bottom: 30px;
+  padding: 40px 24px;
+  border-radius: 16px;
+  margin-bottom: 24px;
 }
 
-/* กรณีประเมินผ่านเกณฑ์ (กล่องสีเขียว) */
 .result-box.pass {
-  background-color: #ebfbee;
-  border: 2px solid #28a745;
-  color: #1e7e34;
-}
-.result-box.pass .result-icon-circle {
-  background-color: #28a745;
+  background: #f0fdf4;
+  border: 2px solid #16a34a;
+  color: #166534;
 }
 
-/* กรณีไม่ผ่านเกณฑ์ (กล่องสีแดง) */
 .result-box.fail {
-  background-color: #fff5f5;
-  border: 2px solid #dc3545;
-  color: #bd2130;
-}
-.result-box.fail .result-icon-circle {
-  background-color: #dc3545;
+  background: #fef2f2;
+  border: 2px solid #c1121f;
+  color: #991b1b;
 }
 
 .result-icon-circle {
-  width: 70px;
-  height: 70px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   color: white;
   font-size: 36px;
@@ -354,31 +362,47 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.result-box.pass .result-icon-circle { background: #16a34a; }
+.result-box.fail .result-icon-circle { background: #c1121f; }
+
+.result-box h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.result-box p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.7;
+  margin: 0;
 }
 
 .fail-notice {
-  color: #666666;
-  font-size: 16px;
-  margin-bottom: 25px;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-/* กล่องแสดงข้อพกพร่องที่ทำให้ไม่ผ่านเกณฑ์ */
 .failed-reasons-box {
   background: #ffffff;
-  border: 1px solid #f5c6cb;
-  border-radius: 8px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
   padding: 20px;
   text-align: left;
-  max-height: 300px;
+  max-height: 280px;
   overflow-y: auto;
+  margin-top: 16px;
 }
 
 .failed-reasons-box h4 {
-  margin-top: 0;
-  color: #495057;
-  font-size: 16px;
-  border-bottom: 1px solid #eed3d7;
+  margin: 0 0 12px 0;
+  color: #374151;
+  font-size: 14px;
+  border-bottom: 1px solid #fecaca;
   padding-bottom: 8px;
 }
 
@@ -388,84 +412,83 @@
 }
 
 .failed-reasons-box li {
-  margin-bottom: 12px;
-  color: #555555;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.user-ans {
-  color: #dc3545;
-  font-weight: 500;
-}
-
-/* ปุ่มควบคุมในหน้าสรุปผล */
-.result-actions {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.btn-retry {
-  background-color: #495057;
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-retry:hover {
-  background-color: #343a40;
-}
-
-/* ปุ่มสีเขียวเด่นๆ สำหรับลิงก์ไปหน้า Booking จองคิวต่อ */
-.btn-go-booking {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 14px 35px;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-  transition: all 0.2s ease;
-}
-
-.btn-go-booking:hover {
-  background-color: #218838;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
-}
-
-/* ==========================================================================
-   6. กล่องข้อความแจ้งเตือนความปลอดภัยด้านล่างสุด (Footer Note)
-   ========================================================================== */
-.note-box {
-  display: flex;
-  gap: 15px;
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-  padding: 15px 20px;
-  border-radius: 0 8px 8px 0;
-  color: #856404;
+  margin-bottom: 10px;
+  color: #64748b;
   font-size: 14px;
   line-height: 1.5;
 }
 
+.user-ans {
+  color: #c1121f;
+  font-weight: 600;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-retry {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1.5px solid #e2e8f0;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-retry:hover {
+  background: #e2e8f0;
+}
+
+.btn-go-booking {
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(193, 18, 31, 0.3);
+  transition: all 0.2s;
+}
+
+.btn-go-booking:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(193, 18, 31, 0.4);
+}
+
+/* Note */
+.note-box {
+  display: flex;
+  gap: 14px;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  padding: 16px 20px;
+  border-radius: 0 12px 12px 0;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .note-icon {
-  background: #ffc107;
+  background: #f59e0b;
   color: #fff;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 13px;
   flex-shrink: 0;
 }

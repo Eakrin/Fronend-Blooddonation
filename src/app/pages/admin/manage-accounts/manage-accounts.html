@@ -1,209 +1,198 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการบัญชีเจ้าหน้าที่ - สุทธาเวช</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<main class="main-content">
 
-    <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-        }
-        /* ซ่อน Scrollbar ของบราวเซอร์หลักเพื่อความเป็น Web App ไร้ขอบ */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
-</head>
-<body class="bg-[#f8fafc] text-[#334155] antialiased flex h-screen overflow-hidden">
+  <header class="content-header">
+    <div class="search-box">
+      <span class="icon search-icon">search</span>
+      <input type="text" placeholder="ค้นหาชื่อ, อีเมล...">
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      <span class="icon">add</span> เพิ่มเจ้าหน้าที่
+    </button>
+  </header>
 
-    <aside class="w-64 bg-white border-r border-[#f1f5f9] flex flex-col justify-between h-full shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.01)]">
+  <section class="kpi-grid">
+    <div class="kpi-card total">
+      <div class="kpi-icon-wrapper"><span class="icon">badge</span></div>
+      <div class="kpi-info">
+        <span class="kpi-label">เจ้าหน้าที่ทั้งหมด</span>
+        <h2 class="kpi-value">48 <small>คน</small></h2>
+      </div>
+    </div>
+    <div class="kpi-card active">
+      <div class="kpi-icon-wrapper"><span class="icon">check_circle</span></div>
+      <div class="kpi-info">
+        <span class="kpi-label">กำลังใช้งาน</span>
+        <h2 class="kpi-value text-success">42 <small>คน</small></h2>
+      </div>
+    </div>
+    <div class="kpi-card suspended">
+      <div class="kpi-icon-wrapper"><span class="icon">block</span></div>
+      <div class="kpi-info">
+        <span class="kpi-label">ระงับการใช้งาน</span>
+        <h2 class="kpi-value text-warning">6 <small>คน</small></h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ชื่อ-นามสกุล</th>
+          <th>อีเมล</th>
+          <th>สถานะ</th>
+          <th>เข้าใช้ล่าสุด</th>
+          <th class="text-center">จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="user-profile">
+              <div class="avatar av-1">สม</div>
+              <span class="user-name">นายสมชาย ใจดี</span>
+            </div>
+          </td>
+          <td class="text-muted">somchai@hospital.com</td>
+          <td><span class="badge badge-success">กำลังใช้งาน</span></td>
+          <td class="text-muted">10 นาทีที่แล้ว</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon edit-btn"><span class="icon">edit</span></button>
+              <button class="btn-icon delete-btn"><span class="icon">delete</span></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-profile">
+              <div class="avatar av-2">สศ</div>
+              <span class="user-name">นางสาวสมศรี รักเรียน</span>
+            </div>
+          </td>
+          <td class="text-muted">somsri.r@hospital.com</td>
+          <td><span class="badge badge-success">กำลังใช้งาน</span></td>
+          <td class="text-muted">วานนี้, 14:30</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon edit-btn"><span class="icon">edit</span></button>
+              <button class="btn-icon delete-btn"><span class="icon">delete</span></button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="user-profile">
+              <div class="avatar av-3">มน</div>
+              <span class="user-name">นายมานะ อดทน</span>
+            </div>
+          </td>
+          <td class="text-muted">mana.a@hospital.com</td>
+          <td><span class="badge badge-suspended">ระงับการใช้งาน</span></td>
+          <td class="text-muted">3 วันที่แล้ว</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon edit-btn"><span class="icon">edit</span></button>
+              <button class="btn-icon delete-btn"><span class="icon">delete</span></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer class="table-footer">
+      <span class="entry-info">แสดง 1 ถึง 10 จากทั้งหมด 48 รายการ</span>
+      <div class="pagination">
+        <button class="pag-btn"><span class="icon">chevron_left</span></button>
+        <button class="pag-btn active">1</button>
+        <button class="pag-btn">2</button>
+        <button class="pag-btn">3</button>
+        <span class="pag-dots">...</span>
+        <button class="pag-btn">5</button>
+        <button class="pag-btn"><span class="icon">chevron_right</span></button>
+      </div>
+    </footer>
+  </section>
+
+  <footer class="app-footer">
+    © 2026 โรงพยาบาลสุทธาเวช - ระบบบริหารจัดการเจ้าหน้าที่และคิวบริจาคโลหิต
+  </footer>
+
+
+  <!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+      <div class="modal-title-group">
+        <div class="modal-icon"><span class="icon">person_add</span></div>
         <div>
-            <div class="p-6 border-b border-[#f8fafc]">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-[#f0fdf4] rounded-full flex items-center justify-center text-[#16a34a] font-bold text-lg shadow-sm border border-[#dcfce7]">
-                        ST
-                    </div>
-                    <div>
-                        <h1 class="font-bold text-[#0f172a] text-[15px] tracking-wide leading-tight">สุทธาเวช</h1>
-                        <p class="text-[11px] text-[#16a34a] font-medium mt-0.5 tracking-wider">ระบบจัดการคิวบริจาค</p>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="p-4 space-y-1.5">
-                <a href="#" class="flex items-center gap-3.5 px-4 py-3 text-[#64748b] hover:bg-[#f8fafc] hover:text-[#1e293b] rounded-xl transition-all duration-200 group">
-                    <i class="fa-solid fa-house text-base w-5 text-[#94a3b8] group-hover:text-[#64748b] transition-colors"></i>
-                    <span class="text-[13.5px] font-medium tracking-wide">หน้าแรก</span>
-                </a>
-                <a href="#" class="flex items-center gap-3.5 px-4 py-3 bg-[#f2fcf5] text-[#15803d] rounded-xl border-r-[3px] border-[#22c55e] shadow-[0_2px_8px_rgba(34,197,94,0.04)] transition-all duration-200">
-                    <i class="fa-solid fa-users text-base w-5 text-[#16a34a]"></i>
-                    <span class="text-[13.5px] font-semibold tracking-wide">จัดการเจ้าหน้าที่</span>
-                </a>
-                <a href="#" class="flex items-center gap-3.5 px-4 py-3 text-[#64748b] hover:bg-[#f8fafc] hover:text-[#1e293b] rounded-xl transition-all duration-200 group">
-                    <i class="fa-solid fa-building text-base w-5 text-[#94a3b8] group-hover:text-[#64748b] transition-colors"></i>
-                    <span class="text-[13.5px] font-medium tracking-wide">ตั้งค่าหน่วยงาน</span>
-                </a>
-                <a href="#" class="flex items-center gap-3.5 px-4 py-3 text-[#64748b] hover:bg-[#f8fafc] hover:text-[#1e293b] rounded-xl transition-all duration-200 group">
-                    <i class="fa-solid fa-user text-base w-5 text-[#94a3b8] group-hover:text-[#64748b] transition-colors"></i>
-                    <span class="text-[13.5px] font-medium tracking-wide">ข้อมูลส่วนตัว</span>
-                </a>
-            </nav>
+          <h2>เพิ่มเจ้าหน้าที่ใหม่</h2>
+          <p>กรอกข้อมูลเพื่อสร้างบัญชีเจ้าหน้าที่</p>
         </div>
+      </div>
+      <button class="btn-close" (click)="closeModal()">
+        <span class="icon">close</span>
+      </button>
+    </div>
 
-        <div class="p-4 border-t border-[#f1f5f9]">
-            <button class="w-full flex items-center gap-3.5 px-4 py-3 text-[#ef4444] hover:bg-[#fef2f2] rounded-xl transition-all duration-200 font-medium text-[13.5px] cursor-pointer">
-                <i class="fa-solid fa-right-from-bracket text-base w-5"></i>
-                ออกจากระบบ
-            </button>
-        </div>
-    </aside>
+<div class="modal-body">
+  <div class="form-group">
+    <label>ชื่อ-นามสกุล</label>
+    <div class="input-wrapper">
+      <span class="icon input-icon">person</span>
+      <input type="text" placeholder="ระบุชื่อและนามสกุล">
+    </div>
+  </div>
 
-    <main class="flex-1 flex flex-col h-full overflow-hidden">
+  <div class="form-group">
+    <div class="label-row">
+      <label>อีเมล</label>
+      <span class="error-hint">* ไม่สามารถซ้ำได้</span>
+    </div>
+    <div class="input-wrapper">
+      <span class="icon input-icon">mail</span>
+      <input type="email" placeholder="example@suthawet.go.th">
+    </div>
+  </div>
 
-        <header class="bg-white border-b border-[#f1f5f9] px-8 py-4 flex justify-between items-center shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.01)]z-5">
-            <h2 class="text-lg font-bold text-[#0f172a] tracking-wide">จัดการบัญชีเจ้าหน้าที่</h2>
-            <div class="flex items-center gap-5">
-                <button class="relative w-9 h-9 flex items-center justify-center text-[#94a3b8] hover:text-[#475569] bg-white hover:bg-[#f8fafc] rounded-full border border-[#f1f5f9] transition-all cursor-pointer">
-                    <i class="fa-regular fa-bell text-[17px]"></i>
-                    <span class="absolute top-2 right-2.5 w-2 h-2 bg-[#ef4444] rounded-full border-2 border-white"></span>
-                </button>
-                <div class="flex items-center gap-3 border-l pl-5 border-[#e2e8f0]">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-xs font-bold text-[#0f172a] tracking-wide">ผู้ดูแลระบบสูงสุด</p>
-                        <p class="text-[11px] text-[#94a3b8] font-medium mt-0.5">admin@suthawet.go.th</p>
-                    </div>
-                    <div class="w-9 h-9 bg-[#ffedd5] text-[#ea580c] rounded-full flex items-center justify-center font-bold text-xs shadow-inner border border-[#fed7aa]">
-                        อ
-                    </div>
-                </div>
-            </div>
-        </header>
+  <div class="form-group">
+    <label>รหัสผ่าน</label>
+    <div class="input-wrapper">
+      <span class="icon input-icon">lock</span>
+      <input type="password" placeholder="กำหนดรหัสผ่านเริ่มต้น">
+    </div>
+  </div>
 
-        <div class="p-8 flex-1 space-y-6 overflow-y-auto">
+  <div class="form-group">
+    <label>เบอร์โทรศัพท์</label>
+    <div class="input-wrapper">
+      <span class="icon input-icon">phone</span>
+      <input type="tel" placeholder="0xx-xxx-xxxx">
+    </div>
+  </div>
 
-            <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
-                <div class="relative w-full sm:w-80">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8] text-xs"></i>
-                    <input id="searchInput" type="text" placeholder="ค้นหาชื่อ, อีเมล..." class="w-full pl-10 pr-4 py-2 bg-white border border-[#e2e8f0] rounded-xl text-xs font-medium placeholder-[#94a3b8] focus:outline-none focus:border-[#10b981] focus:ring-4 focus:ring-[#d1fae5]/50 shadow-[0_2px_4px_rgba(0,0,0,0.01)] transition-all">
-                </div>
-                <button class="px-4 py-2 bg-[#71c043] hover:bg-[#62a837] text-white font-medium text-xs rounded-xl flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(113,192,67,0.2)] hover:shadow-[0_4px_16px_rgba(113,192,67,0.3)] transition-all duration-200 cursor-pointer">
-                    <i class="fa-solid fa-user-plus text-[11px]"></i>
-                    เพิ่มเจ้าหน้าที่
-                </button>
-            </div>
+  <div class="form-group">
+    <label>บทบาท</label>
+    <div class="input-wrapper">
+      <span class="icon input-icon">badge</span>
+      <select class="select-input">
+        <option value="" disabled selected>เลือกบทบาท</option>
+        <option value="staff">เจ้าหน้าที่</option>
+        <option value="admin">ผู้ดูแลระบบ</option>
+      </select>
+    </div>
+  </div>
+</div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div class="bg-white p-5 rounded-xl border border-[#f1f5f9] flex items-center justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)]">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-11 h-11 bg-[#f0fdf4] text-[#16a34a] rounded-xl flex items-center justify-center text-lg border border-[#bbf7d0]/40">
-                            <i class="fa-regular fa-id-card"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11.5px] text-[#94a3b8] font-semibold tracking-wide uppercase">เจ้าหน้าที่ทั้งหมด</p>
-                            <p class="text-xl font-bold text-[#0f172a] mt-0.5"><span id="statTotal">48</span><span class="text-xs font-normal text-[#64748b] ml-1">คน</span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-[#f1f5f9] flex items-center justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)]">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-11 h-11 bg-[#f0fdf4] text-[#16a34a] rounded-xl flex items-center justify-center text-lg border border-[#bbf7d0]/40">
-                            <i class="fa-regular fa-circle-check"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11.5px] text-[#94a3b8] font-semibold tracking-wide uppercase">กำลังใช้งาน</p>
-                            <p class="text-xl font-bold text-[#0f172a] mt-0.5"><span id="statActive">42</span><span class="text-xs font-normal text-[#64748b] ml-1">คน</span></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white p-5 rounded-xl border border-[#f1f5f9] flex items-center justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)]">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-11 h-11 bg-[#fff7ed] text-[#ea580c] rounded-xl flex items-center justify-center text-lg border border-[#ffedd5]">
-                            <i class="fa-solid fa-ban"></i>
-                        </div>
-                        <div>
-                            <p class="text-[11.5px] text-[#94a3b8] font-semibold tracking-wide uppercase">ระงับการใช้งาน</p>
-                            <p class="text-xl font-bold text-[#0f172a] mt-0.5"><span id="statSuspended">6</span><span class="text-xs font-normal text-[#64748b] ml-1">คน</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">ยกเลิก</button>
+      <button class="btn-submit">
+        <span class="icon">save</span> บันทึก
+      </button>
+    </div>
 
-            <div class="bg-white rounded-xl border border-[#e2e8f0]/60 shadow-[0_4px_20px_rgba(0,0,0,0.015)] overflow-hidden flex flex-col">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-[#f8fafc] border-b border-[#f1f5f9]">
-                                <th class="px-6 py-3.5 text-[11.5px] font-bold text-[#64748b] tracking-wider w-[30%]">ชื่อ-นามสกุล</th>
-                                <th class="px-6 py-3.5 text-[11.5px] font-bold text-[#64748b] tracking-wider w-[25%]">อีเมล</th>
-                                <th class="px-6 py-3.5 text-[11.5px] font-bold text-[#64748b] tracking-wider w-[15%]">สถานะ</th>
-                                <th class="px-6 py-3.5 text-[11.5px] font-bold text-[#64748b] tracking-wider w-[15%]">เข้าใช้ล่าสุด</th>
-                                <th class="px-6 py-3.5 text-[11.5px] font-bold text-[#64748b] tracking-wider text-center w-[15%]">จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody" class="divide-y divide-[#f1f5f9]">
-                            <tr class="hover:bg-[#f8fafc]/60 transition-colors duration-150">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-[#dcfce7] text-[#15803d] flex items-center justify-center font-bold text-xs border border-[#bbf7d0]/50">สม</div>
-                                        <span class="text-[13.5px] font-medium text-[#0f172a]">นายสมชาย ใจดี</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-[13px] text-[#475569]">somchai@hospital.com</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#e8fbf0] text-[#15803d] border border-[#bbf7d0]">
-                                        <span class="w-1 h-1 rounded-full bg-[#22c55e]"></span>กำลังใช้งาน
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-[13px] text-[#64748b]">10 นาทีที่แล้ว</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
-                                    <div class="flex justify-center items-center gap-3 text-[#94a3b8]">
-                                        <button class="hover:text-[#475569] transition-colors p-1 rounded hover:bg-gray-100 cursor-pointer"><i class="fa-regular fa-pen-to-square text-[15px]"></i></button>
-                                        <button class="hover:text-[#ef4444] transition-colors p-1 rounded hover:bg-red-50 cursor-pointer"><i class="fa-regular fa-trash-can text-[15px]"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+  </div>
+</div>
 
-                <div class="px-6 py-3.5 bg-[#f8fafc]/50 border-t border-[#f1f5f9] flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-medium text-[#64748b]">
-                    <div id="paginationInfo" class="tracking-wide">
-                        แสดง 1 ถึง 10 จากทั้งหมด 48 รายการ
-                    </div>
-                    <div class="flex items-center gap-1" id="paginationButtons">
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-white text-[#94a3b8] hover:bg-gray-50 transition-colors disabled:opacity-50 cursor-pointer"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold bg-[#71c043] text-white shadow-sm cursor-pointer">1</button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-white hover:bg-gray-50 text-[#475569] transition-colors cursor-pointer">2</button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-white hover:bg-gray-50 text-[#475569] transition-colors cursor-pointer">3</button>
-                        <span class="text-[#94a3b8] px-1">...</span>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-white hover:bg-gray-50 text-[#475569] transition-colors cursor-pointer">5</button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-white text-[#475569] hover:bg-gray-50 transition-colors cursor-pointer"><i class="fa-solid fa-chevron-right text-[10px]"></i></button>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <footer class="text-center py-3.5 text-[11px] font-medium text-[#94a3b8] bg-white border-t border-[#f1f5f9] shrink-0 tracking-wide">
-            © 2026 โรงพยาบาลสุทธาเวช - ระบบบริหารจัดการเจ้าหน้าที่และคิวบริจาคโลหิต
-        </footer>
-    </main>
-
-</body>
-</html>
+</main>

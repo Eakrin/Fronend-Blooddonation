@@ -1,60 +1,61 @@
-<button class="theme-toggle" (click)="toggleTheme()">
-  🌗 สลับธีม
-</button>
-
 <div class="register-page">
 
-  <!-- ฝั่งซ้าย -->
   <div class="left">
-
     <div class="welcome">
-      <span class="badge">โครงการบริจาคโลหิตออนไลน์</span>
+      <span class="badge">💉 โครงการบริจาคโลหิตออนไลน์</span>
 
       <h1>
         ยินดีต้อนรับสู่ <br>
-        <span class="brand">สุทธาเวช</span>
+        <span class="brand">สุทธาเวช Blood Center</span>
       </h1>
 
-      <p>
-        การบริจาคของคุณช่วยต่อชีวิตผู้ป่วย
-        มาร่วมเป็นส่วนหนึ่งในการให้ที่ยิ่งใหญ่ผ่านแพลตฟอร์มที่ทันสมัย
-        และปลอดภัย
+      <p class="desc">
+        การบริจาคของคุณช่วยต่อชีวิตผู้ป่วย <br>
+        มาร่วมเป็นส่วนหนึ่งในการให้ที่ยิ่งใหญ่
       </p>
 
       <div class="stats">
         <div class="box">
           <h3>1,200+</h3>
-          <span>ผู้บริจาคในเดือนนี้</span>
+          <span>ผู้บริจาคเดือนนี้</span>
         </div>
-
         <div class="box">
           <h3>24/7</h3>
           <span>จองคิวได้ตลอดเวลา</span>
         </div>
       </div>
 
+      <div class="features">
+        <div class="feature-item">
+          <div class="feature-icon">verified</div>
+          <span>ระบบจองคิวออนไลน์ที่ปลอดภัย</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">notifications</div>
+          <span>แจ้งเตือนนัดหมายอัตโนมัติ</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">history</div>
+          <span>ติดตามประวัติการบริจาคได้ทันที</span>
+        </div>
+      </div>
+
       <img src="assets/blood.png" class="blood-img">
-
     </div>
-
   </div>
 
-  <!-- ฝั่งขวา -->
   <div class="right">
-
     <div class="form">
 
-      <h2>สร้างบัญชีผู้บริจาค</h2>
-
-      <p class="subtitle">
-        กรุณากรอกข้อมูลเพื่อเริ่มต้นการจองคิวและบันทึกประวัติการบริจาค
-      </p>
+      <div class="logo-area">
+        <div class="logo-circle">🩸</div>
+        <h2>สร้างบัญชีผู้บริจาค</h2>
+        <p class="subtitle">กรุณากรอกข้อมูลเพื่อเริ่มต้นการจองคิว</p>
+      </div>
 
       <div class="upload">
-        <div class="circle">
-          <span>+</span>
-        </div>
-        <p>คลิกเพื่ออัปโหลด</p>
+        <div class="circle">+</div>
+        <p>คลิกเพื่ออัปโหลดรูปโปรไฟล์</p>
       </div>
 
       <div class="row">
@@ -70,7 +71,6 @@
           <option value="AB">AB</option>
           <option value="O">O</option>
         </select>
-
         <input type="text" placeholder="08x-xxx-xxxx" [(ngModel)]="phone">
       </div>
 
@@ -79,27 +79,35 @@
         <input type="number" placeholder="ส่วนสูง (ซม.)" [(ngModel)]="height">
       </div>
 
-      <input type="date" [(ngModel)]="birthday">
+      <div class="mb">
+        <input type="date" [(ngModel)]="birthday">
+      </div>
 
-      <input type="email" placeholder="example@email.com" [(ngModel)]="email">
+      <div class="mb">
+        <input type="email" placeholder="example@email.com" [(ngModel)]="email">
+      </div>
 
-      <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
+      <div class="mb">
+        <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
+      </div>
 
-      <select [(ngModel)]="gender">
-        <option value="">เลือกเพศ</option>
-        <option value="male">ชาย</option>
-        <option value="female">หญิง</option>
-        <option value="other">อื่นๆ</option>
-      </select>
+      <div class="mb">
+        <select [(ngModel)]="gender">
+          <option value="">เลือกเพศ</option>
+          <option value="male">ชาย</option>
+          <option value="female">หญิง</option>
+          <option value="other">อื่นๆ</option>
+        </select>
+      </div>
 
       <button class="register-btn" (click)="register()">
         ลงทะเบียนตอนนี้
       </button>
 
-      <div class="or">หรือสมัครด้วย</div>
+      <div class="or"><span>หรือสมัครด้วย</span></div>
 
       <button class="google">
-        สมัครด้วย Google Account
+        🔵 สมัครด้วย Google Account
       </button>
 
       <p class="login">
@@ -108,7 +116,6 @@
       </p>
 
     </div>
-
   </div>
 
 </div>

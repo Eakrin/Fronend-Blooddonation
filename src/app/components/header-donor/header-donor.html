@@ -1,35 +1,49 @@
 <header class="header">
   <div class="container">
 
+    <!-- Logo -->
     <div class="logo">
-      <img src="assets/logo.png">
-      <div>
+      <div class="logo-icon">🩸</div>
+      <div class="logo-text">
         <h3>สุทธาเวช</h3>
         <span>SUTTAVEJ BLOOD CENTER</span>
       </div>
     </div>
 
+    <!-- Menu -->
     <nav class="menu">
-      <a routerLink="/home-donor">หน้าหลัก</a>
-      <a routerLink="/assessment-quiz">บริจาคโลหิต</a>
-      <a routerLink="/location">สถานที่บริจาค</a>
-      <a routerLink="/location">ประวัติ</a>
-
+      <a routerLink="/home-donor" routerLinkActive="active">หน้าหลัก</a>
+      <a routerLink="/assessment-quiz" routerLinkActive="active">บริจาคโลหิต</a>
+      <a routerLink="/location" routerLinkActive="active">สถานที่บริจาค</a>
+      <a routerLink="/location" routerLinkActive="active">ประวัติ</a>
     </nav>
 
+    <!-- Right -->
     <div class="user-info">
+
+      <div class="notif-btn">
+        <span class="material-icons-outlined">notifications</span>
+        <span class="notif-dot"></span>
+      </div>
+
+      <div class="divider"></div>
+
       <div class="user-text">
         <span class="user-name">{{ userName }}</span>
         <span class="user-role">ผู้บริจาคโลหิต</span>
       </div>
+
       <div class="avatar" (click)="toggleDropdown()">
         <span>{{ userName.charAt(0) }}</span>
       </div>
 
-      <!-- Dropdown -->
       <div class="dropdown" *ngIf="showDropdown">
-        <div class="dropdown-item" routerLink="/edit-profile">
-          👤 โปรไฟล์
+        <div class="dropdown-header">
+          <span class="d-name">{{ userName }}</span>
+          <span class="d-role">ผู้บริจาคโลหิต</span>
+        </div>
+        <div class="dropdown-item" (click)="goToProfile()">
+          👤 โปรไฟล์ของฉัน
         </div>
         <div class="dropdown-divider"></div>
         <div class="dropdown-item logout" (click)="logout()">

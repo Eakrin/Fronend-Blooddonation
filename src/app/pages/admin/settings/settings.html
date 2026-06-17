@@ -1,0 +1,103 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <h2>ตั้งค่าหน่วยงาน</h2>
+    <p>จัดการข้อมูลติดต่อและเวลาทำการของหน่วยงานเพื่อให้ผู้บริจาคทราบข้อมูลที่ถูกต้อง</p>
+  </header>
+
+  <div class="settings-card">
+
+    <!-- ข้อมูลติดต่อ -->
+    <section class="settings-section">
+      <div class="section-title">
+        <span class="icon">contact_phone</span>
+        <h3>ข้อมูลติดต่อ</h3>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>เบอร์โทรศัพท์ติดต่อ</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">phone</span>
+            <input type="tel" placeholder="02-xxx-xxxx" [(ngModel)]="phone">
+          </div>
+          <span class="input-hint">ระบุเบอร์โทรศัพท์ส่วนกลางของหน่วยงานรับบริจาค</span>
+        </div>
+        <div class="form-group">
+          <label>อีเมลติดต่อ <span class="optional">(ไม่บังคับ)</span></label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">mail</span>
+            <input type="email" placeholder="contact@suthawet.go.th" [(ngModel)]="email">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- เวลาทำการ -->
+    <section class="settings-section">
+      <div class="section-title">
+        <span class="icon">schedule</span>
+        <h3>เวลาทำการ</h3>
+      </div>
+
+      <div class="schedule-row">
+        <span class="day-label">จันทร์ - ศุกร์</span>
+        <div class="time-group">
+          <div class="input-wrapper time-input">
+            <input type="time" [(ngModel)]="weekdayStart">
+          </div>
+          <span class="time-sep">ถึง</span>
+          <div class="input-wrapper time-input">
+            <input type="time" [(ngModel)]="weekdayEnd">
+          </div>
+        </div>
+        <span class="status-open">เปิดทำการ</span>
+      </div>
+
+      <div class="schedule-row closed">
+        <span class="day-label">เสาร์ - อาทิตย์</span>
+        <div class="time-group">
+          <div class="input-wrapper time-input disabled">
+            <input type="time" disabled placeholder="--:--">
+          </div>
+          <span class="time-sep">ถึง</span>
+          <div class="input-wrapper time-input disabled">
+            <input type="time" disabled placeholder="--:--">
+          </div>
+        </div>
+        <span class="status-closed">ปิดทำการ</span>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- สถานที่ตั้ง -->
+    <section class="settings-section">
+      <div class="section-title">
+        <span class="icon">location_on</span>
+        <h3>สถานที่ตั้ง</h3>
+      </div>
+      <div class="form-group">
+        <label>ที่อยู่หน่วยงาน</label>
+        <textarea placeholder="ระบุที่อยู่หน่วยงาน..." [(ngModel)]="address" rows="4"></textarea>
+      </div>
+    </section>
+
+    <!-- หมายเหตุ -->
+    <div class="info-box">
+      <span class="icon">info</span>
+      <p>ข้อมูลส่วนนี้จะแสดงผลบนหน้าเว็บไซต์และในใบยืนยันการจองคิวของผู้บริจาค กรุณาตรวจสอบความถูกต้องของสถานที่เพื่อป้องกันความสับสน</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button class="btn-cancel">ยกเลิก</button>
+      <button class="btn-save">
+        <span class="icon">save</span> บันทึกการเปลี่ยนแปลง
+      </button>
+    </div>
+
+  </div>
+
+</main>

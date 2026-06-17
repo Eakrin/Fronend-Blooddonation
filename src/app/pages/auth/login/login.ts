@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/api';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +14,7 @@ export class Login {
   password = '';
 
   constructor(
-    private http: HttpClient,
+    private auth: AuthService, // ✅ เปลี่ยน
     private router: Router,
   ) {}
 
@@ -24,13 +24,17 @@ export class Login {
       password: this.password,
     };
 
-    this.http.post('http://localhost:3000/api/auth/login', data).subscribe({
+    this.auth.login(data).subscribe({
+      // ✅ เปลี่ยน
       next: (res: any) => {
+        console.log('FULL RESPONSE = ', res);
+        console.log('ROLE = ', res.role);
+
         const role = res.role;
         const backendUser = res.user || {};
 
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', role);
+        this.auth.saveToken(res.token); // ✅ เปลี่ยน (signal อัปเดตอัตโนมัติ)
+        this.auth.saveRole(role); // ✅ เปลี่ยน (signal อัปเดตอัตโนมัติ)
 
         if (role === 'donor') {
           const userPayload = {
@@ -42,14 +46,8 @@ export class Login {
             gender: backendUser.gender || '',
             blood_type: backendUser.blood_type || '',
             birthday: backendUser.birthday || '',
-            weight:
-              backendUser.weight !== undefined && backendUser.weight !== null
-                ? backendUser.weight
-                : '',
-            height:
-              backendUser.height !== undefined && backendUser.height !== null
-                ? backendUser.height
-                : '',
+            weight: backendUser.weight ?? '',
+            height: backendUser.height ?? '',
             profile: backendUser.profile || null,
           };
           localStorage.setItem('user', JSON.stringify(userPayload));
@@ -77,7 +75,7 @@ export class Login {
           this.router.navigate(['/home-admin']);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         alert(err.error.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
       },
     });

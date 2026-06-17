@@ -1,151 +1,345 @@
-/* container */
-.donor-container{
-  width:90%;
-  max-width:1200px;
-  margin:auto;
-  padding:40px 0;
-  font-family: 'Segoe UI', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+
+:host {
+  display: block;
+  font-family: 'Sarabun', sans-serif;
+  background: linear-gradient(180deg, #fef2f2 0%, #f8fafc 100%); /* ✅ เปลี่ยน */
+  min-height: 100vh;
+}
+
+.icon {
+  font-family: 'Material Icons Outlined';
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+.donor-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 /* HERO */
-.hero{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:linear-gradient(135deg,#ff4b4b,#c30000);
-  color:white;
-  padding:40px;
-  border-radius:15px;
-  margin-bottom:30px;
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 40%, #c1121f 100%);
+  color: white;
+  padding: 48px 56px;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-left{
-  width:55%;
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  top: -150px;
+  right: 200px;
 }
 
-.hero-left h1{
-  font-size:32px;
-  margin-bottom:15px;
+.hero-left {
+  max-width: 560px;
+  position: relative;
+  z-index: 2;
 }
 
-.hero-left span{
-  font-size:18px;
-  font-weight:400;
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 20px;
 }
 
-.hero-left p{
-  margin-top:15px;
-  font-size:16px;
-  opacity:0.9;
+.hero-left h1 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0 0 12px 0;
 }
 
-/* button */
-.btn-donate{
-  margin-top:20px;
-  padding:12px 25px;
-  border:none;
-  background:white;
-  color:#c30000;
-  font-weight:bold;
-  border-radius:8px;
-  cursor:pointer;
-  transition:0.3s;
+.hero-left h1 span {
+  font-size: 20px;
+  font-weight: 400;
+  color: #fecaca;
+  display: block;
+  margin-top: 8px;
 }
 
-.btn-donate:hover{
-  transform:scale(1.05);
+.hero-left p {
+  font-size: 15px;
+  color: #fecaca;
+  line-height: 1.7;
+  margin: 0 0 28px 0;
 }
 
-/* hero image */
-.hero-right img{
-  width:250px;
+.btn-donate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  background: white;
+  color: #c1121f;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: inherit;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* GRID */
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:25px;
-  margin-bottom:30px;
+.btn-donate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* CARD */
-.card{
-  background:white;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+.hero-right {
+  position: relative;
+  z-index: 2;
 }
 
-.card h3{
-  margin-bottom:20px;
+.hero-right img {
+  width: 220px;
+  opacity: 0.9;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
 }
 
-/* empty */
-.empty-box{
-  background:#f5f5f5;
-  padding:20px;
-  border-radius:10px;
-  text-align:center;
+/* DASHBOARD GRID */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 }
 
-.empty-box span{
-  font-size:13px;
-  color:#888;
+.card {
+  background: white;
+  padding: 28px;
+  border-radius: 20px;
+  border: 1px solid #fecaca; /* ✅ เปลี่ยนขอบเป็นชมพู */
+  box-shadow: 0 4px 12px rgba(193, 18, 31, 0.06); /* ✅ เงาแดงอ่อน */
 }
 
-/* status */
-.status{
-  background:#e6fff0;
-  color:#008a2e;
-  padding:10px;
-  border-radius:8px;
-  margin-bottom:15px;
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-/* health grid */
-.health-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.health-box{
-  background:#f7f7f7;
-  padding:15px;
-  border-radius:10px;
-  text-align:center;
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #c1121f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.health-box p{
-  font-size:14px;
-  color:#666;
+.card-title h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
 }
 
-.health-box h4{
-  font-size:20px;
-  margin-top:5px;
+.card-link {
+  font-size: 13px;
+  color: #c1121f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Empty */
+.empty-box {
+  background: #fef2f2; /* ✅ เปลี่ยน */
+  border: 1.5px dashed #fecaca;
+  padding: 32px 20px;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.empty-box .icon {
+  font-size: 40px;
+  color: #cbd5e1;
+}
+
+.empty-box p {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+  margin: 0;
+}
+
+.empty-box span {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.btn-book {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-book:hover {
+  transform: translateY(-1px);
+}
+
+/* Status */
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.status-badge .icon {
+  color: #16a34a;
+  font-size: 18px;
+}
+
+/* Health grid */
+.health-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.health-box {
+  background: #fef2f2; /* ✅ เปลี่ยนเป็นชมพูอ่อน */
+  border: 1px solid #fecaca;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.health-box p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 6px 0;
+}
+
+.health-box h4 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.health-box small {
+  font-size: 11px;
+  color: #94a3b8;
 }
 
 /* TIP */
-.tip{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#fff5f5;
-  padding:25px;
-  border-radius:12px;
+.tip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #fef2f2, #fff5f5);
+  border: 1px solid #fecaca;
+  padding: 28px 32px;
+  border-radius: 20px;
+  gap: 20px;
 }
 
-.tip h3{
-  margin-bottom:8px;
+.tip-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
 }
 
-.tip button{
-  padding:10px 20px;
-  border:none;
-  background:#c30000;
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
+.tip-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.tip-text h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.tip-text p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.btn-read {
+  padding: 12px 24px;
+  border: none;
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: white;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(193, 18, 31, 0.3);
+}
+
+.btn-read:hover {
+  transform: translateY(-1px);
 }

@@ -13,6 +13,8 @@ import { EditProfileComponent } from './pages/donor/edit-profile/edit-profile';
 import { AssessmentQuiz } from './pages/donor/assessment-quiz/assessment-quiz';
 import { ManageAccounts } from './pages/admin/manage-accounts/manage-accounts';
 import { HomeAdmin } from './pages/admin/home-admin/home-admin';
+import { Settings } from './pages/admin/settings/settings';
+import { profileAdmin } from './pages/admin/profile-admin/profile-admin';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -30,4 +32,6 @@ export const routes: Routes = [
   // โซนของ Admin (ปรับแก้ให้ตรงสิทธิ์)
   { path: 'home-admin', component: HomeAdmin }, // 👈 2. แก้ให้วิ่งไปที่หน้าหลักของแอดมินก่อน
   { path: 'manage-accounts', component: ManageAccounts }, // 👈 3. ส่วนหน้านี้เอาไว้กดลิงก์ไปทีหลังเมื่อล็อกอินเข้าหน้าหลักแล้ว
+  { path: 'settings', component: Settings }, // 👈 4. ส่วนหน้านี้เอาไว้กดลิงก์ไปทีหลังเมื่อล็อกอินเข้าหน้าหลักแล้ว
+  { path: 'profile-admin', component: profileAdmin },
 ];

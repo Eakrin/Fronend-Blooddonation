@@ -1,0 +1,97 @@
+<main class="main-content">
+
+  <header class="page-header">
+    <h2>การตั้งค่าข้อมูลส่วนตัว</h2>
+    <p>จัดการข้อมูลบัญชีผู้ใช้งานและรหัสผ่านเพื่อความปลอดภัยของระบบ</p>
+  </header>
+
+  <!-- โปรไฟล์ -->
+  <div class="settings-card profile-card">
+    <div class="avatar-section">
+      <div class="avatar-wrapper">
+        <img src="assets/default-avatar.png" class="avatar-img" onerror="this.style.display='none'">
+        <div class="avatar-placeholder"><span class="icon">person</span></div>
+        <button class="avatar-edit-btn"><span class="icon">photo_camera</span></button>
+      </div>
+      <div class="profile-info">
+        <h3>ผู้ดูแลระบบ (Admin)</h3>
+        <span class="staff-id-badge">
+          <span class="icon">badge</span> รหัสพนักงาน: AD-99812
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ข้อมูลติดต่อ -->
+  <div class="settings-card">
+    <div class="section-title">
+      <span class="icon">contact_mail</span>
+      <h3>ข้อมูลการติดต่อ</h3>
+    </div>
+    <div class="divider"></div>
+    <div class="form-group">
+      <label>อีเมล (Email)</label>
+      <div class="input-wrapper">
+        <span class="icon input-icon">mail</span>
+        <input type="email" [(ngModel)]="email" placeholder="admin@suthawet.go.th">
+      </div>
+      <span class="input-hint">อีเมลนี้ใช้สำหรับกู้คืนรหัสผ่านและรับการแจ้งเตือนสำคัญจากระบบ</span>
+    </div>
+  </div>
+
+  <!-- เปลี่ยนรหัสผ่าน -->
+  <div class="settings-card">
+    <div class="section-title">
+      <span class="icon">security</span>
+      <h3>เปลี่ยนรหัสผ่าน</h3>
+    </div>
+    <div class="divider"></div>
+
+    <div class="password-layout">
+      <div class="password-fields">
+        <div class="form-group">
+          <label>รหัสผ่านปัจจุบัน (Current Password) <span class="required">*</span></label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">lock</span>
+            <input type="password" [(ngModel)]="currentPassword" placeholder="••••••••">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>รหัสผ่านใหม่</label>
+            <div class="input-wrapper">
+              <span class="icon input-icon">key</span>
+              <input type="password" [(ngModel)]="newPassword" placeholder="รหัสผ่านใหม่">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>ยืนยันรหัสผ่านใหม่</label>
+            <div class="input-wrapper">
+              <span class="icon input-icon">verified_user</span>
+              <input type="password" [(ngModel)]="confirmPassword" placeholder="ยืนยันรหัสผ่านใหม่">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="password-rules">
+        <p class="rules-title">ข้อกำหนดรหัสผ่าน</p>
+        <ul>
+          <li><span class="icon check-icon">check_circle</span> ความยาวอย่างน้อย 8 ตัวอักษร</li>
+          <li><span class="icon check-icon">check_circle</span> ประกอบด้วยตัวอักษรพิมพ์ใหญ่และพิมพ์เล็ก</li>
+          <li><span class="icon check-icon">check_circle</span> มีตัวเลขหรืออักขระพิเศษอย่างน้อย 1 ตัว</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="form-actions">
+    <button class="btn-cancel">ยกเลิก</button>
+    <button class="btn-save">
+      <span class="icon">save</span> บันทึกการเปลี่ยนแปลง
+    </button>
+  </div>
+
+</main>

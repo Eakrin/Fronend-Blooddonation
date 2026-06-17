@@ -2,28 +2,24 @@
 
   <!-- HERO -->
   <div class="hero">
-
     <div class="hero-left">
-
+      <div class="hero-badge">
+        <span class="icon">favorite</span>
+        ระบบบริจาคโลหิตออนไลน์
+      </div>
       <h1>
-        สวัสดีคุณ {{userName}}
-        <br>
+        สวัสดีคุณ {{ userName }} 👋
         <span>พร้อมที่จะส่งต่อโลหิต เพื่อช่วยชีวิตผู้อื่นแล้วหรือยัง?</span>
       </h1>
-
-      <p>
-        การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน
-      </p>
-
+      <p>การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน</p>
       <button class="btn-donate" routerLink="/booking">
+        <span class="icon">calendar_today</span>
         จองคิวบริจาคโลหิต
       </button>
     </div>
-
     <div class="hero-right">
       <img src="assets/blood.png">
     </div>
-
   </div>
 
   <!-- GRID -->
@@ -31,56 +27,64 @@
 
     <!-- นัดหมาย -->
     <div class="card">
-
-      <h3>การนัดหมายที่กำลังจะมาถึง</h3>
-
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon"><span class="icon">event</span></div>
+          <h3>การนัดหมายที่กำลังจะมาถึง</h3>
+        </div>
+        <a class="card-link" routerLink="/booking">ดูทั้งหมด</a>
+      </div>
       <div class="empty-box">
+        <span class="icon">event_busy</span>
         <p>ยังไม่มีการจองคิวในขณะนี้</p>
         <span>เริ่มจองครั้งแรกของคุณเลย</span>
+        <button class="btn-book" routerLink="/booking">
+          <span class="icon">add</span> จองคิวเลย
+        </button>
       </div>
-
     </div>
 
     <!-- สุขภาพ -->
     <div class="card">
-
-      <h3>ผลการประเมินสุขภาพล่าสุด</h3>
-
-      <div class="status">
-        ✔ ร่างกายพร้อมสำหรับการบริจาค
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon"><span class="icon">monitor_heart</span></div>
+          <h3>ผลการประเมินสุขภาพล่าสุด</h3>
+        </div>
+        <a class="card-link" routerLink="/assessment-quiz">ประเมินใหม่</a>
       </div>
-
+      <div class="status-badge">
+        <span class="icon">check_circle</span>
+        ร่างกายพร้อมสำหรับการบริจาค
+      </div>
       <div class="health-grid">
-
         <div class="health-box">
           <p>ความดันโลหิต</p>
-          <h4>{{bloodPressure}}</h4>
+          <h4>{{ bloodPressure }}</h4>
+          <small>mmHg</small>
         </div>
-
         <div class="health-box">
           <p>ค่า Hemoglobin</p>
-          <h4>{{hemoglobin}}</h4>
+          <h4>{{ hemoglobin }}</h4>
+          <small>g/dL</small>
         </div>
-
       </div>
-
     </div>
 
   </div>
 
   <!-- TIP -->
   <div class="tip">
-
-    <div>
-      <h3>เตรียมตัวก่อนบริจาคโลหิต</h3>
-      <p>
-        ดื่มน้ำมาก ๆ อย่างน้อย 3-4 แก้ว และนอนหลับพักผ่อนให้เพียงพอ
-        ไม่น้อยกว่า 5 ชั่วโมงก่อนการบริจาค
-      </p>
+    <div class="tip-content">
+      <div class="tip-icon">
+        <span class="icon">tips_and_updates</span>
+      </div>
+      <div class="tip-text">
+        <h3>เตรียมตัวก่อนบริจาคโลหิต</h3>
+        <p>ดื่มน้ำมาก ๆ อย่างน้อย 3-4 แก้ว และนอนหลับพักผ่อนให้เพียงพอ ไม่น้อยกว่า 5 ชั่วโมงก่อนการบริจาค</p>
+      </div>
     </div>
-
-    <button>อ่านเพิ่มเติม</button>
-
+    <button class="btn-read">อ่านเพิ่มเติม</button>
   </div>
 
 </div>

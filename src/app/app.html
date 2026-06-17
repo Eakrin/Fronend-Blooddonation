@@ -1,4 +1,11 @@
-<app-header *ngIf="!isLoggedIn()"></app-header>
-<app-header-donor *ngIf="isLoggedIn()"></app-header-donor>
+<app-header *ngIf="!auth.isLoggedIn() || (auth.isAdmin() && !isAdminRoute())"></app-header>
+<app-header-donor *ngIf="auth.isLoggedIn() && !auth.isAdmin()"></app-header-donor>
 
-<router-outlet></router-outlet>
+<div class="admin-layout" *ngIf="auth.isAdmin() && isAdminRoute()">
+  <app-sidebar-admin></app-sidebar-admin>
+  <div class="admin-main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<router-outlet *ngIf="!auth.isAdmin() || !isAdminRoute()"></router-outlet>
