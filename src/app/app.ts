@@ -3,7 +3,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Header } from './components/header/header';
 import { HeaderDonor } from './components/header-donor/header-donor';
 import { SidebarAdmin } from './components/sidebar-admin/sidebar-admin';
-import { SidebarStaff } from './components/sidebar-staff/sidebar-staff'; // ✅ เพิ่ม
+import { SidebarStaff } from './components/sidebar-staff/sidebar-staff';
 import { NgIf } from '@angular/common';
 import { AuthService } from './services/api';
 import { filter } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { filter } from 'rxjs/operators';
     SidebarAdmin,
     SidebarStaff,
     NgIf,
-  ], // ✅ เพิ่ม
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -34,9 +34,10 @@ export class App implements OnInit {
         this.currentUrl = event.urlAfterRedirects;
       });
 
+    // ✅ แก้ effect ให้ reset เฉพาะตอน logout เท่านั้น
     effect(() => {
-      if (!this.auth.isAdmin()) {
-        this.currentUrl = window.location.pathname;
+      if (!this.auth.isLoggedIn()) {
+        this.currentUrl = '/';
       }
     });
   }
@@ -48,7 +49,6 @@ export class App implements OnInit {
       this.router.navigate(['/home-admin']);
     }
 
-    // ✅ เพิ่ม
     if (this.isStaff() && window.location.pathname === '/') {
       this.router.navigate(['/home-staff']);
     }
@@ -63,20 +63,20 @@ export class App implements OnInit {
     );
   }
 
-  // ✅ เพิ่ม
   isStaff(): boolean {
     return localStorage.getItem('role') === 'staff';
   }
 
-  // ✅ เพิ่ม
   isStaffRoute(): boolean {
     return (
-      this.currentUrl.startsWith('/home-staff') ||
-      this.currentUrl.startsWith('/schedule-staff') ||
-      this.currentUrl.startsWith('/post-staff') ||
-      this.currentUrl.startsWith('/profile-staff') ||
-      this.currentUrl.startsWith('/record-staff') ||
-      this.currentUrl.startsWith('/location-staff')
+      this.isStaff() &&
+      (this.currentUrl.startsWith('/home-staff') ||
+        this.currentUrl.startsWith('/schedule-staff') ||
+        this.currentUrl.startsWith('/announcement-staff') ||
+        this.currentUrl.startsWith('/post-staff') ||
+        this.currentUrl.startsWith('/profile-staff') ||
+        this.currentUrl.startsWith('/record-staff') ||
+        this.currentUrl.startsWith('/location-staff'))
     );
   }
 }
