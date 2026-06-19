@@ -12,10 +12,24 @@
         <span>พร้อมที่จะส่งต่อโลหิต เพื่อช่วยชีวิตผู้อื่นแล้วหรือยัง?</span>
       </h1>
       <p>การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน</p>
-      <button class="btn-donate" routerLink="/booking">
+
+      <!-- ✅ แสดงปุ่มจองเฉพาะตอนยังไม่ได้จอง หรือจองถูกยกเลิกหมดแล้ว -->
+      <button class="btn-donate" routerLink="/assessment-quiz" *ngIf="!hasActiveBooking">
         <span class="icon">calendar_today</span>
         จองคิวบริจาคโลหิต
       </button>
+
+      <!-- ✅ ถ้าจองแล้ว แสดงแจ้งเตือนแทน -->
+      <div class="booked-notice" *ngIf="hasActiveBooking">
+        <span class="icon">check_circle</span>
+        คุณมีการจองคิวอยู่แล้ว
+      </div>
+
+      <!-- ✅ แจ้งเตือนบริจาคถี่เกินไป -->
+      <div class="warning-notice" *ngIf="lastDonationWarning">
+        <span class="icon">warning</span>
+        {{ lastDonationWarning }}
+      </div>
     </div>
     <div class="hero-right">
       <img src="assets/blood.png">
@@ -32,13 +46,47 @@
           <div class="card-icon"><span class="icon">event</span></div>
           <h3>การนัดหมายที่กำลังจะมาถึง</h3>
         </div>
-        <a class="card-link" routerLink="/booking">ดูทั้งหมด</a>
+        <button class="card-link-btn" *ngIf="bookings.length > 2" (click)="showAllBookings = !showAllBookings">
+          {{ showAllBookings ? 'ย่อลง' : 'ดูทั้งหมด' }}
+        </button>
       </div>
-      <div class="empty-box">
+
+      <!-- มีการจอง -->
+      <div class="booking-list" *ngIf="bookings.length > 0">
+        <div class="booking-item" *ngFor="let b of displayedBookings">
+          <div class="booking-left">
+            <div class="booking-icon">
+              <span class="icon">calendar_today</span>
+            </div>
+            <div>
+              <p class="booking-date">{{ b.booking_datetime | date:'d MMM yyyy HH:mm' }}</p>
+              <p class="booking-id">รหัสจอง #{{ b.Booking_ID }}</p>
+            </div>
+          </div>
+          <div class="booking-right">
+            <span class="booking-status" [class]="getStatusClass(b.booking_status)">
+              {{ getStatusLabel(b.booking_status) }}
+            </span>
+            <button class="btn-cancel-booking"
+                    *ngIf="b.booking_status === 'pending'"
+                    (click)="cancelBooking(b.Booking_ID)">
+              <span class="icon">close</span>
+            </button>
+            <button class="btn-rebook"
+                    *ngIf="b.booking_status === 'cancelled'"
+                    routerLink="/assessment-quiz">
+              <span class="icon">refresh</span> จองใหม่
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ยังไม่มีการจอง -->
+      <div class="empty-box" *ngIf="bookings.length === 0">
         <span class="icon">event_busy</span>
         <p>ยังไม่มีการจองคิวในขณะนี้</p>
         <span>เริ่มจองครั้งแรกของคุณเลย</span>
-        <button class="btn-book" routerLink="/booking">
+        <button class="btn-book" routerLink="/assessment-quiz">
           <span class="icon">add</span> จองคิวเลย
         </button>
       </div>
@@ -55,7 +103,7 @@
       </div>
       <div class="status-badge">
         <span class="icon">check_circle</span>
-        ร่างกายพร้อมสำหรับการบริจาค
+        ร่างกายพร้อมสำหรับการบริจาคเบื้องต้น
       </div>
       <div class="health-grid">
         <div class="health-box">

@@ -139,38 +139,30 @@
       <a href="#" class="news-link">ดูข่าวสารทั้งหมด <span class="icon">arrow_forward</span></a>
     </div>
     <div class="news-grid">
-      <div class="news-card">
-        <div class="news-img-wrap">
-          <img src="assets/news1.png" onerror="this.parentElement.style.background='linear-gradient(135deg,#991b1b,#c1121f)'">
-          <span class="news-tag">ด่วน</span>
+      <div class="news-card" *ngFor="let post of posts">
+        <div class="news-img-wrap" style="background: linear-gradient(135deg,#991b1b,#c1121f)">
+          <span class="news-tag">ประกาศ</span>
         </div>
         <div class="news-body">
-          <h3>เตรียมบริจาคโลหิตกรุ๊ป O</h3>
-          <p>บริจาคโลหิตเพื่อช่วยชีวิตผู้ป่วยที่ต้องการโลหิตเร่งด่วน</p>
-          <span class="news-date"><span class="icon">calendar_today</span> 17 มิ.ย. 2569</span>
+          <h3>{{ post.Toppic }}</h3>
+          <p>{{ post.Text || 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>
+          <div class="news-meta">
+            <span class="news-date">
+              <span class="icon">calendar_today</span>
+              {{ post.Start_time | date:'d MMM yyyy' }}
+            </span>
+            <span class="news-date">
+              <span class="icon">schedule</span>
+              {{ post.Start_time | date:'HH:mm' }} - {{ post.End_time | date:'HH:mm' }}
+            </span>
+          </div>
         </div>
       </div>
-      <div class="news-card">
-        <div class="news-img-wrap">
-          <img src="assets/news2.png" onerror="this.parentElement.style.background='linear-gradient(135deg,#991b1b,#c1121f)'">
-          <span class="news-tag">ข่าวสาร</span>
-        </div>
-        <div class="news-body">
-          <h3>หน่วยรับบริจาคเคลื่อนที่</h3>
-          <p>ออกหน่วยรับบริจาคโลหิตตามสถานที่ต่างๆ ทั่วจังหวัด</p>
-          <span class="news-date"><span class="icon">calendar_today</span> 15 มิ.ย. 2569</span>
-        </div>
-      </div>
-      <div class="news-card">
-        <div class="news-img-wrap">
-          <img src="assets/news3.png" onerror="this.parentElement.style.background='linear-gradient(135deg,#991b1b,#c1121f)'">
-          <span class="news-tag">สุขภาพ</span>
-        </div>
-        <div class="news-body">
-          <h3>บริจาคโลหิตดีอย่างไร</h3>
-          <p>5 ประโยชน์ของการบริจาคโลหิตที่คุณอาจไม่เคยรู้มาก่อน</p>
-          <span class="news-date"><span class="icon">calendar_today</span> 10 มิ.ย. 2569</span>
-        </div>
+
+      <!-- ถ้าไม่มีประกาศ -->
+      <div class="news-empty" *ngIf="posts.length === 0">
+        <span class="icon">campaign</span>
+        <p>ยังไม่มีประกาศในขณะนี้</p>
       </div>
     </div>
   </div>

@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+
+:host {
+  display: block;
+  font-family: 'Sarabun', sans-serif;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.icon {
+  font-family: 'Material Icons Outlined';
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.history-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-back {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.btn-back:hover { background: #f8fafc; }
+
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 4px 0;
+}
+
+.page-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.total-badge {
+  background: #fef2f2;
+  color: #c1121f;
+  border: 1px solid #fecaca;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px 20px;
+  transition: all 0.2s;
+}
+
+.history-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  transform: translateY(-1px);
+}
+
+.history-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #c1121f;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.history-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: #fef2f2;
+  display: flex; align-items: center; justify-content: center;
+  color: #c1121f;
+  flex-shrink: 0;
+}
+
+.history-info { flex: 1; }
+
+.history-date {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 2px 0;
+}
+
+.history-time {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 2px 0;
+}
+
+.history-id {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.history-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.history-status.approved {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #94a3b8;
+}
+
+.loading .icon { font-size: 40px; display: block; margin-bottom: 8px; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.empty-state .icon {
+  font-size: 48px;
+  color: #fecaca;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 24px 0;
+}
+
+.btn-donate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(193,18,31,.3);
+  transition: all 0.2s;
+}
+
+.btn-donate:hover { transform: translateY(-1px); }
+
+.history-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.history-status.pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.history-status.rejected {
+  background: #fee2e2;
+  color: #c1121f;
+}
+
+.history-status.cancelled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.btn-cancel-booking {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  background: #fef2f2;
+  color: #c1121f;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel-booking:hover { background: #fecaca; }
+.btn-cancel-booking .icon { font-size: 14px; }

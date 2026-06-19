@@ -24,14 +24,21 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label>วันรับบริจาค</label>
-          <div class="input-wrapper">
-            <span class="icon input-icon">calendar_today</span>
-            <input type="date" [(ngModel)]="donationDate">
-          </div>
-        </div>
+<!-- วันที่ -->
+<div class="form-group">
+  <label>วันรับบริจาค</label>
+  <div class="input-wrapper">
+    <span class="icon input-icon">calendar_today</span>
+    <select class="select-input" [(ngModel)]="donationDate" (ngModelChange)="onDateChange()">
+      <option value="">เลือกวันที่</option>
+      <option *ngFor="let d of donationDays" [value]="d.Donation_date?.split('T')[0]">
+        {{ d.Donation_date | date:'d MMM yyyy' }} - {{ d.location_name }}
+      </option>
+    </select>
+  </div>
+</div>
 
+<!-- เวลา -->
 <div class="form-row">
   <div class="form-group">
     <label>เวลาเริ่มต้น</label>
@@ -39,7 +46,9 @@
       <span class="icon input-icon">schedule</span>
       <select class="select-input" [(ngModel)]="startTime">
         <option value="">เลือกเวลา</option>
-        <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+        <option *ngFor="let t of timeSlotOptions" [value]="t.Start_time?.slice(0,5)">
+          {{ t.Start_time?.slice(0,5) }}
+        </option>
       </select>
     </div>
   </div>
@@ -49,7 +58,9 @@
       <span class="icon input-icon">schedule</span>
       <select class="select-input" [(ngModel)]="endTime">
         <option value="">เลือกเวลา</option>
-        <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+        <option *ngFor="let t of timeSlotOptions" [value]="t.End_time?.slice(0,5)">
+          {{ t.End_time?.slice(0,5) }}
+        </option>
       </select>
     </div>
   </div>

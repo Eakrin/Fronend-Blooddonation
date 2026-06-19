@@ -17,73 +17,66 @@
           <th>สถานที่</th>
           <th>วันที่</th>
           <th>ช่วงเวลา</th>
-          <th>จำนวนโควตา</th>
+          <th>โควตา</th>
+          <th>สถานะ</th>
           <th class="text-center">การจัดการ</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let slot of slots">
-          <td>
-            <span class="location-main">{{ slot.location_name }}</span>
-            <span class="location-sub">{{ slot.location_zone }}</span>
-          </td>
-          <td class="text-datetime">{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
-          <td class="text-datetime">{{ slot.Start_time }} - {{ slot.End_time }}</td>
-          <td>
-            <div class="quota-wrapper">
-              <div class="quota-label"
-                [class.full]="slot.booked >= slot.max_quota"
-                [class.available]="slot.booked < slot.max_quota && slot.booked > 0"
-                [class.empty]="slot.booked === 0">
-                {{ slot.booked >= slot.max_quota ? 'เต็ม' : '' }}
-                ({{ slot.booked }}/{{ slot.max_quota }})
-              </div>
-              <div class="progress-bar-bg">
-                <div class="progress-bar-fill"
-                  [class.bg-red]="slot.booked >= slot.max_quota"
-                  [class.bg-green]="slot.booked < slot.max_quota"
-                  [style.width.%]="(slot.booked / slot.max_quota) * 100">
-                </div>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div class="actions-group">
-              <button class="btn-action edit" (click)="openEditModal(slot)">
-                <span class="icon">edit</span>
-              </button>
-              <button class="btn-action delete" (click)="deleteSlot(slot.DonationD_ID)">
-                <span class="icon">delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
+  <tr *ngFor="let slot of slots">
+    <td class="location-main">{{ slot.location_name || '-' }}</td>
+    <td class="text-datetime">{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
+    <td class="text-datetime">{{ slot.Start_time }} - {{ slot.End_time }}</td>
+    <td>
+      <div class="quota-wrapper">
+        <div class="quota-label"
+             [class.available]="(slot.booked || 0) < slot.max_quota"
+             [class.full]="(slot.booked || 0) >= slot.max_quota">
+          {{ slot.booked || 0 }}/{{ slot.max_quota }} คน
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill"
+               [class.bg-green]="(slot.booked || 0) < slot.max_quota"
+               [class.bg-red]="(slot.booked || 0) >= slot.max_quota"
+               [style.width.%]="((slot.booked || 0) / slot.max_quota) * 100">
+          </div>
+        </div>
+      </div>
+    </td>
+    <td>
+      <span class="status-badge" [class.active]="slot.Status === 'active'">
+        {{ slot.Status === 'active' ? 'เปิดรับ' : 'ปิด' }}
+      </span>
+    </td>
+    <td>
+      <div class="actions-group">
+        <button class="btn-action edit" (click)="openEditModal(slot)">
+          <span class="icon">edit</span>
+        </button>
+        <button class="btn-action delete" (click)="deleteSlot(slot.Slot_ID)">
+          <span class="icon">delete</span>
+        </button>
+      </div>
+    </td>
+  </tr>
 
-        <!-- Empty -->
-        <tr *ngIf="slots.length === 0">
-          <td colspan="5" class="empty-row">
-            <span class="icon">event_busy</span>
-            <p>ยังไม่มีรายการ</p>
-          </td>
-        </tr>
-      </tbody>
+  <tr *ngIf="slots.length === 0">
+    <td colspan="6" class="empty-row">
+      <span class="icon">event_busy</span>
+      <p>ยังไม่มีรายการ</p>
+    </td>
+  </tr>
+</tbody>
     </table>
 
     <div class="table-footer">
       <span class="entry-info">ทั้งหมด {{ slots.length }} รายการ</span>
-      <div class="pagination">
-        <button class="pag-btn"><span class="icon">chevron_left</span></button>
-        <button class="pag-btn active">1</button>
-        <button class="pag-btn">2</button>
-        <button class="pag-btn">3</button>
-        <button class="pag-btn"><span class="icon">chevron_right</span></button>
-      </div>
     </div>
   </div>
 
 </main>
 
-<!-- Modal เพิ่ม/แก้ไข -->
+<!-- Modal -->
 <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
   <div class="modal-card" (click)="$event.stopPropagation()">
 
@@ -106,10 +99,15 @@
       </div>
 
       <div class="form-group">
-        <label>ชื่อสถานที่</label>
+        <label>สถานที่</label>
         <div class="input-wrapper">
           <span class="icon input-icon">location_on</span>
-          <input type="text" [(ngModel)]="locationName" placeholder="ระบุชื่อสถานที่ เช่น ห้องรับบริจาคชั้น 2">
+          <select class="select-input" [(ngModel)]="locationId">
+            <option [ngValue]="null" disabled>เลือกสถานที่</option>
+            <option *ngFor="let loc of locations" [ngValue]="loc.Location_ID">
+              {{ loc.name }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -117,7 +115,10 @@
         <label>วันที่รับบริจาค</label>
         <div class="input-wrapper">
           <span class="icon input-icon">calendar_today</span>
-          <input type="date" [(ngModel)]="donationDate">
+          <select class="select-input" [(ngModel)]="donationDate">
+            <option value="">เลือกวันที่</option>
+            <option *ngFor="let d of dateOptions" [value]="d">{{ d }}</option>
+          </select>
         </div>
       </div>
 
@@ -126,14 +127,20 @@
           <label>เวลาเริ่ม</label>
           <div class="input-wrapper">
             <span class="icon input-icon">schedule</span>
-            <input type="time" [(ngModel)]="startTime">
+            <select class="select-input" [(ngModel)]="startTime">
+              <option value="">เลือกเวลา</option>
+              <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label>เวลาสิ้นสุด</label>
           <div class="input-wrapper">
             <span class="icon input-icon">schedule</span>
-            <input type="time" [(ngModel)]="endTime">
+            <select class="select-input" [(ngModel)]="endTime">
+              <option value="">เลือกเวลา</option>
+              <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
+            </select>
           </div>
         </div>
       </div>

@@ -1,142 +1,207 @@
-<div class="booking-container">
+  <div class="booking-page">
 
-  <div class="left">
-
-    <!-- STEP -->
-    <div class="step-bar">
-      <div class="step active">1 <span>ประเภท</span></div>
-      <div class="line"></div>
-
-      <div class="step active">2 <span>สถานที่</span></div>
-      <div class="line"></div>
-
-      <div class="step active">3 <span>วันที่</span></div>
-      <div class="line"></div>
-
-      <div class="step active">4 <span>เวลา</span></div>
+    <!-- Header -->
+    <div class="booking-header">
+      <h1>จองคิวบริจาคโลหิต</h1>
+      <p>เลือกประเภท สถานที่ วันที่ และเวลาที่สะดวก</p>
     </div>
 
-    <!-- TYPE -->
-    <h3 class="section-title">1. เลือกประเภทการบริจาค</h3>
-
-    <div class="type-grid">
-
-      <div class="type-card"
-           [class.active]="donationType === 'whole'"
-           (click)="selectType('whole')">
-        🩸
-        <h4>บริจาคโลหิตรวม</h4>
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-item" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">
+        <div class="step-circle">{{ currentStep > 1 ? '✓' : '1' }}</div>
+        <span>ประเภท</span>
       </div>
-
-      <div class="type-card"
-           [class.active]="donationType === 'plasma'"
-           (click)="selectType('plasma')">
-        💧
-        <h4>บริจาคพลาสม่า</h4>
+      <div class="step-line" [class.active]="currentStep > 1"></div>
+      <div class="step-item" [class.active]="currentStep >= 2" [class.done]="currentStep > 2">
+        <div class="step-circle">{{ currentStep > 2 ? '✓' : '2' }}</div>
+        <span>สถานที่</span>
       </div>
-
-      <div class="type-card"
-           [class.active]="donationType === 'platelets'"
-           (click)="selectType('platelets')">
-        🧬
-        <h4>บริจาคเกล็ดโลหิต</h4>
+      <div class="step-line" [class.active]="currentStep > 2"></div>
+      <div class="step-item" [class.active]="currentStep >= 3" [class.done]="currentStep > 3">
+        <div class="step-circle">{{ currentStep > 3 ? '✓' : '3' }}</div>
+        <span>วันที่</span>
       </div>
-
-    </div>
-
-    <!-- LOCATION -->
-    <h3 class="section-title">2. เลือกสถานที่บริจาคโลหิต</h3>
-
-    <div class="location"
-         [class.active]="location === 'sutthavej'"
-         (click)="selectLocation('sutthavej')">
-
-      <h4>โรงพยาบาลสุทธาเวช (อาคารหลัก)</h4>
-      <p>ชั้น 2 แผนกคลังเลือด • เปิด 08:30 - 16:00 น.</p>
-
-    </div>
-
-    <div class="location"
-         [class.active]="location === 'mobile1'"
-         (click)="selectLocation('mobile1')">
-
-      <h4>หน่วยรับบริจาคเคลื่อนที่ (มหาสารคาม)</h4>
-      <p>ลานกิจกรรม ชั้น G • เปิด 10:00 - 18:00 น.</p>
-
-    </div>
-
-    <div class="location"
-         [class.active]="location === 'mobile2'"
-         (click)="selectLocation('mobile2')">
-
-      <h4>หน่วยรับบริจาคเคลื่อนที่ โซน 2</h4>
-      <p>ลานกิจกรรม • เปิด 10:00 - 18:00 น.</p>
-
-    </div>
-
-    <!-- DATE -->
-    <h3 class="section-title">3. เลือกวันที่</h3>
-
-    <div class="calendar">
-
-      <div class="date"
-           *ngFor="let d of [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]"
-           [class.active]="selectedDate === d"
-           (click)="selectDate(d)">
-        {{ d }}
+      <div class="step-line" [class.active]="currentStep > 3"></div>
+      <div class="step-item" [class.active]="currentStep >= 4" [class.done]="currentStep > 4">
+        <div class="step-circle">{{ currentStep > 4 ? '✓' : '4' }}</div>
+        <span>เวลา</span>
       </div>
-
-    </div>
-
-    <!-- TIME -->
-    <h3 class="section-title">4. เลือกเวลา</h3>
-
-    <div class="time-grid">
-
-      <div class="time"
-           *ngFor="let t of ['08:30','09:00','09:30','10:00','11:00','11:30','13:00','13:30','14:00']"
-           [class.active]="selectedTime === t"
-           (click)="selectTime(t)">
-        {{ t }}
+      <div class="step-line" [class.active]="currentStep > 4"></div>
+      <div class="step-item" [class.active]="currentStep >= 5">
+        <div class="step-circle">5</div>
+        <span>ยืนยัน</span>
       </div>
-
     </div>
 
+    <div class="booking-body">
+      <div class="booking-main">
+
+        <!-- Step 1: ประเภท -->
+        <div class="step-content" *ngIf="currentStep === 1">
+          <h2 class="step-title"><span class="icon">water_drop</span> เลือกประเภทการบริจาค</h2>
+          <div class="type-grid">
+            <div class="type-card" *ngFor="let t of donationTypes"
+                [class.selected]="donationType === t.value"
+                (click)="donationType = t.value">
+              <div class="type-emoji">{{ t.icon }}</div>
+              <h3>{{ t.label }}</h3>
+              <p>{{ t.desc }}</p>
+              <div class="type-check" *ngIf="donationType === t.value">
+                <span class="icon">check_circle</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: สถานที่ -->
+        <div class="step-content" *ngIf="currentStep === 2">
+          <h2 class="step-title"><span class="icon">location_on</span> เลือกสถานที่บริจาค</h2>
+          <div class="location-list">
+            <div class="location-card" *ngFor="let loc of locations"
+                [class.selected]="locationId === loc.Location_ID"
+                (click)="locationId = loc.Location_ID; onLocationChange()">
+              <div class="location-icon">
+                <span class="icon">local_hospital</span>
+              </div>
+              <div class="location-info">
+                <h3>{{ loc.name }}</h3>
+                <p>{{ loc.address || '-' }}</p>
+                <span class="location-type">{{ loc.type }}</span>
+              </div>
+              <div class="location-check" *ngIf="locationId === loc.Location_ID">
+                <span class="icon">check_circle</span>
+              </div>
+            </div>
+            <div class="empty-state" *ngIf="locations.length === 0">
+              <span class="icon">location_off</span>
+              <p>ยังไม่มีสถานที่</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: วันที่ -->
+        <div class="step-content" *ngIf="currentStep === 3">
+          <h2 class="step-title"><span class="icon">calendar_month</span> เลือกวันที่</h2>
+          <div class="date-grid" *ngIf="availableDates.length > 0">
+            <div class="date-card" *ngFor="let d of availableDates"
+                [class.selected]="selectedDate === d"
+                (click)="selectedDate = d; onDateChange()">
+              <span class="date-day">{{ d | date:'EEE' }}</span>
+              <span class="date-num">{{ d | date:'d' }}</span>
+              <span class="date-month">{{ d | date:'MMM yyyy' }}</span>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="availableDates.length === 0">
+            <span class="icon">event_busy</span>
+            <p>ไม่มีวันที่เปิดรับในสถานที่นี้</p>
+          </div>
+        </div>
+
+        <!-- Step 4: เวลา -->
+<!-- Step 4: เวลา -->
+<div class="step-content" *ngIf="currentStep === 4">
+  <h2 class="step-title"><span class="icon">schedule</span> เลือกช่วงเวลา</h2>
+  <div class="slot-grid">
+    <div class="slot-card" *ngFor="let slot of filteredSlots"
+        [class.selected]="selectedSlotId === slot.Slot_ID"
+        [class.full]="isFull(slot)"
+        (click)="!isFull(slot) && (selectedSlotId = slot.Slot_ID)">
+      <div class="slot-time">
+        {{ slot.Start_time?.slice(0,5) }} - {{ slot.End_time?.slice(0,5) }}
+      </div>
+      <div class="slot-quota">
+        <div class="quota-bar-bg">
+          <div class="quota-bar-fill"
+              [style.width.%]="getQuotaPercent(slot)"
+              [class.bar-full]="isFull(slot)"
+              [class.bar-ok]="!isFull(slot)">
+          </div>
+        </div>
+        <span class="quota-text" *ngIf="!isFull(slot)">
+          ว่าง {{ slot.max_quota - (slot.booked || 0) }} / {{ slot.max_quota }} ที่นั่ง
+        </span>
+        <span class="quota-text full-text" *ngIf="isFull(slot)">
+          เต็มแล้ว
+        </span>
+      </div>
+      <div class="slot-full-badge" *ngIf="isFull(slot)">เต็ม</div>
+    </div>
   </div>
 
-  <!-- SUMMARY -->
-  <div class="right">
-
-    <div class="summary">
-
-      <h3>สรุปข้อมูลการจอง</h3>
-
-      <div class="item">
-        <b>ประเภท</b>
-        <p>{{ donationType }}</p>
-      </div>
-
-      <div class="item">
-        <b>สถานที่</b>
-        <p>{{ location }}</p>
-      </div>
-
-      <div class="item">
-        <b>วันที่</b>
-        <p>{{ selectedDate }}</p>
-      </div>
-
-      <div class="item">
-        <b>เวลา</b>
-        <p>{{ selectedTime }}</p>
-      </div>
-
-      <button class="confirm-btn" (click)="confirmBooking()">
-        ยืนยันการจอง
-      </button>
-
+  <!-- ✅ แสดงเมื่อทุก slot เต็ม -->
+  <div class="all-full-notice" *ngIf="filteredSlots.length > 0 && isAllFull()">
+    <div class="all-full-icon">
+      <span class="icon">event_busy</span>
     </div>
-
+    <h3>ขออภัย ช่วงเวลาทั้งหมดเต็มแล้ว</h3>
+    <p>กรุณาติดตามประกาศจากเจ้าหน้าที่เพื่อรับทราบวันและเวลาที่เปิดรับเพิ่มเติม</p>
+    <button class="btn-go-home" routerLink="/home-donor">
+      <span class="icon">home</span> กลับหน้าหลัก
+    </button>
   </div>
 
+  <div class="empty-state" *ngIf="filteredSlots.length === 0">
+    <span class="icon">schedule</span>
+    <p>ไม่มีช่วงเวลาในวันนี้</p>
+  </div>
 </div>
+
+        <!-- Step 5: ยืนยัน -->
+        <div class="step-content" *ngIf="currentStep === 5">
+          <h2 class="step-title"><span class="icon">fact_check</span> ยืนยันการจอง</h2>
+          <div class="summary-card">
+  <div class="summary-item">
+    <span class="summary-icon">🩸</span>
+    <div>
+      <p class="summary-label">ประเภทการบริจาค</p>
+      <p class="summary-value">{{ getDonationTypeLabel() }}</p>
+    </div>
+  </div>
+            <div class="summary-item">
+              <span class="icon summary-icon-mat">location_on</span>
+              <div>
+                <p class="summary-label">สถานที่</p>
+                <p class="summary-value">{{ getLocationName() }}</p>
+              </div>
+            </div>
+            <div class="summary-item">
+              <span class="icon summary-icon-mat">calendar_today</span>
+              <div>
+                <p class="summary-label">วันที่</p>
+                <p class="summary-value">{{ selectedDate | date:'d MMMM yyyy' }}</p>
+              </div>
+            </div>
+            <div class="summary-item">
+              <span class="icon summary-icon-mat">schedule</span>
+              <div>
+                <p class="summary-label">เวลา</p>
+                <p class="summary-value">{{ getSlotLabel() }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="confirm-note">
+            <span class="icon">info</span>
+            <p>กรุณาตรงเวลาและนำบัตรประชาชนมาด้วยในวันบริจาค</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation -->
+      <div class="booking-nav">
+        <button class="btn-prev" (click)="prev()" [disabled]="currentStep === 1">
+          <span class="icon">chevron_left</span> ย้อนกลับ
+        </button>
+        <button class="btn-next" *ngIf="currentStep < 5" (click)="next()" [disabled]="!canProceed()">
+          ถัดไป <span class="icon">chevron_right</span>
+        </button>
+        <button class="btn-confirm" *ngIf="currentStep === 5" (click)="confirmBooking()" [disabled]="isLoading">
+          <span class="icon">check_circle</span>
+          {{ isLoading ? 'กำลังจอง...' : 'ยืนยันการจอง' }}
+        </button>
+      </div>
+    </div>
+
+  </div>

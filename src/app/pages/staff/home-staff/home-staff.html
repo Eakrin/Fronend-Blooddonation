@@ -3,13 +3,29 @@
   <header class="page-header">
     <div class="header-left">
       <h2>รายชื่อผู้จองและผลคัดกรอง</h2>
-      <p>ตรวจสอบสถานะสุขภาพเบื้องต้นของผู้จองบริจาคโลหิตวันนี้</p>
+      <p>ตรวจสอบและอนุมัติการจองบริจาคโลหิต</p>
     </div>
-    <div class="header-stat">
-      <div class="stat-icon"><span class="icon">groups</span></div>
-      <div>
-        <p class="stat-label">ผู้จองวันนี้</p>
-        <h3 class="stat-num">42</h3>
+    <div class="header-stats">
+      <div class="stat-box">
+        <span class="icon">groups</span>
+        <div>
+          <p>ผู้จองทั้งหมด</p>
+          <h3>{{ totalToday }}</h3>
+        </div>
+      </div>
+      <div class="stat-box pending">
+        <span class="icon">hourglass_empty</span>
+        <div>
+          <p>รอพิจารณา</p>
+          <h3>{{ totalPending }}</h3>
+        </div>
+      </div>
+      <div class="stat-box approved">
+        <span class="icon">check_circle</span>
+        <div>
+          <p>อนุมัติแล้ว</p>
+          <h3>{{ totalApproved }}</h3>
+        </div>
       </div>
     </div>
   </header>
@@ -18,21 +34,15 @@
   <div class="filter-bar">
     <div class="search-box">
       <span class="icon search-icon">search</span>
-      <input type="text" placeholder="ค้นหาด้วยชื่อ-นามสกุล หรือเบอร์โทรศัพท์...">
+      <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาด้วยชื่อ-นามสกุล หรือเบอร์โทรศัพท์...">
     </div>
-    <select class="filter-select">
-      <option>ทุกสถานะ</option>
-      <option>พร้อม</option>
-      <option>รอพิจารณา</option>
-      <option>ไม่ผ่าน</option>
+    <select class="filter-select" [(ngModel)]="filterStatus">
+      <option value="">ทุกสถานะ</option>
+      <option value="pending">รอพิจารณา</option>
+      <option value="approved">อนุมัติแล้ว</option>
+      <option value="rejected">ไม่ผ่านเกณฑ์</option>
+      <option value="cancelled">ยกเลิก</option>
     </select>
-    <div class="date-box">
-      <span class="icon">calendar_today</span>
-      <span>24 พ.ค. 2567</span>
-    </div>
-    <button class="btn-export">
-      <span class="icon">download</span> ส่งออก
-    </button>
   </div>
 
   <!-- Table -->
@@ -42,97 +52,60 @@
         <tr>
           <th>ชื่อ-นามสกุล</th>
           <th>เบอร์โทร</th>
-          <th>สถานที่</th>
           <th>วันที่/เวลาจอง</th>
-          <th>ผลประเมินเบื้องต้น</th>
+          <th>สถานะ</th>
           <th class="text-center">จัดการ</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr *ngFor="let b of filteredBookings">
           <td>
             <div class="donor-profile">
-              <div class="donor-avatar av-1">อน</div>
-              <span class="donor-name">นายอนันต์ อารีรักษ์</span>
+              <div class="donor-avatar">{{ getInitials(b.name, b.lastname) }}</div>
+              <span class="donor-name">{{ b.name }} {{ b.lastname }}</span>
             </div>
           </td>
-          <td class="text-muted">081-234-5678</td>
-          <td class="text-muted">ชั้น 1 อาคารหลัก</td>
-          <td class="text-muted">24 พ.ค. 67 (09:00)</td>
-          <td><span class="status-badge ready">● พร้อม</span></td>
+          <td class="text-muted">{{ b.phone || '-' }}</td>
+          <td class="text-muted">{{ b.booking_datetime | date:'d MMM yyyy HH:mm' }}</td>
+          <td>
+            <span class="status-badge"
+              [class.ready]="b.booking_status === 'approved'"
+              [class.pending]="b.booking_status === 'pending'"
+              [class.failed]="b.booking_status === 'rejected'"
+              [class.cancelled]="b.booking_status === 'cancelled'">
+              ● {{ getStatusLabel(b.booking_status) }}
+            </span>
+          </td>
           <td class="text-center">
-            <button class="btn-more"><span class="icon">more_vert</span></button>
+            <div class="action-group">
+              <button class="btn-approve"
+                      *ngIf="b.booking_status === 'pending'"
+                      (click)="updateStatus(b.Booking_ID, 'approved')">
+                <span class="icon">check</span> อนุมัติ
+              </button>
+              <button class="btn-reject"
+                      *ngIf="b.booking_status === 'pending'"
+                      (click)="updateStatus(b.Booking_ID, 'rejected')">
+                <span class="icon">close</span> ปฏิเสธ
+              </button>
+              <span class="text-muted" *ngIf="b.booking_status !== 'pending'">
+                {{ getStatusLabel(b.booking_status) }}
+              </span>
+            </div>
           </td>
         </tr>
-        <tr>
-          <td>
-            <div class="donor-profile">
-              <div class="donor-avatar av-2">รส</div>
-              <span class="donor-name">นางสาวรุ่งสว่าง สดใส</span>
-            </div>
-          </td>
-          <td class="text-muted">089-876-5432</td>
-          <td class="text-muted">ลานกิจกรรมชั้น 2</td>
-          <td class="text-muted">24 พ.ค. 67 (09:15)</td>
-          <td><span class="status-badge pending">● รอพิจารณา</span></td>
-          <td class="text-center">
-            <button class="btn-more"><span class="icon">more_vert</span></button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="donor-profile">
-              <div class="donor-avatar av-3">พช</div>
-              <span class="donor-name">นายพงษ์ศักดิ์ ชัยชนะ</span>
-            </div>
-          </td>
-          <td class="text-muted">085-555-4444</td>
-          <td class="text-muted">ชั้น 1 อาคารหลัก</td>
-          <td class="text-muted">24 พ.ค. 67 (09:30)</td>
-          <td><span class="status-badge failed">● ไม่ผ่าน</span></td>
-          <td class="text-center">
-            <button class="btn-more"><span class="icon">more_vert</span></button>
+
+        <tr *ngIf="filteredBookings.length === 0">
+          <td colspan="5" class="empty-row">
+            <span class="icon">inbox</span>
+            <p>ไม่พบรายการ</p>
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="table-footer">
-      <span class="entry-info">แสดงผล 1 - 3 จากทั้งหมด 42 รายการ</span>
-      <div class="pagination">
-        <button class="pag-btn"><span class="icon">chevron_left</span></button>
-        <button class="pag-btn active">1</button>
-        <button class="pag-btn">2</button>
-        <button class="pag-btn">3</button>
-        <span class="pag-dots">...</span>
-        <button class="pag-btn">9</button>
-        <button class="pag-btn"><span class="icon">chevron_right</span></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom Cards -->
-  <div class="bottom-grid">
-    <div class="info-card yellow">
-      <div class="info-card-icon"><span class="icon">info</span></div>
-      <div>
-        <p class="info-card-title">เกณฑ์การคัดกรองเบื้องต้น</p>
-        <p class="info-card-desc">ผลการประเมินนี้อ้างอิงจากการตอบแบบสอบถามออนไลน์ของผู้จอง เจ้าหน้าที่ควรตรวจสอบความถูกต้องอีกครั้งหน้างาน</p>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-icon pending-icon"><span class="icon">hourglass_empty</span></div>
-      <div>
-        <p class="stat-card-label">รอคัดกรองหน้างาน</p>
-        <h3 class="stat-card-num">12 ราย</h3>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-card-icon success-icon"><span class="icon">check_circle</span></div>
-      <div>
-        <p class="stat-card-label">บริจาคสำเร็จวันนี้</p>
-        <h3 class="stat-card-num">28 ราย</h3>
-      </div>
+      <span class="entry-info">ทั้งหมด {{ filteredBookings.length }} รายการ</span>
     </div>
   </div>
 

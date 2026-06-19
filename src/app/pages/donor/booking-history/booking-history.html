@@ -1,0 +1,63 @@
+<div class="history-container">
+
+  <div class="page-header">
+    <div class="header-left">
+      <button class="btn-back" routerLink="/home-donor">
+        <span class="icon">arrow_back</span>
+      </button>
+<div>
+  <h1>การจองคิวของฉัน</h1>
+  <p>ติดตามสถานะการจองและประวัติการบริจาคโลหิต</p>
+</div>
+    </div>
+    <div class="total-badge">ทั้งหมด {{ bookings.length }} รายการ</div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <span class="icon">hourglass_empty</span>
+    <p>กำลังโหลด...</p>
+  </div>
+
+  <!-- มีประวัติ -->
+  <div class="history-list" *ngIf="!isLoading && bookings.length > 0">
+    <div class="history-card" *ngFor="let b of bookings; let i = index">
+      <div class="history-num">{{ i + 1 }}</div>
+      <div class="history-icon">
+        <span class="icon">water_drop</span>
+      </div>
+      <div class="history-info">
+        <p class="history-date">{{ b.booking_datetime | date:'d MMMM yyyy' }}</p>
+        <p class="history-time">เวลา {{ b.booking_datetime | date:'HH:mm' }} น.</p>
+        <p class="history-id">รหัสจอง #{{ b.Booking_ID }}</p>
+      </div>
+      <div class="history-right">
+        <div class="history-status" [class.approved]="b.booking_status === 'approved'"
+          [class.pending]="b.booking_status === 'pending'" [class.rejected]="b.booking_status === 'rejected'"
+          [class.cancelled]="b.booking_status === 'cancelled'">
+          <span class="icon">
+            {{ b.booking_status === 'approved' ? 'check_circle' :
+            b.booking_status === 'pending' ? 'hourglass_empty' :
+            b.booking_status === 'rejected' ? 'cancel' : 'block' }}
+          </span>
+          {{ getStatusLabel(b.booking_status) }}
+        </div>
+        <!-- ✅ ปุ่มยกเลิกเฉพาะ pending -->
+        <button class="btn-cancel-booking" *ngIf="b.booking_status === 'pending'" (click)="cancelBooking(b.Booking_ID)">
+          <span class="icon">close</span> ยกเลิก
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ไม่มีประวัติ -->
+  <div class="empty-state" *ngIf="!isLoading && bookings.length === 0">
+    <span class="icon">water_drop</span>
+    <h3>ยังไม่มีประวัติการบริจาค</h3>
+    <p>เมื่อท่านบริจาคโลหิตสำเร็จ ประวัติจะแสดงที่นี่</p>
+    <button class="btn-donate" routerLink="/assessment-quiz">
+      <span class="icon">add_circle</span> จองคิวบริจาคโลหิต
+    </button>
+  </div>
+
+</div>

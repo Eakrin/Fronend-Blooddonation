@@ -23,6 +23,8 @@ export class PostStaff implements OnInit {
   locations: any[] = [];
   timeSlots: string[] = []; // ✅ เพิ่ม
   editingId: number | null = null;
+  donationDays: any[] = []; // ✅ เพิ่ม
+  timeSlotOptions: any[] = []; // ✅ เพิ่ม
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +32,40 @@ export class PostStaff implements OnInit {
     this.loadPosts();
     this.loadLocations();
     this.generateTimeSlots(); // ✅ เพิ่ม
+    this.loadDonationDays(); // ✅ เพิ่ม
+  }
+
+  // เมื่อเลือกวันที่แล้วให้ load time slots ของวันนั้น
+  onDateChange() {
+    const selected = this.donationDays.find((d) => {
+      const date = new Date(d.Donation_date).toISOString().split('T')[0];
+      return date === this.donationDate;
+    });
+
+    if (selected) {
+      this.locationId = selected.Location_ID;
+      // กรองเอา time slots ของวันนั้น
+      this.timeSlotOptions = this.donationDays.filter((d) => {
+        const date = new Date(d.Donation_date).toISOString().split('T')[0];
+        return date === this.donationDate;
+      });
+    }
+    this.startTime = '';
+    this.endTime = '';
+  }
+  loadDonationDays() {
+    // ✅ เพิ่ม
+    const token = localStorage.getItem('token');
+    this.http
+      .get('http://localhost:3000/api/donation-day', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.donationDays = res;
+        },
+        error: () => {},
+      });
   }
 
   generateTimeSlots() {

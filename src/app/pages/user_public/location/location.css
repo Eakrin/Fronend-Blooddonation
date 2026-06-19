@@ -308,3 +308,40 @@
 .btn-outline:hover {
   background: rgba(255,255,255,0.2);
 }
+
+.slots {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slot-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.quota-badge {
+  background: #fef2f2;
+  color: #c1121f;
+  border: 1px solid #fecaca;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+.empty-state .icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 8px;
+}

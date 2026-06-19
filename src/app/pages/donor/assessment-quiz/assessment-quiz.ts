@@ -12,10 +12,8 @@ import { AuthService } from '../../../services/api';
   styleUrl: './assessment-quiz.css',
 })
 export class AssessmentQuiz implements OnInit {
-  currentStep = 0; // 0=ประวัติ, 1-3=คำถาม, 4=หน้าแสดงผลลัพธ์
+  currentStep = 0;
   progressPercent = 0;
-
-  // สถานะการตรวจคะแนน
   isAssessmentPassed = true;
   failedQuestions: any[] = [];
 
@@ -36,7 +34,6 @@ export class AssessmentQuiz implements OnInit {
   };
 
   questions = [
-    // --- ขั้นตอนที่ 1 ---
     {
       id: 1,
       step: 1,
@@ -130,8 +127,6 @@ export class AssessmentQuiz implements OnInit {
       expected: false,
       userAnswer: null as boolean | null,
     },
-
-    // --- ขั้นตอนที่ 2 ---
     {
       id: 13,
       step: 2,
@@ -216,8 +211,6 @@ export class AssessmentQuiz implements OnInit {
       expected: false,
       userAnswer: null as boolean | null,
     },
-
-    // --- ขั้นตอนที่ 3 ---
     {
       id: 24,
       step: 3,
@@ -251,7 +244,7 @@ export class AssessmentQuiz implements OnInit {
       id: 28,
       step: 3,
       question:
-        'คุณเคยเข้าไปในพื้นพื้นที่เชื้อมาลาเรียชุกชุม ในระยะ 1 ปีที่ผ่านมาหรือไม่?',
+        'คุณเคยเข้าไปในพื้นที่เชื้อมาลาเรียชุกชุม ในระยะ 1 ปีที่ผ่านมาหรือไม่?',
       expected: false,
       userAnswer: null as boolean | null,
     },
@@ -341,13 +334,9 @@ export class AssessmentQuiz implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // เช็กสถานะ: ถ้าเคยทำแบบประเมินผ่านไปแล้ว ให้ข้ามมาแสดงหน้าสรุปผลสีเขียวทันที
-    const savedStatus = localStorage.getItem('assessment_passed');
-    if (savedStatus === 'true') {
-      this.currentStep = 4;
-      this.isAssessmentPassed = true;
-      this.progressPercent = 100;
-    }
+    localStorage.removeItem('assessment_passed');
+    this.currentStep = 0;
+    this.progressPercent = 0;
   }
 
   get filteredQuestions() {
@@ -393,56 +382,42 @@ export class AssessmentQuiz implements OnInit {
     this.failedQuestions = this.questions.filter(
       (q) => q.userAnswer !== q.expected,
     );
-
     this.isAssessmentPassed = this.failedQuestions.length === 0;
-
-    // เรียกเซฟข้อมูลและล็อกสถานะหน้าจอ
     this.saveAssessmentToDatabase();
-
-    // ไปที่สเต็ป 4 หน้าจอสรุปผลลัพธ์
-    this.currentStep = 4;
+    this.currentStep = 4; // ✅ แสดงผลก่อนเสมอ ไม่ redirect เลย
   }
 
   saveAssessmentToDatabase() {
     const token = this.auth.getToken();
-    if (!token) {
-      alert('❌ กรุณาเข้าสู่ระบบใหม่อีกครั้ง');
-      return;
-    }
+    if (!token) return;
 
-    // เตรียมโครงสร้างข้อมูลที่จะยิงขึ้นหลังบ้าน
     const payload = {
-      is_passed: this.isAssessmentPassed,
-      history: this.donorHistory,
-      answers: this.questions.map((q) => ({
-        question_id: q.id,
-        answer: q.userAnswer,
-      })),
+      result_status: this.isAssessmentPassed ? 'passed' : 'failed',
+      assessment_date: new Date().toISOString(),
     };
 
-    // 🌟 แก้ปัญหา Property ts(7053) โดยใช้ type casting หลบการตรวจสอบของ TS ชั่วคราว
-    const anyAuth = this.auth as any;
-    if (typeof anyAuth.createAssessment === 'function') {
-      anyAuth.createAssessment(payload, token).subscribe({
-        next: (res: any) => {
-          console.log('✅ บันทึกแบบประเมินลงตาราง Database สำเร็จ', res);
-        },
-        error: (err: any) => {
-          console.error('❌ หลังบ้านเกิดข้อผิดพลาดในการบันทึกข้อมูล', err);
-        },
+    fetch('http://localhost:3000/api/health-assessment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(() => {
+        console.log('✅ บันทึก Health_Assessment สำเร็จ');
+      })
+      .catch((err) => {
+        console.error('❌ บันทึกไม่สำเร็จ', err);
       });
-    }
 
-    // กลไกล็อกหน้าจอของระบบผู้ใช้: ถ้าผ่านเกณฑ์ให้ทำการบันทึกลงบราวเซอร์ทันที
     if (this.isAssessmentPassed) {
       localStorage.setItem('assessment_passed', 'true');
     }
   }
 
   resetAssessment() {
-    // เมื่อผู้ใช้กดทำใหม่ ให้ปลดล็อกความทรงจำของเครื่องออกด้วย
     localStorage.removeItem('assessment_passed');
-
     this.currentStep = 0;
     this.progressPercent = 0;
     this.isAssessmentPassed = true;

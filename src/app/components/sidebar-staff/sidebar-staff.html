@@ -17,11 +17,10 @@
       <span class="icon">groups</span>
       <span class="menu-text" *ngIf="!isCollapsed">รายชื่อผู้จอง</span>
     </a>
-    <a routerLink="/schedule-staff" routerLinkActive="active" class="menu-item"
-      [title]="isCollapsed ? 'ตารางรับบริจาค' : ''">
-      <span class="icon">calendar_month</span>
-      <span class="menu-text" *ngIf="!isCollapsed">จัดการตารางรับบริจาค</span>
-    </a>
+<a routerLink="/donation-day-staff" routerLinkActive="active" class="menu-item">
+  <span class="icon">calendar_month</span>
+  <span class="menu-text" *ngIf="!isCollapsed">ตารางรับบริจาค</span>
+</a>
     <a routerLink="/post-staff" routerLinkActive="active" class="menu-item"
       [title]="isCollapsed ? 'ประชาสัมพันธ์' : ''">
       <span class="icon">campaign</span>

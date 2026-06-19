@@ -71,7 +71,7 @@ export class App implements OnInit {
     return (
       this.isStaff() &&
       (this.currentUrl.startsWith('/home-staff') ||
-        this.currentUrl.startsWith('/schedule-staff') ||
+        this.currentUrl.startsWith('/donation-day-staff') ||
         this.currentUrl.startsWith('/announcement-staff') ||
         this.currentUrl.startsWith('/post-staff') ||
         this.currentUrl.startsWith('/profile-staff') ||

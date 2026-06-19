@@ -492,3 +492,146 @@
   font-size: 13px;
   flex-shrink: 0;
 }
+
+.result-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.result-badge {
+  display: inline-block;
+  padding: 6px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.pass-badge {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.fail-badge {
+  background: #fee2e2;
+  color: #c1121f;
+  border: 1px solid #fecaca;
+}
+
+.result-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.result-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.result-info-item .icon { color: #16a34a; font-size: 18px; }
+
+.result-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fef9c3;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 16px 0 24px;
+  text-align: left;
+}
+
+.result-note .icon { color: #d97706; font-size: 18px; flex-shrink: 0; }
+.result-note p { font-size: 13px; color: #92400e; margin: 0; line-height: 1.6; }
+
+.btn-go-booking {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #991b1b, #c1121f);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(193,18,31,.3);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn-go-booking:hover { transform: translateY(-2px); }
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #475569;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-retry:hover { background: #f8fafc; }
+
+.btn-go-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: #fee2e2;
+  color: #c1121f;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-go-home:hover { background: #fecaca; }
+
+.failed-reasons-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.failed-reasons-box li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  text-align: left;
+}
+
+.failed-reasons-box li .icon { color: #c1121f; font-size: 18px; flex-shrink: 0; }

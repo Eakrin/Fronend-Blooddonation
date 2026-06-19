@@ -1,59 +1,180 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// 🌟 1. เพิ่มการ Import RouterModule เข้ามาจากแองกูลาร์ด้านบนนี้ครับ
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/api';
 
 @Component({
   selector: 'app-booking',
   standalone: true,
-  // 🌟 2. เอา RouterModule มาใส่เพิ่มในกล่องก้อนอิมพอร์ตตรงนี้ด้วยครับ
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './booking.html',
   styleUrl: './booking.css',
 })
-export class BookingComponent {
-  donationType = 'whole';
-  location = 'sutthavej';
-  selectedDate = 10;
-  selectedTime = '09:30';
+export class BookingComponent implements OnInit {
+  currentStep = 1;
+  donationType = '';
+  locationId: number | null = null;
+  selectedSlotId: number | null = null;
+  selectedDate = '';
+  locations: any[] = [];
+  allSlots: any[] = [];
+  filteredSlots: any[] = [];
+  availableDates: string[] = [];
+  isLoading = false;
 
-  constructor(private auth: AuthService) {}
+  donationTypes = [
+    {
+      value: 'whole',
+      label: 'บริจาคโลหิตรวม',
+      icon: '🩸',
+      desc: 'บริจาคเลือดทั้งหมด ใช้เวลาประมาณ 10-15 นาที',
+    },
+    {
+      value: 'plasma',
+      label: 'บริจาคพลาสม่า',
+      icon: '💧',
+      desc: 'บริจาคน้ำเลือด เหมาะสำหรับผู้บริจาคบ่อย',
+    },
+    {
+      value: 'platelets',
+      label: 'บริจาคเกล็ดโลหิต',
+      icon: '🧬',
+      desc: 'บริจาคเกล็ดเลือด ช่วยผู้ป่วยมะเร็ง',
+    },
+  ];
 
-  selectType(type: string) {
-    this.donationType = type;
+  constructor(
+    private auth: AuthService,
+    private http: HttpClient,
+    private router: Router,
+  ) {}
+
+  ngOnInit() {
+    this.loadLocations();
+    this.loadSlots();
   }
 
-  selectLocation(loc: string) {
-    this.location = loc;
+  loadLocations() {
+    this.http.get('http://localhost:3000/api/location').subscribe({
+      next: (res: any) => {
+        this.locations = res;
+      },
+      error: () => {},
+    });
   }
 
-  selectDate(date: number) {
-    this.selectedDate = date;
+  loadSlots() {
+    this.http.get('http://localhost:3000/api/donation-day').subscribe({
+      next: (res: any) => {
+        this.allSlots = res;
+      },
+      error: () => {},
+    });
   }
 
-  selectTime(time: string) {
-    this.selectedTime = time;
+  onLocationChange() {
+    this.selectedDate = '';
+    this.selectedSlotId = null;
+    this.filteredSlots = [];
+    if (this.locationId) {
+      const slots = this.allSlots.filter(
+        (s) => s.Location_ID === this.locationId,
+      );
+      const dates = [
+        ...new Set(slots.map((s) => s.Donation_date?.split('T')[0])),
+      ];
+      this.availableDates = dates as string[];
+    }
+  }
+
+  onDateChange() {
+    this.selectedSlotId = null;
+    if (this.locationId && this.selectedDate) {
+      this.filteredSlots = this.allSlots.filter(
+        (s) =>
+          s.Location_ID === this.locationId &&
+          s.Donation_date?.split('T')[0] === this.selectedDate,
+      );
+    }
+  }
+
+  getQuotaPercent(slot: any): number {
+    if (!slot.max_quota) return 0;
+    return Math.round(((slot.booked || 0) / slot.max_quota) * 100);
+  }
+
+  isFull(slot: any): boolean {
+    return (slot.booked || 0) >= slot.max_quota;
+  }
+
+  isAllFull(): boolean {
+    return (
+      this.filteredSlots.length > 0 &&
+      this.filteredSlots.every((s) => this.isFull(s))
+    );
+  }
+
+  getLocationName(): string {
+    const loc = this.locations.find((l) => l.Location_ID === this.locationId);
+    return loc ? loc.name : '-';
+  }
+
+  getSlotLabel(): string {
+    const slot = this.filteredSlots.find(
+      (s) => s.Slot_ID === this.selectedSlotId,
+    );
+    return slot
+      ? `${slot.Start_time?.slice(0, 5)} - ${slot.End_time?.slice(0, 5)}`
+      : '-';
+  }
+
+  getDonationTypeLabel(): string {
+    const t = this.donationTypes.find((t) => t.value === this.donationType);
+    return t ? t.label : '-';
+  }
+
+  canProceed(): boolean {
+    if (this.currentStep === 1) return !!this.donationType;
+    if (this.currentStep === 2) return !!this.locationId;
+    if (this.currentStep === 3) return !!this.selectedDate;
+    if (this.currentStep === 4) return !!this.selectedSlotId;
+    return false;
+  }
+
+  next() {
+    if (this.canProceed() && this.currentStep < 5) this.currentStep++;
+  }
+
+  prev() {
+    if (this.currentStep > 1) this.currentStep--;
   }
 
   confirmBooking() {
     const token = this.auth.getToken();
-
     if (!token) {
-      alert('❌ กรุณา login ก่อน');
+      alert('กรุณาเข้าสู่ระบบก่อน');
       return;
     }
 
-    const booking_datetime = `2026-05-${this.selectedDate}T${this.selectedTime}:00`;
+    const slot = this.filteredSlots.find(
+      (s) => s.Slot_ID === this.selectedSlotId,
+    );
+    if (!slot) return;
 
+    const booking_datetime = `${this.selectedDate} ${slot.Start_time}`;
+
+    this.isLoading = true;
     this.auth.createBooking({ booking_datetime }, token).subscribe({
       next: () => {
-        alert('✅ จองสำเร็จ');
+        this.isLoading = false;
+        alert('จองสำเร็จ');
+        this.router.navigate(['/home-donor']);
       },
       error: (err) => {
-        console.log(err);
-        alert(err.error?.message || '❌ เกิดข้อผิดพลาด');
+        this.isLoading = false;
+        alert(err.error?.message || 'เกิดข้อผิดพลาด');
       },
     });
   }

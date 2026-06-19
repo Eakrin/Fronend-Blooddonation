@@ -166,39 +166,76 @@
       </button>
     </div>
 
-    <div class="result-container" *ngIf="currentStep === 4">
+<div class="result-container" *ngIf="currentStep === 4">
 
-      <div class="result-box pass" *ngIf="isAssessmentPassed">
-        <div class="result-icon-circle">✓</div>
-        <h2>ท่านผ่านเกณฑ์การประเมินสุขภาพเบื้องต้น</h2>
-        <p>คุณสมบัติของท่านพร้อมสำหรับการบริจาคโลหิต โปรดติดต่อเจ้าหน้าที่ ณ จุดลงทะเบียนถัดไป</p>
-
-        <div style="margin-top: 25px;">
-          <button routerLink="/booking" class="btn-go-booking">ขั้นตอนถัดไป: จองคิวบริจาคโลหิต →</button>
-        </div>
-      </div>
-
-      <div class="result-box fail" *ngIf="!isAssessmentPassed">
-        <div class="result-icon-circle">✕</div>
-        <h2>ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
-        <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
-
-        <div class="failed-reasons-box">
-          <h4>หัวข้อที่ท่านควรปรึกษาเจ้าหน้าที่เพิ่มเติม:</h4>
-          <ul>
-            <li *ngFor="let q of failedQuestions">
-              <strong>ข้อที่ {{q.id}}:</strong> {{q.question}}
-              <span class="user-ans">(ท่านตอบว่า: {{q.userAnswer ? 'ใช่' : 'ไม่ใช่'}})</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="result-actions">
-        <button class="btn-retry" (click)="resetAssessment()">ทำแบบประเมินใหม่อีกครั้ง</button>
-      </div>
-
+  <!-- ✅ ผ่าน -->
+  <div class="result-box pass" *ngIf="isAssessmentPassed">
+    <div class="result-icon-wrap pass">
+      <div class="result-icon-circle">✓</div>
     </div>
+    <div class="result-badge pass-badge">ผ่านการประเมิน</div>
+    <h2>ยินดีด้วย! ท่านผ่านเกณฑ์การประเมินสุขภาพเบื้องต้น</h2>
+    <p>คุณสมบัติของท่านพร้อมสำหรับการบริจาคโลหิต สามารถดำเนินการจองคิวได้เลย</p>
+
+    <div class="result-info-grid">
+      <div class="result-info-item">
+        <span class="icon">check_circle</span>
+        <span>ไม่มีโรคประจำตัวที่เป็นข้อห้าม</span>
+      </div>
+      <div class="result-info-item">
+        <span class="icon">check_circle</span>
+        <span>สุขภาพพร้อมสำหรับการบริจาค</span>
+      </div>
+      <div class="result-info-item">
+        <span class="icon">check_circle</span>
+        <span>ผ่านการคัดกรองเบื้องต้น</span>
+      </div>
+    </div>
+
+    <div class="result-note">
+      <span class="icon">info</span>
+      <p>หมายเหตุ: ผลการประเมินนี้เป็นเพียงการคัดกรองเบื้องต้น เจ้าหน้าที่จะตรวจสอบอีกครั้ง ณ จุดรับบริจาค</p>
+    </div>
+
+    <button routerLink="/booking" class="btn-go-booking">
+      <span class="icon">calendar_today</span>
+      จองคิวบริจาคโลหิต
+    </button>
+  </div>
+
+  <!-- ❌ ไม่ผ่าน -->
+  <div class="result-box fail" *ngIf="!isAssessmentPassed">
+    <div class="result-icon-wrap fail">
+      <div class="result-icon-circle">✕</div>
+    </div>
+    <div class="result-badge fail-badge">ไม่ผ่านการประเมิน</div>
+    <h2>ขออภัย ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
+    <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
+
+    <div class="failed-reasons-box">
+      <h4>หัวข้อที่ท่านยังไม่ผ่านเกณฑ์:</h4>
+      <ul>
+        <li *ngFor="let q of failedQuestions">
+          <span class="icon">cancel</span>
+          <div>
+            <strong>ข้อที่ {{q.id}}:</strong> {{q.question}}
+            <span class="user-ans">(ท่านตอบว่า: {{q.userAnswer ? 'ใช่' : 'ไม่ใช่'}})</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-retry" (click)="resetAssessment()">
+        <span class="icon">refresh</span> ทำแบบประเมินใหม่
+      </button>
+      <button class="btn-go-home" routerLink="/home-donor">
+        <span class="icon">home</span> กลับหน้าหลัก
+      </button>
+    </div>
+  </div>
+
+</div>
 
   </div>
 

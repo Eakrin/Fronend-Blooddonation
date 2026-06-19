@@ -1,158 +1,83 @@
 <div class="location-container">
 
-<!-- breadcrumb -->
-<div class="breadcrumb">
-หน้าหลัก > สถานที่รับบริจาคโลหิต
-</div>
+  <div class="breadcrumb">
+    <a routerLink="/">หน้าหลัก</a> > สถานที่รับบริจาคโลหิต
+  </div>
 
-<h1>ค้นหาสถานที่บริจาคโลหิต</h1>
-<p class="subtitle">
-เลือกสถานที่ วัน และเวลาที่เหมาะสมเพื่อทำการจองคิวบริจาคโลหิตล่วงหน้า
-</p>
+  <h1>ค้นหาสถานที่บริจาคโลหิต</h1>
+  <p class="subtitle">เลือกสถานที่และเวลาที่เหมาะสมเพื่อทำการจองคิวบริจาคโลหิตล่วงหน้า</p>
 
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาชื่อสถานที่ หรือที่อยู่">
+  </div>
 
-<!-- search -->
-<div class="search-box">
+  <!-- Location Cards -->
+  <div *ngFor="let loc of filteredLocations" class="location-card">
+    <img src="assets/blood.png" onerror="this.style.display='none'">
 
-<input type="text" placeholder="ค้นหาชื่อโรงพยาบาล หรือจังหวัด">
+    <div class="location-info">
+      <h3>{{ loc.name }}</h3>
+      <p class="address">{{ loc.address || '-' }}</p>
+      <div class="meta">
+        <span>{{ loc.phone }}</span>
+        <span>{{ loc.email }}</span>
+      </div>
+      <!-- Time Slots -->
+      <div class="slots" *ngIf="getSlotsForLocation(loc.Location_ID).length > 0">
+        <div class="slot-item" *ngFor="let slot of getSlotsForLocation(loc.Location_ID)">
+          <span class="icon">calendar_today</span>
+          {{ slot.Donation_date | date:'d MMM yyyy' }}
+          <span class="icon">schedule</span>
+          {{ slot.Start_time }} - {{ slot.End_time }}
+          <span class="quota-badge">{{ slot.max_quota }} ที่นั่ง</span>
+        </div>
+      </div>
+    </div>
 
-<select>
-<option>เลือกจังหวัดทั้งหมด</option>
-<option>กรุงเทพ</option>
-<option>มหาสารคาม</option>
-<option>ขอนแก่น</option>
-</select>
+    <div class="booking">
+      <button class="btn-book" (click)="book(loc.Location_ID)">
+        จองคิวบริจาค
+      </button>
+    </div>
+  </div>
 
-<input type="date">
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="filteredLocations.length === 0">
+    <span class="icon">location_off</span>
+    <p>ไม่พบสถานที่ที่ค้นหา</p>
+  </div>
 
-</div>
+  <!-- ตารางเวลา -->
+  <h2 class="table-title">สรุปตารางเวลาให้บริการ</h2>
 
+  <table class="schedule">
+    <tr>
+      <th>พื้นที่ / สถานที่</th>
+      <th>วันที่</th>
+      <th>ช่วงเวลา</th>
+      <th>โควตา</th>
+      <th>สถานะ</th>
+    </tr>
+    <tr *ngFor="let slot of donationDays">
+      <td>{{ slot.location_name || '-' }}</td>
+      <td>{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
+      <td>{{ slot.Start_time }} - {{ slot.End_time }}</td>
+      <td>{{ slot.max_quota }} ที่นั่ง</td>
+      <td [class.status-open]="slot.Status === 'active'" [class.status-full]="slot.Status !== 'active'">
+        {{ slot.Status === 'active' ? 'ว่าง' : 'เต็ม' }}
+      </td>
+    </tr>
+  </table>
 
-<!-- location card -->
-<div class="location-card">
-
-<img src="assets/blood.png">
-
-<div class="location-info">
-
-<h3>ศูนย์บริการโลหิตแห่งชาติ สภากาชาดไทย</h3>
-
-<p class="address">
-ถนนอังรีดูนังต์ เขตปทุมวัน กรุงเทพมหานคร 10330
-</p>
-
-<div class="meta">
-<span>จันทร์ - อาทิตย์</span>
-<span>07:30 - 19:30</span>
-</div>
-
-</div>
-
-<div class="booking">
-
-<p>คิวที่เหลือวันนี้ <b>42 ที่นั่ง</b></p>
-
-<button class="btn-book">
-จองคิวบริจาค
-</button>
-
-</div>
-
-</div>
-
-
-<!-- location card -->
-<div class="location-card">
-
-<img src="assets/blood.png">
-
-<div class="location-info">
-
-<h3>โรงพยาบาลสุทธาเวช คณะแพทยศาสตร์</h3>
-
-<p class="address">
-มหาวิทยาลัยมหาสารคาม
-</p>
-
-<div class="meta">
-<span>จันทร์ - ศุกร์</span>
-<span>08:30 - 16:30</span>
-</div>
-
-</div>
-
-<div class="booking">
-
-<p>คิวที่เหลือวันนี้ <b>15 ที่นั่ง</b></p>
-
-<button class="btn-book">
-จองคิวบริจาค
-</button>
-
-</div>
-
-</div>
-
-
-<!-- ตารางเวลา -->
-
-<h2 class="table-title">
-สรุปตารางเวลาให้บริการตามจังหวัด
-</h2>
-
-<table class="schedule">
-
-<tr>
-<th>พื้นที่ / สถานที่</th>
-<th>วันให้บริการ</th>
-<th>ช่วงเวลา</th>
-<th>สถานะ</th>
-</tr>
-
-<tr>
-<td>โรงพยาบาลศิริราช</td>
-<td>จันทร์ - อาทิตย์</td>
-<td>08:00 - 16:00</td>
-<td class="status-open">ว่าง</td>
-</tr>
-
-<tr>
-<td>โรงพยาบาลพระมงกุฎ</td>
-<td>จันทร์ - ศุกร์</td>
-<td>08:30 - 15:30</td>
-<td class="status-open">ว่าง</td>
-</tr>
-
-<tr>
-<td>โรงพยาบาลธรรมศาสตร์</td>
-<td>จันทร์ - ศุกร์</td>
-<td>09:00 - 15:00</td>
-<td class="status-full">เต็ม</td>
-</tr>
-
-</table>
-
-
-<!-- contact box -->
-
-<div class="contact-box">
-
-<h2>ไม่พบสถานที่ที่ท่านต้องการ?</h2>
-
-<p>
-สามารถติดต่อเราเพื่อสอบถามข้อมูลเพิ่มเติมเกี่ยวกับสถานที่บริจาคโลหิต
-</p>
-
-<div class="contact-btns">
-
-<button class="btn-main">ติดต่อเจ้าหน้าที่</button>
-
-<button class="btn-outline">
-คำถามที่พบบ่อย
-</button>
-
-</div>
-
-</div>
+  <!-- Contact -->
+  <div class="contact-box">
+    <h2>ไม่พบสถานที่ที่ท่านต้องการ?</h2>
+    <p>สามารถติดต่อเราเพื่อสอบถามข้อมูลเพิ่มเติมเกี่ยวกับสถานที่บริจาคโลหิต</p>
+    <div class="contact-btns">
+      <button class="btn-main" routerLink="/contact">ติดต่อเจ้าหน้าที่</button>
+      <button class="btn-outline">คำถามที่พบบ่อย</button>
+    </div>
+  </div>
 
 </div>
