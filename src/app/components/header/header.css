@@ -1,26 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+
+:host {
+  display: block;
+  font-family: 'Sarabun', sans-serif;
+}
+
 .header {
   width: 100%;
   position: sticky;
   top: 0;
   z-index: 1000;
-
-  /* กลับไปธีมแดงแบบต้นฉบับ */
-  background: #c62828;
-  backdrop-filter: none;
-
-  border-bottom: none;
-  box-shadow: none;
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #c1121f 100%);
+  box-shadow: 0 2px 12px rgba(153, 27, 27, 0.3);
 }
 
 .container {
   width: 100%;
   margin: 0;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 15px 40px;
+  padding: 0 40px;
+  height: 68px;
   box-sizing: border-box;
 }
 
@@ -28,174 +30,80 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .logo img {
-  width: 35px;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
 
 .logo h3 {
   margin: 0;
   font-size: 16px;
-  color: white;
-  font-weight: 600;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
 }
 
 .logo span {
-  font-size: 11px;
-  color: rgba(255,255,255,0.7);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 /* MENU */
 .menu {
   display: flex;
-  gap: 30px;
+  align-items: center;
+  gap: 4px;
 }
 
 .menu a {
   text-decoration: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 500;
-  position: relative;
-  transition: 0.2s ease;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.2s;
 }
 
-/* hover แบบเรียบ (ตามต้นฉบับ) */
 .menu a:hover {
-  color: rgba(255,255,255,0.7);
-  transform: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
-/* ลบ underline animation ออกให้ตรงต้นฉบับ */
-.menu a::after {
-  display: none;
-}
-
-/* USER INFO */
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-
-  position: relative;
-}
-
-.user-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.user-name {
-  color: white;
+.menu a.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   font-weight: 600;
+}
+
+/* LOGIN BUTTON (หน้า public) */
+.login button {
+  padding: 10px 24px;
+  background: #ffffff;
+  color: #c1121f;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
   font-size: 14px;
-}
-
-.user-role {
-  color: rgba(255,255,255,0.7);
-  font-size: 11px;
-}
-
-/* AVATAR */
-.avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-
-  background: white;
-  color: #c62828;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   font-weight: 700;
-  font-size: 16px;
-
-  transition: 0.2s ease;
-}
-
-.avatar:hover {
-  background: rgba(255,255,255,0.8);
-}
-
-/* DROPDOWN */
-.dropdown {
-  position: absolute;
-  top: 55px;
-  right: 0;
-
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-
-  min-width: 160px;
-  z-index: 999;
-  overflow: hidden;
-}
-
-.dropdown-item {
-  padding: 12px 16px;
-  color: #333;
   cursor: pointer;
-  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: all 0.2s;
 }
 
-.dropdown-item:hover {
-  background: #f5f5f5;
-}
-
-.dropdown-item.logout {
-  color: #c62828;
-}
-
-.dropdown-item.logout:hover {
-  background: #ffebee;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background: #eee;
+.login button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .container {
-    padding: 12px 16px;
-  }
-
-  .menu {
-    display: none;
-  }
-}
-.login button {
-  padding: 9px 18px;
-
-  border-radius: 12px;
-  border: none;
-
-  cursor: pointer;
-
-  background: white;
-  color: #c62828;
-
-  font-weight: 600;
-  font-size: 14px;
-
-  transition: 0.25s ease;
-}
-
-/* hover */
-.login button:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,0.85);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
-
-/* click */
-.login button:active {
-  transform: scale(0.97);
+  .container { padding: 0 16px; }
+  .menu { display: none; }
 }

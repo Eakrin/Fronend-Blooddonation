@@ -7,35 +7,32 @@
     </div>
   </header>
 
-  <section class="kpi-grid">
+  <section class="kpi-grid" *ngIf="data">
     <div class="kpi-card">
       <div class="kpi-header-row">
         <div class="kpi-icon-box bg-red-light text-red"><span class="icon">group</span></div>
-        <span class="trend-badge trend-up">+12% เดือนนี้</span>
       </div>
       <div class="kpi-body">
         <span class="kpi-label">จำนวนผู้บริจาคทั้งหมด</span>
-        <h3 class="kpi-value">1,284 <small>คน</small></h3>
+        <h3 class="kpi-value">{{ data.totalDonors | number }} <small>คน</small></h3>
       </div>
     </div>
     <div class="kpi-card">
       <div class="kpi-header-row">
         <div class="kpi-icon-box bg-red-light text-red"><span class="icon">calendar_today</span></div>
-        <span class="trend-badge trend-up">+5.2% วันนี้</span>
       </div>
       <div class="kpi-body">
         <span class="kpi-label">การจองวันนี้</span>
-        <h3 class="kpi-value">42 <small>รายการ</small></h3>
+        <h3 class="kpi-value">{{ data.todayBookings }} <small>รายการ</small></h3>
       </div>
     </div>
     <div class="kpi-card">
       <div class="kpi-header-row">
         <div class="kpi-icon-box bg-gray-light text-gray"><span class="icon">cancel</span></div>
-        <span class="trend-badge trend-down">-2.1%</span>
       </div>
       <div class="kpi-body">
         <span class="kpi-label">รายการที่ยกเลิก</span>
-        <h3 class="kpi-value">5 <small>รายการ</small></h3>
+        <h3 class="kpi-value">{{ data.cancelledToday }} <small>รายการ</small></h3>
       </div>
     </div>
   </section>
@@ -57,29 +54,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>คุณสมชาย ใจดี</td>
-              <td class="text-muted">09:00 น.</td>
-              <td><span class="blood-badge">A</span></td>
-              <td><span class="status-badge status-success">ยืนยันแล้ว</span></td>
-            </tr>
-            <tr>
-              <td>คุณวิภาดา รักเรียน</td>
-              <td class="text-muted">10:30 น.</td>
-              <td><span class="blood-badge">O</span></td>
-              <td><span class="status-badge status-warning">รอดำเนินการ</span></td>
-            </tr>
-            <tr>
-              <td>คุณมานะ อดทน</td>
-              <td class="text-muted">11:15 น.</td>
-              <td><span class="blood-badge">AB</span></td>
-              <td><span class="status-badge status-danger">ยกเลิก</span></td>
-            </tr>
-            <tr>
-              <td>คุณกัญญา เพียรขยัน</td>
-              <td class="text-muted">13:00 น.</td>
-              <td><span class="blood-badge">B</span></td>
-              <td><span class="status-badge status-success">ยืนยันแล้ว</span></td>
+            <tr *ngFor="let item of data?.recentActivity">
+              <td>{{ item.name }}</td>
+              <td class="text-muted">{{ formatTime(item.time) }}</td>
+              <td><span class="blood-badge">{{ item.bloodType }}</span></td>
+              <td><span class="status-badge" [ngClass]="statusClass(item.status)">{{ statusLabel(item.status) }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -93,14 +72,11 @@
         <h3>สถิติการรับบริจาครายวัน</h3>
       </div>
       <div class="mock-chart-container">
-        <div class="chart-bars">
-          <div class="bar-wrapper"><div class="bar h-40"></div><span>จ.</span></div>
-          <div class="bar-wrapper"><div class="bar h-60"></div><span>อ.</span></div>
-          <div class="bar-wrapper"><div class="bar h-80"></div><span>พ.</span></div>
-          <div class="bar-wrapper"><div class="bar h-50"></div><span>พฤ.</span></div>
-          <div class="bar-wrapper"><div class="bar h-95 active"></div><span>ศ.</span></div>
-          <div class="bar-wrapper"><div class="bar h-75"></div><span>ส.</span></div>
-          <div class="bar-wrapper"><div class="bar h-30"></div><span>อา.</span></div>
+        <div class="chart-bars" *ngIf="data">
+          <div class="bar-wrapper" *ngFor="let day of days; let i = index">
+            <div class="bar" [style.height.%]="barHeight(data.weeklyStats[i])"></div>
+            <span>{{ day }}</span>
+          </div>
         </div>
       </div>
     </div>

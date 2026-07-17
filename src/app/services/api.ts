@@ -33,6 +33,12 @@ export class AuthService {
     });
   }
 
+  getDashboard(token: string) {
+    return this.http.get(`${this.api}/admin/dashboard`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
   saveToken(token: string) {
     localStorage.setItem('token', token);
     this.isLoggedIn.set(true); // ✅
@@ -58,5 +64,4 @@ export class AuthService {
     this.isLoggedIn.set(false); // ✅
     this.isAdmin.set(false); // ✅
   }
-  
 }

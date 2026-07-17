@@ -35,47 +35,96 @@
   </section>
 
   <section class="table-container">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>ชื่อ-นามสกุล</th>
-          <th>อีเมล</th>
-          <th>บทบาท</th>
-          <th>สถานะ</th>
-          <th class="text-center">จัดการ</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let staff of staffList">
-          <td>
-            <div class="user-profile">
-              <div class="avatar av-1">{{ staff.name?.charAt(0) }}</div>
-              <span class="user-name">{{ staff.name }} {{ staff.lastname }}</span>
-            </div>
-          </td>
-          <td class="text-muted">{{ staff.email }}</td>
-          <td class="text-muted">{{ staff.role }}</td>
-          <td>
-            <span class="badge"
-              [class.badge-success]="staff.status === 'active'"
-              [class.badge-suspended]="staff.status === 'suspended'">
-              {{ staff.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
-            </span>
-          </td>
-          <td>
-            <div class="action-buttons">
-              <button class="btn-icon edit-btn" (click)="openEditModal(staff)">
-                <span class="icon">edit</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <footer class="table-footer">
-      <span class="entry-info">ทั้งหมด {{ staffList.length }} รายการ</span>
-    </footer>
-  </section>
+  <div class="card-header" style="padding: 16px 20px 0;">
+    <h3>เจ้าหน้าที่</h3>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ชื่อ-นามสกุล</th>
+        <th>อีเมล</th>
+        <th>บทบาท</th>
+        <th>สถานะ</th>
+        <th class="text-center">จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let staff of staffList">
+        <td>
+          <div class="user-profile">
+            <div class="avatar av-1">{{ staff.name?.charAt(0) }}</div>
+            <span class="user-name">{{ staff.name }} {{ staff.lastname }}</span>
+          </div>
+        </td>
+        <td class="text-muted">{{ staff.email }}</td>
+        <td class="text-muted">{{ staff.role }}</td>
+        <td>
+          <span class="badge"
+            [class.badge-success]="staff.status === 'active'"
+            [class.badge-suspended]="staff.status === 'suspended'">
+            {{ staff.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
+          </span>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-icon edit-btn" (click)="openEditModal(staff)">
+              <span class="icon">edit</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <footer class="table-footer">
+    <span class="entry-info">ทั้งหมด {{ staffList.length }} รายการ</span>
+  </footer>
+</section>
+
+<section class="table-container">
+  <div class="card-header" style="padding: 16px 20px 0;">
+    <h3>ผู้ดูแลระบบ</h3>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>อีเมล</th>
+        <th>บทบาท</th>
+        <th>สถานะ</th>
+        <th class="text-center">จัดการ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let admin of adminList">
+        <td>
+          <div class="user-profile">
+            <div class="avatar av-1">{{ admin.name?.charAt(0) }}</div>
+            <span class="user-name">{{ admin.name }}</span>
+          </div>
+        </td>
+        <td class="text-muted">{{ admin.email }}</td>
+        <td class="text-muted">ผู้ดูแลระบบ</td>
+        <td>
+          <span class="badge"
+            [class.badge-success]="admin.status === 'active'"
+            [class.badge-suspended]="admin.status === 'suspended'">
+            {{ admin.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
+          </span>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-icon edit-btn" (click)="toggleAdminStatus(admin)">
+              <span class="icon">{{ admin.status === 'active' ? 'block' : 'check_circle' }}</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <footer class="table-footer">
+    <span class="entry-info">ทั้งหมด {{ adminList.length }} รายการ</span>
+  </footer>
+</section>
 
   <footer class="app-footer">
     © 2026 โรงพยาบาลสุทธาเวช - ระบบบริหารจัดการเจ้าหน้าที่และคิวบริจาคโลหิต

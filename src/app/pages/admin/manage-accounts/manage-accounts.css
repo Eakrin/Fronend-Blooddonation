@@ -809,3 +809,34 @@
   border-radius: 10px;
   font-size: 13px;
 }
+
+.data-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) {
+  width: 30%;
+}
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2) {
+  width: 26%;
+}
+
+.data-table th:nth-child(3),
+.data-table td:nth-child(3) {
+  width: 18%;
+}
+
+.data-table th:nth-child(4),
+.data-table td:nth-child(4) {
+  width: 16%;
+}
+
+.data-table th:nth-child(5),
+.data-table td:nth-child(5) {
+  width: 10%;
+  text-align: center;
+}

@@ -212,18 +212,10 @@
     <h2>ขออภัย ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
     <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
 
-    <div class="failed-reasons-box">
-      <h4>หัวข้อที่ท่านยังไม่ผ่านเกณฑ์:</h4>
-      <ul>
-        <li *ngFor="let q of failedQuestions">
-          <span class="icon">cancel</span>
-          <div>
-            <strong>ข้อที่ {{q.id}}:</strong> {{q.question}}
-            <span class="user-ans">(ท่านตอบว่า: {{q.userAnswer ? 'ใช่' : 'ไม่ใช่'}})</span>
-          </div>
-        </li>
-      </ul>
-    </div>
+<div class="result-note fail-note">
+  <span class="icon">info</span>
+  <p>คำตอบบางส่วนของท่านไม่เข้าเกณฑ์ความปลอดภัยตามมาตรฐานสภากาชาดไทย หากมีข้อสงสัยเกี่ยวกับผลการประเมิน กรุณาปรึกษาเจ้าหน้าที่ที่จุดรับบริจาคโดยตรง เพื่อรับคำแนะนำที่เหมาะสมกับสุขภาพของท่าน</p>
+</div>
 
     <div class="result-actions">
       <button class="btn-retry" (click)="resetAssessment()">

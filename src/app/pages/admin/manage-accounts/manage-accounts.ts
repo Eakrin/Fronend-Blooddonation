@@ -52,6 +52,7 @@ export class ManageAccounts implements OnInit {
 
   ngOnInit() {
     this.loadStaff();
+    this.loadAdmins();
   }
 
   loadStaff() {
@@ -65,6 +66,38 @@ export class ManageAccounts implements OnInit {
           this.staffList = res;
         },
         error: () => {},
+      });
+  }
+
+  adminList: any[] = [];
+
+  loadAdmins() {
+    const token = localStorage.getItem('token');
+    this.http
+      .get('http://localhost:3000/api/admin/admins', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.adminList = res;
+        },
+        error: () => {},
+      });
+  }
+  toggleAdminStatus(admin: any) {
+    const newStatus = admin.status === 'active' ? 'suspended' : 'active';
+    const token = localStorage.getItem('token');
+    this.http
+      .put(
+        `http://localhost:3000/api/admin/admins/${admin.Admin_ID}/status`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      )
+      .subscribe({
+        next: () => (admin.status = newStatus),
+        error: (err) => alert(err.error?.message || 'เกิดข้อผิดพลาด'),
       });
   }
 
@@ -91,12 +124,14 @@ export class ManageAccounts implements OnInit {
   }
 
   createStaff() {
+    const isAdmin = this.role === 'admin';
+
     if (
       !this.name ||
-      !this.lastname ||
       !this.email ||
       !this.password ||
-      !this.role
+      !this.role ||
+      (!isAdmin && !this.lastname)
     ) {
       this.errorMsg = 'กรุณากรอกข้อมูลให้ครบถ้วน';
       return;
@@ -106,25 +141,38 @@ export class ManageAccounts implements OnInit {
     this.errorMsg = '';
 
     const token = localStorage.getItem('token');
-    const data = {
-      name: this.name,
-      lastname: this.lastname,
-      email: this.email,
-      password: this.password,
-      phone: this.phone,
-      role: this.role,
-    };
+
+    const data: any = isAdmin
+      ? {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          phone: this.phone,
+        }
+      : {
+          name: this.name,
+          lastname: this.lastname,
+          email: this.email,
+          password: this.password,
+          phone: this.phone,
+          role: this.role,
+        };
+
+    const url = isAdmin
+      ? 'http://localhost:3000/api/admin/create-admin'
+      : 'http://localhost:3000/api/admin/create-staff';
 
     this.http
-      .post('http://localhost:3000/api/admin/create-staff', data, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(url, data, { headers: { Authorization: `Bearer ${token}` } })
       .subscribe({
         next: () => {
           this.isLoading = false;
-          alert('สร้างบัญชีเจ้าหน้าที่สำเร็จ');
+          alert(
+            isAdmin ? 'สร้างบัญชีแอดมินสำเร็จ' : 'สร้างบัญชีเจ้าหน้าที่สำเร็จ',
+          );
           this.closeModal();
           this.loadStaff();
+          this.loadAdmins();
         },
         error: (err) => {
           this.isLoading = false;
