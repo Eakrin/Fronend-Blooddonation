@@ -5,10 +5,10 @@
     <div class="hero-left">
       <div class="hero-badge">
         <span class="icon">favorite</span>
-        ระบบบริจาคโลหิตออนไลน์
+        ระบบจองช่วงเวลาโลหิตออนไลน์
       </div>
       <h1>
-        สวัสดีคุณ {{ userName }} 👋
+        สวัสดีคุณ {{ userName }}
         <span>พร้อมที่จะส่งต่อโลหิต เพื่อช่วยชีวิตผู้อื่นแล้วหรือยัง?</span>
       </h1>
       <p>การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน</p>
@@ -18,21 +18,21 @@
         <span class="icon">calendar_today</span>
         จองคิวบริจาคโลหิต
       </button>
-
-      <!-- ✅ ถ้าจองแล้ว แสดงแจ้งเตือนแทน -->
-      <div class="booked-notice" *ngIf="hasActiveBooking">
-        <span class="icon">check_circle</span>
-        คุณมีการจองคิวอยู่แล้ว
-      </div>
-
-      <!-- ✅ แจ้งเตือนบริจาคถี่เกินไป -->
-      <div class="warning-notice" *ngIf="lastDonationWarning">
-        <span class="icon">warning</span>
-        {{ lastDonationWarning }}
-      </div>
     </div>
     <div class="hero-right">
       <img src="assets/blood.png">
+    </div>
+  </div>
+
+  <!-- ✅ STATUS BAR: ย้ายแจ้งเตือนออกจาก hero มาไว้พื้นขาวแยกส่วน อ่านง่ายขึ้น -->
+  <div class="status-bar" *ngIf="hasActiveBooking || lastDonationWarning">
+    <div class="status-chip status-chip-ok" *ngIf="hasActiveBooking">
+      <span class="icon">check_circle</span>
+      คุณมีการจองคิวอยู่แล้ว
+    </div>
+    <div class="status-chip status-chip-warn" *ngIf="lastDonationWarning">
+      <span class="icon">warning</span>
+      {{ lastDonationWarning }}
     </div>
   </div>
 

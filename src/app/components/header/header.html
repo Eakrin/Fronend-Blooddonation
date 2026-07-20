@@ -1,22 +1,45 @@
+<input type="checkbox" id="announce-close" class="announce-close-checkbox">
+
+<div class="announce-bar">
+  <span class="icon">emergency</span>
+  <span class="announce-text">ต้องการโลหิตกรุ๊ป <strong>O</strong> และ <strong>AB</strong> ด่วน! ร่วมบริจาคเพื่อช่วยชีวิตวันนี้</span>
+  <a routerLink="/booking" class="announce-cta">จองคิวเลย</a>
+  <label for="announce-close" class="announce-dismiss">
+    <span class="icon">close</span>
+  </label>
+</div>
+
 <header class="header">
   <div class="container">
 
-    <div class="logo">
-      <img src="assets/logo.png">
-      <div>
+    <a class="logo" routerLink="/">
+      <img src="assets/logo.png" alt="โลโก้สุทธาเวช">
+      <div class="logo-text">
         <h3>สุทธาเวช</h3>
         <span>SUTTAVEJ BLOOD CENTER</span>
       </div>
-    </div>
+    </a>
 
-<nav class="menu">
-  <a routerLink="/" routerLinkActive="active">หน้าหลัก</a>
- <a routerLink="/contact" routerLinkActive="active">ติดต่อเรา</a>
-</nav>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle-checkbox">
+
+    <nav class="menu">
+      <a routerLink="/" routerLinkActive="active">หน้าหลัก</a>
+      <a routerLink="/news" routerLinkActive="active">ข่าวสาร</a>
+      <a routerLink="/contact" routerLinkActive="active">ติดต่อเรา</a>
+    </nav>
 
     <div class="login">
-      <button routerLink="/login">เข้าสู่ระบบ</button>
+      <button routerLink="/login">
+        <span class="icon">person</span>
+        เข้าสู่ระบบ
+      </button>
     </div>
+
+    <label for="menu-toggle" class="menu-burger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
 
   </div>
 </header>

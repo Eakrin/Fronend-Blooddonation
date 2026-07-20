@@ -2,7 +2,10 @@
 
   <div class="left">
     <div class="welcome">
-      <span class="badge">💉 โครงการบริจาคโลหิตออนไลน์</span>
+      <span class="badge">
+        <span class="icon">opacity</span>
+        โครงการบริจาคโลหิตออนไลน์
+      </span>
 
       <h1>
         ยินดีต้อนรับสู่ <br>
@@ -26,37 +29,40 @@
       </div>
 
       <div class="features">
-        <div class="feature-item">
-          <div class="feature-icon">verified</div>
+        <div class="feature-item" style="animation-delay: .05s">
+          <div class="feature-icon"><span class="icon">verified</span></div>
           <span>ระบบจองคิวออนไลน์ที่ปลอดภัย</span>
         </div>
-        <div class="feature-item">
-          <div class="feature-icon">notifications</div>
+        <div class="feature-item" style="animation-delay: .15s">
+          <div class="feature-icon"><span class="icon">notifications</span></div>
           <span>แจ้งเตือนนัดหมายอัตโนมัติ</span>
         </div>
-        <div class="feature-item">
-          <div class="feature-icon">history</div>
+        <div class="feature-item" style="animation-delay: .25s">
+          <div class="feature-icon"><span class="icon">history</span></div>
           <span>ติดตามประวัติการบริจาคได้ทันที</span>
         </div>
       </div>
 
-      <img src="assets/blood.png" class="blood-img">
+      <img src="assets/blood.png" class="blood-img" alt="Blood Donation">
     </div>
   </div>
+
+  <div class="v-divider"></div>
 
   <div class="right">
     <div class="form">
 
       <div class="logo-area">
-        <div class="logo-circle">🩸</div>
+        <div class="logo-circle"><span class="icon">opacity</span></div>
         <h2>สร้างบัญชีผู้บริจาค</h2>
         <p class="subtitle">กรุณากรอกข้อมูลเพื่อเริ่มต้นการจองคิว</p>
       </div>
 
-      <div class="upload">
-        <div class="circle">+</div>
+      <label class="upload">
+        <input type="file" hidden>
+        <div class="circle"><span class="icon">add_a_photo</span></div>
         <p>คลิกเพื่ออัปโหลดรูปโปรไฟล์</p>
-      </div>
+      </label>
 
       <div class="row">
         <input type="text" placeholder="ชื่อจริง" [(ngModel)]="name">
@@ -79,8 +85,14 @@
         <input type="number" placeholder="ส่วนสูง (ซม.)" [(ngModel)]="height">
       </div>
 
-      <div class="mb">
+      <div class="row">
         <input type="date" [(ngModel)]="birthday">
+        <select [(ngModel)]="gender">
+          <option value="">เลือกเพศ</option>
+          <option value="male">ชาย</option>
+          <option value="female">หญิง</option>
+          <option value="other">อื่นๆ</option>
+        </select>
       </div>
 
       <div class="mb">
@@ -91,23 +103,16 @@
         <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
       </div>
 
-      <div class="mb">
-        <select [(ngModel)]="gender">
-          <option value="">เลือกเพศ</option>
-          <option value="male">ชาย</option>
-          <option value="female">หญิง</option>
-          <option value="other">อื่นๆ</option>
-        </select>
-      </div>
-
       <button class="register-btn" (click)="register()">
-        ลงทะเบียนตอนนี้
+        <span>ลงทะเบียนตอนนี้</span>
+        <span class="icon">arrow_forward</span>
       </button>
 
       <div class="or"><span>หรือสมัครด้วย</span></div>
 
       <button class="google">
-        🔵 สมัครด้วย Google Account
+        <span class="google-mark">G</span>
+        สมัครด้วย Google Account
       </button>
 
       <p class="login">

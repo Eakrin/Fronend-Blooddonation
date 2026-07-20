@@ -2,47 +2,66 @@
 <section class="hero">
   <div class="hero-container">
     <div class="hero-text">
-      <span class="badge">
-        <span class="badge-dot"></span>
-        ระบบบริจาคเลือดของเรา
+      <span class="tag-badge">
+        <span class="tag-dot"></span>
+        ความปลอดภัยสูงสุด
       </span>
       <h1>
-        ร่วมเป็นส่วนหนึ่งของการให้ชีวิต<br>
-        <span class="highlight">บริจาคโลหิต</span> กับสุทธาเวช
+        หนึ่งการให้ <span class="highlight">ต่อลมหายใจ</span><br>
+        ให้คนอีกมากมาย
       </h1>
-      <p>การบริจาคเพียงครั้งเดียวสามารถช่วยชีวิตผู้ป่วยได้ถึง 3 คน มาร่วมสร้างสังคมแห่งการแบ่งปันและส่งต่อความหวังให้กับเพื่อนมนุษย์</p>
+      <p>ร่วมเป็นหนึ่งของการเปลี่ยนชีวิตเพื่อนมนุษย์กับโรงพยาบาลสุธาเวช เราดูแลคุณตลอดทุกขั้นตอนการบริจาคด้วยความใส่ใจและความปลอดภัยสูงสุด</p>
       <div class="hero-actions">
-        <button class="btn-primary" routerLink="/location">
-          <span class="icon">location_on</span>
-          ค้นหาสถานที่บริจาค
+        <button class="btn-primary" (click)="goToBooking()">
+          <span class="icon">calendar_today</span>
+          จองคิวบริจาค
         </button>
-        <button class="btn-secondary" routerLink="/register">
-          <span class="icon">person_add</span>
+        <button class="btn-outline" routerLink="/register">
+
           สมัครสมาชิก
         </button>
       </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">1,200+</span>
-          <span class="stat-label">ผู้บริจาคเดือนนี้</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">3</span>
-          <span class="stat-label">ชีวิตที่ช่วยได้ต่อครั้ง</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">24/7</span>
-          <span class="stat-label">จองคิวออนไลน์</span>
+    </div>
+    <div class="hero-media">
+      <div class="hero-photo-card" (click)="openVideo()">
+        <img [src]="videoThumbnail" alt="วิดีโอแนะนำการบริจาคโลหิต">
+        <div class="hero-photo-overlay">
+          <button class="play-btn" (click)="openVideo(); $event.stopPropagation()">
+            <span class="icon">play_arrow</span>
+          </button>
+          <div class="overlay-text">
+            <p class="overlay-title">ศูนย์รับบริจาคโลหิตสุธาเวช</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="hero-image">
-      <div class="hero-img-wrapper">
-        <img src="assets/blood.png" alt="Blood Donation">
-        <div class="hero-img-glow"></div>
-      </div>
+  </div>
+</section>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal-backdrop" *ngIf="isVideoOpen" (click)="closeVideo()">
+  <div class="video-modal" (click)="$event.stopPropagation()">
+    <button class="video-close" (click)="closeVideo()">
+      <span class="icon">close</span>
+    </button>
+    <div class="video-frame-wrap">
+      <iframe
+        [src]="videoUrl"
+        title="วิดีโอแนะนำการบริจาคโลหิต"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<section class="stats-bar">
+  <div class="stats-container">
+    <div class="stat-block" *ngFor="let s of stats">
+      <span class="stat-num">{{ s.num }}</span>
+      <span class="stat-label">{{ s.label }}</span>
     </div>
   </div>
 </section>
@@ -51,80 +70,88 @@
 <section class="steps">
   <div class="section-container">
     <div class="section-header">
-      <span class="section-tag">ขั้นตอนง่ายๆ</span>
-      <h2>ขั้นตอนการบริจาคโลหิต</h2>
-      <p>4 ขั้นตอนง่ายๆ ในการบริจาคเลือดเพื่อช่วยชีวิตเพื่อนมนุษย์</p>
+      <h2>เส้นทางการเป็นผู้ให้</h2>
+      <p>ขั้นตอนง่ายๆที่เปลี่ยนคุณเป็นฮีโร่</p>
     </div>
     <div class="step-grid">
       <div class="step-card">
-        <div class="step-icon-wrap">
-          <span class="icon">assignment</span>
-        </div>
-        <span class="step-number">01</span>
+        <div class="step-icon-wrap"><span class="icon">assignment</span></div>
+        <span class="step-number">STEP 01</span>
         <h3>ลงทะเบียน</h3>
         <p>กรอกแบบฟอร์มข้อมูลผู้บริจาคและประวัติสุขภาพเบื้องต้น</p>
       </div>
       <div class="step-card">
-        <div class="step-icon-wrap">
-          <span class="icon">monitor_heart</span>
-        </div>
-        <span class="step-number">02</span>
-        <h3>คัดกรอง</h3>
-        <p>ตรวจร่างกายเบื้องต้นและวัดความดันโลหิต</p>
-      </div>
-      <div class="step-card active">
-        <div class="step-icon-wrap">
-          <span class="icon">water_drop</span>
-        </div>
-        <span class="step-number">03</span>
-        <h3>บริจาคโลหิต</h3>
-        <p>กระบวนการใช้เวลาประมาณ 5-10 นาที</p>
+        <div class="step-icon-wrap"><span class="icon">monitor_heart</span></div>
+        <span class="step-number">STEP 02</span>
+        <h3>ตรวจร่างกาย</h3>
+        <p>พยาบาลจะประเมินสุขภาพเบื้องต้นและวัดความดันโลหิต</p>
       </div>
       <div class="step-card">
-        <div class="step-icon-wrap">
-          <span class="icon">self_improvement</span>
-        </div>
-        <span class="step-number">04</span>
+        <div class="step-icon-wrap"><span class="icon">water_drop</span></div>
+        <span class="step-number">STEP 03</span>
+        <h3>บริจาคโลหิต</h3>
+        <p>กระบวนการใช้เวลาประมาณ 15-20 นาที ในบรรยากาศที่สะดวกสบาย</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon-wrap"><span class="icon">self_improvement</span></div>
+        <span class="step-number">STEP 04</span>
         <h3>พักผ่อน</h3>
-        <p>พักฟื้นและรับเครื่องดื่มหลังบริจาค</p>
+        <p>รับของว่างและพักผ่อนอย่างน้อย 15 นาที ก่อนกลับบ้านอย่างปลอดภัย</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- INFO -->
-<section class="info">
+<!-- CARE TABS -->
+<section class="care">
   <div class="section-container">
-    <div class="section-header">
-      <span class="section-tag">ข้อมูลสำคัญ</span>
-      <h2>ข้อควรรู้ก่อนและหลังการบริจาคโลหิต</h2>
-    </div>
-    <div class="info-grid">
-      <div class="info-card">
-        <div class="info-icon-wrap">
-          <span class="icon">checklist</span>
-        </div>
-        <h3>การเตรียมตัวก่อนบริจาค</h3>
-        <ul>
-          <li><span class="icon check">check_circle</span> นอนหลับให้เพียงพออย่างน้อย 5 ชั่วโมง</li>
-          <li><span class="icon check">check_circle</span> ดื่มน้ำมากๆ อย่างน้อย 3-4 แก้ว</li>
-          <li><span class="icon check">check_circle</span> รับประทานอาหารก่อนบริจาค</li>
-          <li><span class="icon check">check_circle</span> งดเครื่องดื่มแอลกอฮอล์ 24 ชั่วโมง</li>
-        </ul>
-      </div>
-      <div class="info-card red">
-        <div class="info-icon-wrap red">
-          <span class="icon">favorite</span>
-        </div>
-        <h3>ข้อควรปฏิบัติหลังบริจาค</h3>
-        <ul>
-          <li><span class="icon check white">check_circle</span> นั่งพักอย่างน้อย 15 นาที</li>
-          <li><span class="icon check white">check_circle</span> งดออกกำลังกายหนักอย่างน้อย 24 ชั่วโมง</li>
-          <li><span class="icon check white">check_circle</span> ดื่มน้ำมากๆ เพื่อชดเชยของเหลว</li>
-          <li><span class="icon check white">check_circle</span> หลีกเลี่ยงการยกของหนัก</li>
-        </ul>
+    <div class="care-header">
+      <h2>เตรียมตัวให้พร้อม <span class="highlight">ก่อนและหลังการให้</span></h2>
+      <p>ความปลอดภัยของคุณคือสิ่งสำคัญที่สุด ศึกษาข้อแนะนำเพื่อเตรียมความพร้อมให้ได้ผลดีที่สุด</p>
+      <div class="care-tabs">
+        <button
+          class="care-tab"
+          [class.active]="activeCareTab === 'before'"
+          (click)="setCareTab('before')">
+          ก่อนบริจาค
+        </button>
+        <button
+          class="care-tab"
+          [class.active]="activeCareTab === 'after'"
+          (click)="setCareTab('after')">
+          หลังบริจาค
+        </button>
       </div>
     </div>
+    <div class="care-grid">
+      <div class="care-card" *ngFor="let item of activeCareItems">
+        <h4>{{ item.title }}</h4>
+        <p>{{ item.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOBILE UNIT BANNER -->
+<section class="unit-banner">
+  <div class="unit-panel">
+    <h2>หน่วยบริจาค<br>เคลื่อนที่สัปดาห์นี้</h2>
+    <p>เราเข้าหาคุณ! ตรวจสอบจุดรับบริจาคโลหิตใกล้บ้านคุณในสัปดาห์นี้ สะดวก รวดเร็ว และปลอดภัย</p>
+    <ul class="unit-list">
+      <li *ngFor="let u of mobileUnits">
+        <span class="icon">location_on</span>
+        <div>
+          <p class="unit-name">{{ u.name }}</p>
+          <p class="unit-schedule">{{ u.schedule }}</p>
+        </div>
+      </li>
+    </ul>
+    <button class="btn-unit" routerLink="/location">
+      ดูทั้งหมด <span class="icon">arrow_forward</span>
+    </button>
+  </div>
+  <div class="unit-map">
+    <span class="icon map-pin">location_on</span>
   </div>
 </section>
 
@@ -133,57 +160,34 @@
   <div class="section-container">
     <div class="news-header">
       <div>
-        <span class="section-tag">อัปเดตล่าสุด</span>
-        <h2>ประกาศและข่าวสาร</h2>
+        <h2>ข่าวสารและกิจกรรม</h2>
+        <p>ติดตามเรื่องราวสร้างแรงบันดาลใจในข่าวสารล่าสุด</p>
       </div>
-      <a href="#" class="news-link">ดูข่าวสารทั้งหมด <span class="icon">arrow_forward</span></a>
+      <a href="#" class="news-link">ข่าวสารทั้งหมด <span class="icon">arrow_forward</span></a>
     </div>
     <div class="news-grid">
       <div class="news-card" *ngFor="let post of posts">
-        <div class="news-img-wrap" style="background: linear-gradient(135deg,#991b1b,#c1121f)">
-          <span class="news-tag">ประกาศ</span>
+        <div class="news-img-wrap">
+          <img src="assets/news-placeholder.jpg" alt="{{ post.Toppic }}">
         </div>
         <div class="news-body">
+          <span class="news-cat">ACTIVITY</span>
           <h3>{{ post.Toppic }}</h3>
           <p>{{ post.Text || 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>
-          <div class="news-meta">
-            <span class="news-date">
-              <span class="icon">calendar_today</span>
-              {{ post.Start_time | date:'d MMM yyyy' }}
-            </span>
-            <span class="news-date">
-              <span class="icon">schedule</span>
-              {{ post.Start_time | date:'HH:mm' }} - {{ post.End_time | date:'HH:mm' }}
-            </span>
-          </div>
         </div>
       </div>
 
-      <!-- ถ้าไม่มีประกาศ -->
       <div class="news-empty" *ngIf="posts.length === 0">
         <span class="icon">campaign</span>
         <p>ยังไม่มีประกาศในขณะนี้</p>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- CTA -->
-<section class="cta">
-  <div class="cta-container">
-    <div class="cta-text">
-      <h2>พร้อมที่จะเป็นฮีโร่แล้วหรือยัง?</h2>
-      <p>การบริจาคโลหิตวันนี้ อาจช่วยชีวิตคนที่คุณรักในวันพรุ่งนี้</p>
-    </div>
-    <div class="cta-actions">
-      <button class="btn-cta-primary" routerLink="/register">
-        <span class="icon">volunteer_activism</span>
-        เริ่มบริจาคตอนนี้
-      </button>
-      <button class="btn-cta-outline" routerLink="/location">
-        <span class="icon">location_on</span>
-        ค้นหาสถานที่
-      </button>
+      <div class="news-announce">
+        <span class="icon">campaign</span>
+        <h4>ประกาศ: รับสมัครพยาบาลวิชาชีพหน่วยเคลื่อนที่</h4>
+        <p>โรงพยาบาลสุธาเวชเปิดรับสมัครบุคลากรทางการแพทย์เพื่อร่วมทีมหน่วยเคลื่อนที่ สนใจสมัครได้แล้ววันนี้</p>
+        <a href="#" class="news-announce-link">ดูรายละเอียด <span class="icon">arrow_forward</span></a>
+      </div>
     </div>
   </div>
 </section>

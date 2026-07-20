@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-manage-accounts',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, FormsModule],
+  imports: [NgIf, NgFor, FormsModule],
   templateUrl: './manage-accounts.html',
   styleUrl: './manage-accounts.css',
 })

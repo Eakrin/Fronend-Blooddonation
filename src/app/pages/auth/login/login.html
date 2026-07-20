@@ -3,7 +3,10 @@
   <div class="left">
     <div class="welcome">
 
-      <span class="badge">💉 โครงการบริจาคโลหิตออนไลน์</span>
+      <span class="badge">
+        <span class="icon">opacity</span>
+        โครงการบริจาคโลหิตออนไลน์
+      </span>
 
       <h1>
         ยินดีต้อนรับสู่ <br>
@@ -27,29 +30,32 @@
       </div>
 
       <div class="features">
-        <div class="feature-item">
-          <div class="feature-icon">verified</div>
+        <div class="feature-item" style="animation-delay: .05s">
+          <div class="feature-icon"><span class="icon">verified</span></div>
           <span>ระบบจองคิวออนไลน์ที่ปลอดภัย</span>
         </div>
-        <div class="feature-item">
-          <div class="feature-icon">notifications</div>
+        <div class="feature-item" style="animation-delay: .15s">
+          <div class="feature-icon"><span class="icon">notifications</span></div>
           <span>แจ้งเตือนนัดหมายอัตโนมัติ</span>
         </div>
-        <div class="feature-item">
-          <div class="feature-icon">history</div>
+        <div class="feature-item" style="animation-delay: .25s">
+          <div class="feature-icon"><span class="icon">history</span></div>
           <span>ติดตามประวัติการบริจาคได้ทันที</span>
         </div>
       </div>
 
       <img src="assets/blood.png" class="blood-img" alt="Blood Donation">
+
     </div>
   </div>
+
+  <div class="v-divider"></div>
 
   <div class="right">
     <div class="login-box">
 
       <div class="logo-area">
-        <div class="logo-circle">🩸</div>
+        <div class="logo-circle"><span class="icon">opacity</span></div>
         <h2>เข้าสู่ระบบ</h2>
         <p class="sub">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
       </div>
@@ -57,7 +63,7 @@
       <div class="input-group">
         <label class="input-label">อีเมล</label>
         <div class="input-wrapper">
-          <span class="input-icon">mail</span>
+          <span class="icon input-icon">mail</span>
           <input type="email" placeholder="example@email.com" [(ngModel)]="email">
         </div>
       </div>
@@ -65,7 +71,7 @@
       <div class="input-group">
         <label class="input-label">รหัสผ่าน</label>
         <div class="input-wrapper">
-          <span class="input-icon">lock</span>
+          <span class="icon input-icon">lock</span>
           <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
         </div>
       </div>
@@ -74,14 +80,16 @@
         <a href="#">ลืมรหัสผ่าน?</a>
       </div>
 
-<button class="login-btn" (click)="login()">
-  เข้าสู่ระบบ
-</button>
+      <button class="login-btn" (click)="login()">
+        <span>เข้าสู่ระบบ</span>
+        <span class="icon">arrow_forward</span>
+      </button>
 
       <div class="divider"><span>หรือ</span></div>
 
       <button class="google-btn">
-        🔵 Continue with Google
+        <span class="google-mark">G</span>
+        Continue with Google
       </button>
 
       <p class="register">

@@ -1,0 +1,43 @@
+<div class="news-page">
+
+  <div class="page-header">
+    <span class="tag-badge">
+      <span class="icon">campaign</span>
+      อัปเดตล่าสุด
+    </span>
+    <h1>ข่าวสารและกิจกรรม</h1>
+    <p class="subtitle">ติดตามความเคลื่อนไหว กิจกรรม และประกาศต่างๆ จากศูนย์รับบริจาคโลหิตสุธาเวช</p>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    <span class="icon">hourglass_empty</span>
+    <p>กำลังโหลดข่าวสาร...</p>
+  </div>
+
+  <!-- News Grid -->
+  <div class="news-grid" *ngIf="!isLoading && posts.length > 0">
+    <div class="news-card" *ngFor="let post of posts">
+      <div class="news-img-wrap">
+        <img src="assets/news-placeholder.jpg" alt="{{ post.Toppic }}">
+        <span class="news-cat">ACTIVITY</span>
+      </div>
+      <div class="news-body">
+        <p class="news-date" *ngIf="post.created_at">
+          <span class="icon">calendar_today</span>
+          {{ post.created_at | date:'d MMMM yyyy' }}
+        </p>
+        <h3>{{ post.Toppic }}</h3>
+        <p class="news-text">{{ post.Text || 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!isLoading && posts.length === 0">
+    <span class="icon">campaign</span>
+    <h3>ยังไม่มีข่าวสารในขณะนี้</h3>
+    <p>โปรดติดตามข่าวสารและกิจกรรมใหม่ๆ จากเราเร็วๆ นี้</p>
+  </div>
+
+</div>

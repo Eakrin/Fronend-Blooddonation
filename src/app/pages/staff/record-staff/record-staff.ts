@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-record-staff',
   standalone: true,
-  imports: [NgFor, NgClass, FormsModule],
+  imports: [NgFor, FormsModule],
   templateUrl: './record-staff.html',
   styleUrl: './record-staff.css',
 })

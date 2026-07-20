@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { AuthService } from '../../../services/api';
 
 interface CareItem {
   title: string;
@@ -20,14 +22,13 @@ interface StatBlock {
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, NgFor, NgIf, DatePipe],
+  imports: [RouterLink, NgFor, NgIf],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
   posts: any[] = [];
 
-  // ── สถิติแถบบน (แก้ตัวเลขเองได้ หรือต่อ API สรุปยอดจริงในอนาคต) ──
   stats: StatBlock[] = [
     { num: '12,482', label: 'ผู้บริจาคในปีนี้' },
     { num: '37,446', label: 'ชีวิตที่ได้รับความช่วยเหลือ' },
@@ -35,7 +36,6 @@ export class Home implements OnInit {
     { num: '24/7', label: 'ความพร้อมของทีมแพทย์' },
   ];
 
-  // ── แท็บก่อน/หลังบริจาค ──
   activeCareTab: 'before' | 'after' = 'before';
 
   careBefore: CareItem[] = [
@@ -76,7 +76,6 @@ export class Home implements OnInit {
     },
   ];
 
-  // ── หน่วยบริจาคเคลื่อนที่ (static ก่อน ยังไม่มีตารางรองรับใน backend) ──
   mobileUnits: MobileUnit[] = [
     {
       name: 'เซ็นทรัลพลาซ่า แพร่ริค',
@@ -85,7 +84,38 @@ export class Home implements OnInit {
     { name: 'ตลาดน้ำเก่าเวียง', schedule: 'เสาร์ - อาทิตย์ | 09:00 - 15:00' },
   ];
 
-  constructor(private http: HttpClient) {}
+  videoId = 'BERz-VhCb2o';
+  videoThumbnail = `https://img.youtube.com/vi/BERz-VhCb2o/maxresdefault.jpg`;
+  videoUrl: SafeResourceUrl;
+  isVideoOpen = false;
+
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private auth: AuthService,
+    private router: Router,
+  ) {
+    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.youtube.com/embed/${this.videoId}?autoplay=1&rel=0`,
+    );
+  }
+
+  goToBooking() {
+    if (this.auth.isLoggedIn()) {
+      this.router.navigate(['/booking']);
+    } else {
+      alert('กรุณาเข้าสู่ระบบก่อนทำการจองคิวบริจาคโลหิต');
+      this.router.navigate(['/login']);
+    }
+  }
+
+  openVideo() {
+    this.isVideoOpen = true;
+  }
+
+  closeVideo() {
+    this.isVideoOpen = false;
+  }
 
   ngOnInit() {
     this.loadPosts();

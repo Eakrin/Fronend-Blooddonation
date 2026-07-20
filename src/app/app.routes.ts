@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { Home } from './pages/user_public/home/home';
 import { Location } from './pages/user_public/location/location';
 import { Contact } from './pages/user_public/contact/contact';
+import { News } from './pages/user_public/news/news';
 
 import { Login } from './pages/auth/login/login';
 import { Register } from './pages/auth/register/register';
@@ -27,6 +28,7 @@ import { BookingHistory } from './pages/donor/booking-history/booking-history';
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'location', component: Location },
+  { path: 'news', component: News },
   { path: 'contact', component: Contact },
 
   { path: 'login', component: Login },

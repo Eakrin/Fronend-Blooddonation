@@ -3,7 +3,7 @@
 
     <!-- Logo -->
     <div class="logo">
-      <div class="logo-icon">🩸</div>
+      <div class="logo-icon"><span class="icon">opacity</span></div>
       <div class="logo-text">
         <h3>สุทธาเวช</h3>
         <span>SUTTAVEJ BLOOD CENTER</span>
@@ -21,7 +21,7 @@
     <div class="user-info">
 
       <div class="notif-btn">
-        <span class="material-icons-outlined">notifications</span>
+        <span class="icon">notifications</span>
         <span class="notif-dot"></span>
       </div>
 
@@ -42,11 +42,13 @@
           <span class="d-role">ผู้บริจาคโลหิต</span>
         </div>
         <div class="dropdown-item" (click)="goToProfile()">
-          👤 โปรไฟล์ของฉัน
+          <span class="icon">person</span>
+          โปรไฟล์ของฉัน
         </div>
         <div class="dropdown-divider"></div>
         <div class="dropdown-item logout" (click)="logout()">
-          🚪 ออกจากระบบ
+          <span class="icon">logout</span>
+          ออกจากระบบ
         </div>
       </div>
 

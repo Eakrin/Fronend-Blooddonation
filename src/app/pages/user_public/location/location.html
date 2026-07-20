@@ -1,70 +1,86 @@
 <div class="location-container">
 
-  <h1>ค้นหาสถานที่บริจาคโลหิต</h1>
-  <p class="subtitle">เลือกสถานที่และเวลาที่เหมาะสมเพื่อทำการจองคิวบริจาคโลหิตล่วงหน้า</p>
+  <div class="page-header">
+    <h1>ค้นหาสถานที่บริจาคโลหิต</h1>
+    <p class="subtitle">เลือกสถานที่และเวลาที่เหมาะสมเพื่อทำการจองคิวบริจาคโลหิตล่วงหน้า</p>
+  </div>
 
   <!-- Search -->
   <div class="search-box">
+    <span class="icon">search</span>
     <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาชื่อสถานที่ หรือที่อยู่">
   </div>
 
   <!-- Location Cards -->
-  <div *ngFor="let loc of filteredLocations" class="location-card">
-    <img src="assets/blood.png" onerror="this.style.display='none'">
-
-    <div class="location-info">
-      <h3>{{ loc.name }}</h3>
-      <p class="address">{{ loc.address || '-' }}</p>
-      <div class="meta">
-        <span>{{ loc.phone }}</span>
-        <span>{{ loc.email }}</span>
+  <div class="location-list">
+    <div *ngFor="let loc of filteredLocations" class="location-card">
+      <div class="location-img">
+        <img src="assets/blood.png" onerror="this.style.display='none'">
       </div>
-      <!-- Time Slots -->
-      <div class="slots" *ngIf="getSlotsForLocation(loc.Location_ID).length > 0">
-        <div class="slot-item" *ngFor="let slot of getSlotsForLocation(loc.Location_ID)">
-          <span class="icon">calendar_today</span>
-          {{ slot.Donation_date | date:'d MMM yyyy' }}
-          <span class="icon">schedule</span>
-          {{ slot.Start_time }} - {{ slot.End_time }}
-          <span class="quota-badge">{{ slot.max_quota }} ที่นั่ง</span>
+
+      <div class="location-info">
+        <h3>{{ loc.name }}</h3>
+        <p class="address">
+          <span class="icon">location_on</span>
+          {{ loc.address || '-' }}
+        </p>
+        <div class="meta">
+          <span><span class="icon">call</span>{{ loc.phone }}</span>
+          <span><span class="icon">mail</span>{{ loc.email }}</span>
+        </div>
+
+        <!-- Time Slots -->
+        <div class="slots" *ngIf="getSlotsForLocation(loc.Location_ID).length > 0">
+          <div class="slot-item" *ngFor="let slot of getSlotsForLocation(loc.Location_ID)">
+            <span class="icon">calendar_today</span>
+            {{ slot.Donation_date | date:'d MMM yyyy' }}
+            <span class="icon">schedule</span>
+            {{ slot.Start_time }} - {{ slot.End_time }}
+            <span class="quota-badge">{{ slot.max_quota }} ที่นั่ง</span>
+          </div>
         </div>
       </div>
+
+      <div class="booking">
+        <button class="btn-book" (click)="book(loc.Location_ID)">
+          <span class="icon">calendar_today</span>
+          จองคิวบริจาค
+        </button>
+      </div>
     </div>
 
-    <div class="booking">
-      <button class="btn-book" (click)="book(loc.Location_ID)">
-        จองคิวบริจาค
-      </button>
+    <!-- Empty -->
+    <div class="empty-state" *ngIf="filteredLocations.length === 0">
+      <span class="icon">location_off</span>
+      <p>ไม่พบสถานที่ที่ค้นหา</p>
     </div>
-  </div>
-
-  <!-- Empty -->
-  <div class="empty-state" *ngIf="filteredLocations.length === 0">
-    <span class="icon">location_off</span>
-    <p>ไม่พบสถานที่ที่ค้นหา</p>
   </div>
 
   <!-- ตารางเวลา -->
   <h2 class="table-title">สรุปตารางเวลาให้บริการ</h2>
 
-  <table class="schedule">
-    <tr>
-      <th>พื้นที่ / สถานที่</th>
-      <th>วันที่</th>
-      <th>ช่วงเวลา</th>
-      <th>โควตา</th>
-      <th>สถานะ</th>
-    </tr>
-    <tr *ngFor="let slot of donationDays">
-      <td>{{ slot.location_name || '-' }}</td>
-      <td>{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
-      <td>{{ slot.Start_time }} - {{ slot.End_time }}</td>
-      <td>{{ slot.max_quota }} ที่นั่ง</td>
-      <td [class.status-open]="slot.Status === 'active'" [class.status-full]="slot.Status !== 'active'">
-        {{ slot.Status === 'active' ? 'ว่าง' : 'เต็ม' }}
-      </td>
-    </tr>
-  </table>
+  <div class="table-wrap">
+    <table class="schedule">
+      <tr>
+        <th>พื้นที่ / สถานที่</th>
+        <th>วันที่</th>
+        <th>ช่วงเวลา</th>
+        <th>โควตา</th>
+        <th>สถานะ</th>
+      </tr>
+      <tr *ngFor="let slot of donationDays">
+        <td>{{ slot.location_name || '-' }}</td>
+        <td>{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
+        <td>{{ slot.Start_time }} - {{ slot.End_time }}</td>
+        <td>{{ slot.max_quota }} ที่นั่ง</td>
+        <td>
+          <span class="status-pill" [class.status-open]="slot.Status === 'active'" [class.status-full]="slot.Status !== 'active'">
+            {{ slot.Status === 'active' ? 'ว่าง' : 'เต็ม' }}
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
 
   <!-- Contact -->
   <div class="contact-box">
