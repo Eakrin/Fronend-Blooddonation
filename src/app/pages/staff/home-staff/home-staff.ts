@@ -83,6 +83,17 @@ export class HomeStaff implements OnInit {
     return map[status] || status;
   }
 
+  // ✅ ใหม่: label ของผลคัดกรองสุขภาพที่ผูกมากับ booking นี้
+  // ค่าที่เป็นไปได้ตรงกับ ENUM จริงของ Health_Assessment: 'pass' / 'fail' / 'pending'
+  getAssessmentLabel(status: string | null): string {
+    const map: any = {
+      pass: 'ผ่าน',
+      pending: 'เหลือง (ต้องพิจารณา)',
+      fail: 'ไม่ผ่าน',
+    };
+    return status ? map[status] || status : 'ไม่มีข้อมูล';
+  }
+
   getInitials(name: string, lastname: string): string {
     return `${name?.charAt(0) || ''}${lastname?.charAt(0) || ''}`;
   }

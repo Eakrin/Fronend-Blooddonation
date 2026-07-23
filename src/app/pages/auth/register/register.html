@@ -110,9 +110,9 @@
 
       <div class="or"><span>หรือสมัครด้วย</span></div>
 
-      <button class="google">
+      <button class="google" (click)="registerWithGoogle()" [disabled]="isGoogleLoading">
         <span class="google-mark">G</span>
-        สมัครด้วย Google Account
+        {{ isGoogleLoading ? 'กำลังเชื่อมต่อ...' : 'สมัครด้วย Google Account' }}
       </button>
 
       <p class="login">

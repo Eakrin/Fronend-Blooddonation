@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { Home } from './pages/user_public/home/home';
 import { Location } from './pages/user_public/location/location';
 import { Contact } from './pages/user_public/contact/contact';
+import { DonationProcess } from './pages/user_public/donation-process/donation-process';
 import { News } from './pages/user_public/news/news';
 
 import { Login } from './pages/auth/login/login';

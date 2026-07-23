@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/api';
+import { signInWithPopup } from 'firebase/auth';
+import { firebaseAuth, googleProvider } from '../../../firebase-config';
 
 @Component({
   selector: 'app-login',
@@ -12,10 +15,12 @@ import { AuthService } from '../../../services/api';
 export class Login {
   email = '';
   password = '';
+  isGoogleLoading = false;
 
   constructor(
     private auth: AuthService, // ✅ เปลี่ยน
     private router: Router,
+    private http: HttpClient,
   ) {}
 
   login() {
@@ -79,5 +84,54 @@ export class Login {
         alert(err.error.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
       },
     });
+  }
+
+  // ✅ ใหม่: เข้าสู่ระบบ/สมัครสมาชิกอัตโนมัติด้วย Google (เฉพาะบัญชีผู้บริจาค)
+  async loginWithGoogle() {
+    if (this.isGoogleLoading) return;
+    this.isGoogleLoading = true;
+
+    try {
+      const result = await signInWithPopup(firebaseAuth, googleProvider);
+      const idToken = await result.user.getIdToken();
+
+      this.http
+        .post('http://localhost:3000/api/auth/google', { idToken })
+        .subscribe({
+          next: (res: any) => {
+            this.isGoogleLoading = false;
+
+            this.auth.saveToken(res.token);
+            this.auth.saveRole(res.role);
+
+            const backendUser = res.user || {};
+            const userPayload = {
+              id: backendUser.id,
+              name: backendUser.name || '',
+              lastname: backendUser.lastname || '',
+              email: backendUser.email || '',
+              phone: backendUser.phone || '',
+              gender: backendUser.gender || '',
+              blood_type: backendUser.blood_type || '',
+              birthday: backendUser.birthday || '',
+              weight: backendUser.weight ?? '',
+              height: backendUser.height ?? '',
+              profile: backendUser.profile || null,
+            };
+            localStorage.setItem('user', JSON.stringify(userPayload));
+            this.router.navigate(['/home-donor']);
+          },
+          error: (err) => {
+            this.isGoogleLoading = false;
+            alert(err.error?.message || 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ');
+          },
+        });
+    } catch (err: any) {
+      this.isGoogleLoading = false;
+      // ผู้ใช้ปิดหน้าต่าง popup เอง ไม่ต้องแจ้ง error
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับ Google');
+      }
+    }
   }
 }

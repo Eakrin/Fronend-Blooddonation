@@ -3,7 +3,7 @@
   <header class="page-header">
     <div class="header-left">
       <h2>รายชื่อผู้จองและผลคัดกรอง</h2>
-      <p>ตรวจสอบและอนุมัติการจองบริจาคโลหิต</p>
+      <p>ตรวจสอบผลประเมินสุขภาพและอนุมัติการจองบริจาคโลหิตในหน้าเดียว</p>
     </div>
     <div class="header-stats">
       <div class="stat-box">
@@ -53,7 +53,8 @@
           <th>ชื่อ-นามสกุล</th>
           <th>เบอร์โทร</th>
           <th>วันที่/เวลาจอง</th>
-          <th>สถานะ</th>
+          <th>ผลคัดกรองสุขภาพ</th>
+          <th>สถานะการจอง</th>
           <th class="text-center">จัดการ</th>
         </tr>
       </thead>
@@ -67,6 +68,14 @@
           </td>
           <td class="text-muted">{{ b.phone || '-' }}</td>
           <td class="text-muted">{{ b.booking_datetime | date:'d MMM yyyy HH:mm' }}</td>
+          <td>
+            <span class="status-badge"
+              [class.ready]="b.assessment_status === 'pass'"
+              [class.pending]="b.assessment_status === 'pending'"
+              [class.failed]="b.assessment_status === 'fail'">
+              ● {{ getAssessmentLabel(b.assessment_status) }}
+            </span>
+          </td>
           <td>
             <span class="status-badge"
               [class.ready]="b.booking_status === 'approved'"
@@ -96,7 +105,7 @@
         </tr>
 
         <tr *ngIf="filteredBookings.length === 0">
-          <td colspan="5" class="empty-row">
+          <td colspan="6" class="empty-row">
             <span class="icon">inbox</span>
             <p>ไม่พบรายการ</p>
           </td>

@@ -87,9 +87,9 @@
 
       <div class="divider"><span>หรือ</span></div>
 
-      <button class="google-btn">
+      <button class="google-btn" (click)="loginWithGoogle()" [disabled]="isGoogleLoading">
         <span class="google-mark">G</span>
-        Continue with Google
+        {{ isGoogleLoading ? 'กำลังเชื่อมต่อ...' : 'Continue with Google' }}
       </button>
 
       <p class="register">

@@ -1,0 +1,85 @@
+<div class="process-page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <span class="tag-badge">
+      <span class="icon">info</span>
+      ข้อมูลสำหรับผู้บริจาค
+    </span>
+    <h1>ขั้นตอนและเงื่อนไขการบริจาคโลหิต</h1>
+    <p class="subtitle">ทำความเข้าใจขั้นตอนการบริจาค คุณสมบัติผู้บริจาค และข้อควรรู้ก่อน-หลังบริจาค เพื่อความปลอดภัยของทุกคน</p>
+  </div>
+
+  <!-- STEPS -->
+  <section class="steps-section">
+    <h2 class="section-title">ขั้นตอนการบริจาคโลหิต</h2>
+    <div class="step-grid">
+      <div class="step-card" *ngFor="let s of steps">
+        <div class="step-icon-wrap"><span class="icon">{{ s.icon }}</span></div>
+        <span class="step-number">{{ s.number }}</span>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELIGIBILITY -->
+  <section class="eligibility-section">
+    <h2 class="section-title">คุณสมบัติผู้บริจาคโลหิต</h2>
+    <div class="eligibility-grid">
+      <div class="eligibility-card" *ngFor="let e of eligibility">
+        <span class="icon eligibility-check">check_circle</span>
+        <div>
+          <p class="eligibility-label">{{ e.label }}</p>
+          <p class="eligibility-value">{{ e.value }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="deferral-box">
+      <div class="deferral-header">
+        <span class="icon">warning</span>
+        <h3>กรณีที่ควรงดบริจาคชั่วคราว</h3>
+      </div>
+      <ul class="deferral-list">
+        <li *ngFor="let d of deferralList">
+          <span class="dot"></span>
+          {{ d }}
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CARE TABS -->
+  <section class="care-section">
+    <h2 class="section-title">ข้อควรรู้ก่อนและหลังการบริจาค</h2>
+    <div class="care-tabs">
+      <button class="care-tab" [class.active]="activeTab === 'before'" (click)="setTab('before')">
+        ก่อนบริจาค
+      </button>
+      <button class="care-tab" [class.active]="activeTab === 'after'" (click)="setTab('after')">
+        หลังบริจาค
+      </button>
+    </div>
+    <div class="care-grid">
+      <div class="care-card" *ngFor="let item of activeCareItems">
+        <span class="icon care-icon">check</span>
+        <div>
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-box">
+    <h2>พร้อมที่จะบริจาคโลหิตแล้วหรือยัง?</h2>
+    <p>หากคุณผ่านคุณสมบัติเบื้องต้นแล้ว สามารถจองคิวบริจาคโลหิตได้เลยวันนี้</p>
+    <button class="btn-cta" (click)="goToBooking()">
+      <span class="icon">calendar_today</span>
+      จองคิวบริจาคโลหิต
+    </button>
+  </section>
+
+</div>
