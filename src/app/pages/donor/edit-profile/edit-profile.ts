@@ -147,16 +147,43 @@ export class EditProfileComponent implements OnInit {
     const token = localStorage.getItem('token');
     const rawValue = this.profileForm.getRawValue();
 
+    // ✅ เปลี่ยนจากส่ง JSON ธรรมดา เป็น FormData เพราะอาจมีไฟล์รูปใหม่แนบไปด้วย
+    const formData = new FormData();
+    formData.append('name', rawValue.name ?? '');
+    formData.append('lastname', rawValue.lastname ?? '');
+    formData.append('email', rawValue.email ?? '');
+    formData.append('phone', rawValue.phone ?? '');
+    formData.append('gender', rawValue.gender ?? '');
+    formData.append('blood_type', rawValue.blood_type ?? '');
+    formData.append('birthday', rawValue.birthday ?? '');
+    formData.append('weight', rawValue.weight ?? '');
+    formData.append('height', rawValue.height ?? '');
+
+    // ชื่อฟิลด์ 'profile' ต้องตรงกับ upload.single('profile') ฝั่ง backend
+    // ถ้าไม่ได้เลือกรูปใหม่ ก็ไม่ต้องแนบไป - backend จะไม่แตะรูปเดิม
+    if (this.selectedFile) {
+      formData.append('profile', this.selectedFile);
+    }
+
+    // หมายเหตุ: ห้ามใส่ Content-Type header เอง ต้องปล่อยให้เบราว์เซอร์ตั้ง
+    // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
     this.http
-      .put(
+      .put<{ message: string; profile: string | null }>(
         'http://localhost:3000/api/update-profile/update-profile',
-        rawValue,
+        formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       )
       .subscribe({
-        next: () => {
+        next: (res) => {
+          // ✅ ใหม่: ใช้ URL รูปจริงจาก Cloudinary ที่ backend ส่งกลับมา
+          // แทนที่จะใช้ base64 preview ชั่วคราวที่ frontend สร้างไว้เอง
+          if (res?.profile) {
+            this.avatarPreview = res.profile;
+          }
+          this.selectedFile = null;
+
           // อัปเดต localStorage ด้วย
           const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
           const updatedUser = {

@@ -59,9 +59,12 @@
       </div>
 
       <label class="upload">
-        <input type="file" hidden>
-        <div class="circle"><span class="icon">add_a_photo</span></div>
-        <p>คลิกเพื่ออัปโหลดรูปโปรไฟล์</p>
+        <input type="file" hidden accept="image/*" (change)="onFileSelected($event)">
+        <div class="circle">
+          <img *ngIf="avatarPreview" [src]="avatarPreview" alt="Preview" class="avatar-preview-img">
+          <span *ngIf="!avatarPreview" class="icon">add_a_photo</span>
+        </div>
+        <p>{{ avatarPreview ? 'เปลี่ยนรูปโปรไฟล์' : 'คลิกเพื่ออัปโหลดรูปโปรไฟล์' }}</p>
       </label>
 
       <div class="row">

@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common'; // ✅ ใหม่: ใช้กับ *ngIf ของรูป preview
 import { AuthService } from '../../../services/api';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth, googleProvider } from '../../../firebase-config';
 
 @Component({
   selector: 'app-register',
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule, NgIf],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -28,6 +29,10 @@ export class Register {
   isDarkMode = false;
   isGoogleLoading = false;
 
+  // ✅ ใหม่: รูปโปรไฟล์ที่เลือกไว้ตอนสมัคร
+  selectedFile: File | null = null;
+  avatarPreview: string | null = null;
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -43,29 +48,52 @@ export class Register {
     }
   }
 
-  register() {
-    const data = {
-      name: this.name,
-      lastname: this.lastname,
-      email: this.email,
-      password: this.password,
-      phone: this.phone,
-      blood_type: this.blood_type,
-      birthday: this.birthday,
-      gender: this.gender,
-      weight: this.weight,
-      height: this.height,
-    };
+  // ✅ ใหม่: ตอนเลือกไฟล์รูปจาก input
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedFile = input.files[0];
 
-    this.http.post('http://localhost:3000/api/auth/register', data).subscribe({
-      next: (res: any) => {
-        alert('สมัครสมาชิกสำเร็จ!');
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        alert(err.error.message);
-      },
-    });
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.avatarPreview = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  register() {
+    // ✅ เปลี่ยนจากส่ง JSON ธรรมดา เป็น FormData เพราะต้องแนบไฟล์รูปไปด้วย
+    const formData = new FormData();
+    formData.append('name', this.name);
+    formData.append('lastname', this.lastname);
+    formData.append('email', this.email);
+    formData.append('password', this.password);
+    formData.append('phone', this.phone);
+    formData.append('blood_type', this.blood_type);
+    formData.append('birthday', this.birthday);
+    formData.append('gender', this.gender);
+    formData.append('weight', this.weight);
+    formData.append('height', this.height);
+
+    // ชื่อฟิลด์ 'profile' ต้องตรงกับที่ backend ตั้งไว้ใน upload.single('profile')
+    if (this.selectedFile) {
+      formData.append('profile', this.selectedFile);
+    }
+
+    // หมายเหตุ: ห้ามใส่ Content-Type header เอง ต้องปล่อยให้เบราว์เซอร์ตั้ง
+    // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
+    this.http
+      .post('http://localhost:3000/api/auth/register', formData)
+      .subscribe({
+        next: (res: any) => {
+          alert('สมัครสมาชิกสำเร็จ!');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          alert(err.error.message);
+        },
+      });
   }
 
   // ✅ ใหม่: สมัครสมาชิก/เข้าสู่ระบบอัตโนมัติด้วย Google
@@ -106,7 +134,9 @@ export class Register {
             // ถ้าเพิ่งสร้างบัญชีใหม่จาก Google ข้อมูลเบอร์โทร/หมู่เลือด ฯลฯ จะยังว่างอยู่
             // พาไปหน้าแก้ไขโปรไฟล์ให้กรอกข้อมูลที่เหลือให้ครบก่อน
             if (!backendUser.phone || !backendUser.blood_type) {
-              alert('เข้าสู่ระบบสำเร็จ! กรุณากรอกข้อมูลส่วนตัวเพิ่มเติมให้ครบถ้วน');
+              alert(
+                'เข้าสู่ระบบสำเร็จ! กรุณากรอกข้อมูลส่วนตัวเพิ่มเติมให้ครบถ้วน',
+              );
               this.router.navigate(['/edit-profile']);
             } else {
               this.router.navigate(['/home-donor']);
