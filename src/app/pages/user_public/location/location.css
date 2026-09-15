@@ -340,3 +340,24 @@
   .contact-btns { flex-direction: column; }
   .btn-main, .btn-outline { width: 100%; }
 }
+
+
+/* ✅ ใหม่: ป้าย "คุณจองแล้ว" แทนปุ่มจอง สำหรับสถานที่ที่ donor จองไว้แล้ว (ยัง active) */
+.btn-booked {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: #dcfce7;
+  color: #16803c;
+  border: 1px solid #bbf7d0;
+  border-radius: 11px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.btn-booked .icon {
+  font-size: 17px;
+}

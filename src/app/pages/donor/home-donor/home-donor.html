@@ -101,9 +101,11 @@
         </div>
         <a class="card-link" routerLink="/assessment-quiz">ประเมินใหม่</a>
       </div>
-      <div class="status-badge">
-        <span class="icon">check_circle</span>
-        ร่างกายพร้อมสำหรับการบริจาคเบื้องต้น
+      <!-- ✅ ใหม่: ดึงจาก Health_Assessment.result_status จริง แทนข้อความ hardcode เดิม
+           เขียว = pass, แดง = fail, เหลือง = pending หรือยังไม่เคยประเมิน -->
+      <div class="status-badge" [class]="assessmentClass">
+        <span class="icon">{{ assessmentIcon }}</span>
+        {{ assessmentLabel }}
       </div>
       <div class="health-grid">
         <div class="health-box">

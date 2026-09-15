@@ -5,11 +5,7 @@
     <p class="subtitle">เลือกสถานที่และเวลาที่เหมาะสมเพื่อทำการจองคิวบริจาคโลหิตล่วงหน้า</p>
   </div>
 
-  <!-- Search -->
-  <div class="search-box">
-    <span class="icon">search</span>
-    <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาชื่อสถานที่ หรือที่อยู่">
-  </div>
+
 
   <!-- Location Cards -->
   <div class="location-list">
@@ -42,10 +38,19 @@
       </div>
 
       <div class="booking">
-        <button class="btn-book" (click)="book(loc.Location_ID)">
+        <!-- ✅ ใหม่: ถ้าจองสถานที่นี้ไปแล้ว (ยัง active) โชว์ป้าย "คุณจองแล้ว" แทนปุ่มจอง
+             ไม่ให้กดจองซ้ำจนไปเจอหน้าทำแบบประเมินสุขภาพใหม่ทั้งที่จองผ่านไปแล้ว -->
+        <button
+          class="btn-book"
+          *ngIf="!isLocationBooked(loc.Location_ID)"
+          (click)="book(loc.Location_ID)">
           <span class="icon">calendar_today</span>
           จองคิวบริจาค
         </button>
+        <div class="btn-booked" *ngIf="isLocationBooked(loc.Location_ID)">
+          <span class="icon">check_circle</span>
+          คุณจองแล้ว
+        </div>
       </div>
     </div>
 

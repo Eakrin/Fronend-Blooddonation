@@ -1,182 +1,190 @@
-@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
 
 :host {
   display: block;
-  font-family: 'Sarabun', sans-serif;
-  background: #f8fafc;
-  width: 100%;
+  font-family: 'Prompt', sans-serif;
 }
 
 .icon {
-  font-family: 'Material Icons Outlined';
+  font-family: 'Material Icons Round';
   font-weight: normal;
-  font-size: 20px;
-  line-height: 1;
-  display: inline-block;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
+  font-style: normal;
   vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
 }
 
 .main-content {
-  padding: 32px 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 28px 24px 100px;
+  box-sizing: border-box;
 }
 
-/* Header */
+/* ── HEADER ── */
 .page-header {
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  padding: 20px 24px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  margin-bottom: 22px;
 }
 
 .header-top {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .page-header h2 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 8px 0;
+  color: #191414;
+  margin: 0 0 10px 0;
 }
 
 .donor-tag {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .tag-badge {
-  display: inline-flex;
-  align-items: center;
   background: #fef2f2;
   color: #c1121f;
   border: 1px solid #fecaca;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12.5px;
+  font-weight: 600;
 }
 
 .donor-info {
-  font-size: 13px;
-  color: #64748b;
+  font-size: 13.5px;
+  color: #475467;
 }
 
-.header-actions { display: flex; gap: 12px; flex-shrink: 0; }
+/* ✅ ใหม่: badge ผลการประเมิน (เขียว/เหลือง/แดง) */
+.tag-badge.result {
+  background: #f2f4f7;
+  color: #475467;
+  border-color: #eaecf0;
+}
+.tag-badge.result.pass { background: #e7f8ee; color: #0f8a4b; border-color: #b7e4c7; }
+.tag-badge.result.pending { background: #fff4e5; color: #b25e09; border-color: #fed8a8; }
+.tag-badge.result.fail { background: #fef2f2; color: #c1121f; border-color: #fecaca; }
 
-.btn-history {
-  display: inline-flex;
+/* ✅ ใหม่: ช่องแสดงผลอย่างเดียว (บริจาคครั้งแรก/ล่าสุด ที่คำนวณจากฐานข้อมูล ไม่ให้แก้ไข) */
+.readonly-value {
+  padding: 11px 14px;
+  border: 1.5px dashed #e5e7eb;
+  border-radius: 11px;
+  font-size: 13.5px;
+  color: #667085;
+  background: #f9fafb;
+}
+
+.header-actions .btn-history {
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 18px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
   background: #fff;
-  color: #475569;
+  border: 1.5px solid #e5e7eb;
+  color: #344054;
+  padding: 10px 16px;
+  border-radius: 12px;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all .2s;
 }
 
-.btn-history:hover { background: #f8fafc; border-color: #cbd5e1; }
-
-.btn-save-all {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #991b1b, #c1121f);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(193,18,31,.3);
-  transition: all 0.2s;
+.header-actions .btn-history:hover {
+  border-color: #c1121f;
+  color: #c1121f;
+  background: #fef2f2;
 }
 
-.btn-save-all:hover { transform: translateY(-1px); }
+.header-actions .btn-history .icon {
+  font-size: 17px;
+}
 
-/* Section Card */
+/* ── SECTION CARDS ── */
 .section-card {
   background: #fff;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
-  overflow: hidden;
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 14px -8px rgba(16, 24, 40, .06);
 }
 
 .section-title {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 24px;
-  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 18px;
 }
 
 .section-num {
-  width: 28px; height: 28px;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: #fef2f2;
-  color: #c1121f;
+  background: #f2f4f7;
+  color: #475467;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
   font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  border: 1.5px solid #fecaca;
 }
 
-.section-num.orange { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
-.section-num.green { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
-.section-num.blue { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+.section-num.orange { background: #fff4e5; color: #b25e09; }
+.section-num.green { background: #e7f8ee; color: #0f8a4b; }
+.section-num.blue { background: #eaf2ff; color: #1c5cc9; }
 
 .section-icon {
-  width: 34px; height: 34px;
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  background: #fef2f2;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f2f4f7;
+  color: #475467;
 }
 
-.section-icon .icon { font-size: 18px; color: #c1121f; }
-.section-icon.orange { background: #fff7ed; }
-.section-icon.orange .icon { color: #c2410c; }
-.section-icon.green { background: #f0fdf4; }
-.section-icon.green .icon { color: #16a34a; }
-.section-icon.blue { background: #eff6ff; }
-.section-icon.blue .icon { color: #1d4ed8; }
+.section-icon .icon { font-size: 18px; }
 
-.section-title h3 { font-size: 15px; font-weight: 700; color: #1e293b; margin: 0; }
-.en-title { font-size: 13px; font-weight: 400; color: #94a3b8; margin-left: 4px; }
+.section-icon.red { background: #fef2f2; color: #c1121f; }
+.section-icon.orange { background: #fff4e5; color: #b25e09; }
+.section-icon.green { background: #e7f8ee; color: #0f8a4b; }
+.section-icon.blue { background: #eaf2ff; color: #1c5cc9; }
 
-/* Health Grid */
-.health-grid {
+.section-title h3 {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #191414;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.section-title .en-title {
+  font-size: 12px;
+  font-weight: 400;
+  color: #98a2b3;
+}
+
+/* ── FORM FIELDS ── */
+.health-grid, .donation-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  padding: 20px 24px;
-}
-
-.donation-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  padding: 20px 24px;
 }
 
 .health-field {
@@ -186,226 +194,303 @@
 }
 
 .health-field label {
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: .3px;
+  color: #475467;
+}
+
+.health-field input,
+.health-field select,
+.form-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 11px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: #191414;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.health-field input:focus,
+.health-field select:focus,
+.form-input:focus {
+  outline: none;
+  border-color: #c1121f;
+  box-shadow: 0 0 0 3px rgba(193,18,31,.1);
 }
 
 .input-unit-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #f9fafb;
-  transition: all 0.2s;
-}
-
-.input-unit-wrapper:focus-within {
-  border-color: #c1121f;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(193,18,31,.08);
 }
 
 .input-unit-wrapper input {
-  flex: 1;
-  padding: 11px 14px;
-  border: none;
-  outline: none;
-  font-family: inherit;
-  font-size: 14px;
-  color: #1f2937;
-  background: transparent;
+  padding-right: 52px;
 }
 
-.unit {
-  padding: 0 12px;
+.input-unit-wrapper .unit {
+  position: absolute;
+  right: 14px;
   font-size: 12px;
+  color: #98a2b3;
   font-weight: 600;
-  color: #94a3b8;
-  background: #f1f5f9;
-  border-left: 1px solid #e5e7eb;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-}
-
-.health-field input[type="date"] {
-  padding: 11px 14px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 14px;
-  color: #1f2937;
-  background: #f9fafb;
-  outline: none;
-  transition: all 0.2s;
-}
-
-.health-field input[type="date"]:focus {
-  border-color: #c1121f;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(193,18,31,.08);
+  pointer-events: none;
 }
 
 .select-field {
-  padding: 11px 14px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 14px;
-  color: #1f2937;
-  background: #f9fafb;
-  outline: none;
   cursor: pointer;
-  transition: all 0.2s;
-  appearance: none;
 }
 
-.select-field:focus {
-  border-color: #c1121f;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(193,18,31,.08);
+/* ── วันที่/เวลา (datetime-local, date) ── */
+.health-field input[type="date"],
+.health-field input[type="datetime-local"],
+.form-input[type="datetime-local"] {
+  cursor: pointer;
+  color-scheme: light; /* กันมือถือบางรุ่นเปลี่ยนเป็น dark mode picker แล้วอ่านไม่ออก */
 }
 
-/* Checklist */
+.health-field input[type="date"]::-webkit-calendar-picker-indicator,
+.health-field input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.form-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(19%) sepia(84%) saturate(3000%) hue-rotate(345deg) brightness(90%);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ✅ ใหม่: แถววันที่+เวลา แยกกัน 2 ช่อง ใช้งานง่ายกว่า datetime-local ตัวเดียว */
+.datetime-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 400px;
+}
+
+.field-note {
+  font-size: 11px;
+  color: #b25e09;
+  margin: 2px 0 0 0;
+  line-height: 1.5;
+}
+
+/* ── CHECKLIST ── */
 .checklist {
-  padding: 8px 24px 20px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .check-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 16px 0;
-  border-bottom: 1px solid #f1f5f9;
+  gap: 16px;
+  padding: 14px 16px;
+  background: #f9fafb;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  flex-wrap: wrap;
 }
 
-.check-item:last-child { border-bottom: none; }
+.check-content {
+  flex: 1;
+  min-width: 220px;
+}
 
-.check-content { flex: 1; }
-.check-q { font-size: 14px; font-weight: 600; color: #1e293b; margin: 0 0 3px 0; }
-.check-en { font-size: 12px; color: #94a3b8; margin: 0; }
+.check-q {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #191414;
+  margin: 0 0 2px 0;
+  line-height: 1.5;
+}
 
-.check-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.check-en {
+  font-size: 11.5px;
+  color: #98a2b3;
+  margin: 0;
+}
 
-.btn-yes, .btn-no {
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+.check-btns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.check-btns button {
+  padding: 8px 18px;
+  border-radius: 10px;
   border: 1.5px solid #e5e7eb;
   background: #fff;
-  color: #64748b;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475467;
+  cursor: pointer;
+  transition: all .2s;
 }
 
-.btn-yes.active {
-  background: #dcfce7;
-  border-color: #16a34a;
-  color: #166534;
+/* ✅ แก้บั๊ก: เดิม .btn-yes.active แพ้ specificity ของ .check-btns button (Angular เติม
+   attribute selector ให้ทุก compound selector ทำให้ .check-btns button มีน้ำหนักสูงกว่า)
+   เลยกดปุ่มแล้วสีไม่เปลี่ยนทั้งที่ class "active" ถูกเพิ่มเข้าไปแล้วจริงๆ
+   แก้โดยเติม .check-btns นำหน้าเพื่อเพิ่ม specificity ให้ชนะ */
+.check-btns .btn-yes.active {
+  background: #e7f8ee;
+  border-color: #0f8a4b;
+  color: #0f8a4b;
 }
 
-.btn-no.active {
-  background: #fee2e2;
+.check-btns .btn-no.active {
+  background: #fef2f2;
   border-color: #c1121f;
-  color: #991b1b;
+  color: #c1121f;
 }
 
-.btn-yes:hover:not(.active) { border-color: #16a34a; color: #16a34a; }
-.btn-no:hover:not(.active) { border-color: #c1121f; color: #c1121f; }
+.check-btns button:hover { transform: translateY(-1px); }
 
-/* Notes */
-.notes-wrapper {
-  padding: 16px 24px 24px;
-}
-
+/* ── NOTES ── */
 .notes-wrapper textarea {
   width: 100%;
   padding: 14px;
   border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: inherit;
-  font-size: 14px;
-  color: #1f2937;
-  background: #f9fafb;
-  outline: none;
+  font-size: 13.5px;
+  color: #191414;
   resize: vertical;
-  transition: all 0.2s;
   box-sizing: border-box;
+  transition: border-color .2s, box-shadow .2s;
 }
 
 .notes-wrapper textarea:focus {
+  outline: none;
   border-color: #c1121f;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(193,18,31,.08);
+  box-shadow: 0 0 0 3px rgba(193,18,31,.1);
 }
 
-/* Bottom Bar */
+/* ── BOTTOM BAR ── */
 .bottom-bar {
+  position: sticky;
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  padding: 16px 24px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
   gap: 16px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 18px;
+  padding: 16px 22px;
+  margin-top: 8px;
+  box-shadow: 0 -8px 24px -12px rgba(16, 24, 40, .12);
 }
 
 .status-indicator {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  color: #b25e09;
 }
 
-.status-indicator.ready { color: #16a34a; }
-.status-indicator.not-ready { color: #94a3b8; }
-.status-indicator .icon { font-size: 20px; }
+.status-indicator .icon { font-size: 19px; }
 
-.bottom-actions { display: flex; gap: 12px; }
+.status-indicator.ready { color: #0f8a4b; }
+.status-indicator.not-ready { color: #b25e09; }
+
+.bottom-actions {
+  display: flex;
+  gap: 10px;
+}
 
 .btn-cancel {
-  padding: 11px 24px;
+  padding: 11px 22px;
+  border-radius: 12px;
   border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
   background: #fff;
-  color: #64748b;
+  color: #475467;
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13.5px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all .2s;
 }
 
-.btn-cancel:hover { background: #f8fafc; }
+.btn-cancel:hover {
+  background: #f9fafb;
+  border-color: #d0d5dd;
+}
 
 .btn-confirm {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
   padding: 11px 24px;
-  background: linear-gradient(135deg, #991b1b, #c1121f);
+  background: #c1121f;
+  background-image: linear-gradient(135deg, #d81b2e, #a30f1a);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(193,18,31,.3);
-  transition: all 0.2s;
+  box-shadow: 0 10px 22px -8px rgba(193,18,31,.4);
+  transition: all .2s;
 }
 
-.btn-confirm:hover { transform: translateY(-1px); }
+.btn-confirm .icon { font-size: 17px; }
+
+.btn-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px -8px rgba(193,18,31,.45);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 760px) {
+  .health-grid, .donation-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .main-content { padding: 20px 16px 90px; }
+  .health-grid, .donation-grid {
+    grid-template-columns: 1fr;
+  }
+  .section-card { padding: 18px; }
+  .datetime-row { grid-template-columns: 1fr; max-width: 100%; }
+  .bottom-bar { flex-direction: column; align-items: stretch; }
+  .bottom-actions { justify-content: stretch; }
+  .bottom-actions button, .bottom-actions a { flex: 1; justify-content: center; }
+  .check-btns { width: 100%; }
+  .check-btns button { flex: 1; }
+
+  /* ✅ กัน iOS Safari auto-zoom ตอนแตะ input (เกิดเมื่อ font-size ช่องกรอกเล็กกว่า 16px) */
+  .health-field input,
+  .health-field select,
+  .form-input,
+  .notes-wrapper textarea {
+    font-size: 16px;
+  }
+
+  /* ✅ ปุ่ม/ช่องกรอกบนมือถือ ให้พื้นที่แตะกว้างพอ (แนะนำขั้นต่ำ ~44px ตามหลัก touch target) */
+  .health-field input,
+  .health-field select,
+  .form-input,
+  .check-btns button,
+  .btn-cancel,
+  .btn-confirm {
+    min-height: 46px;
+  }
+
+  .header-top { flex-direction: column; align-items: stretch; }
+  .header-actions .btn-history { width: 100%; justify-content: center; }
+}

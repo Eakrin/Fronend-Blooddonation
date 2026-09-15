@@ -56,16 +56,6 @@
   </div>
 </div>
 
-<!-- STATS BAR -->
-<section class="stats-bar">
-  <div class="stats-container">
-    <div class="stat-block" *ngFor="let s of stats">
-      <span class="stat-num">{{ s.num }}</span>
-      <span class="stat-label">{{ s.label }}</span>
-    </div>
-  </div>
-</section>
-
 <!-- STEPS -->
 <section class="steps">
   <div class="section-container">
@@ -129,29 +119,6 @@
         <p>{{ item.desc }}</p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- MOBILE UNIT BANNER -->
-<section class="unit-banner">
-  <div class="unit-panel">
-    <h2>หน่วยบริจาค<br>เคลื่อนที่สัปดาห์นี้</h2>
-    <p>เราเข้าหาคุณ! ตรวจสอบจุดรับบริจาคโลหิตใกล้บ้านคุณในสัปดาห์นี้ สะดวก รวดเร็ว และปลอดภัย</p>
-    <ul class="unit-list">
-      <li *ngFor="let u of mobileUnits">
-        <span class="icon">location_on</span>
-        <div>
-          <p class="unit-name">{{ u.name }}</p>
-          <p class="unit-schedule">{{ u.schedule }}</p>
-        </div>
-      </li>
-    </ul>
-    <button class="btn-unit" routerLink="/location">
-      ดูทั้งหมด <span class="icon">arrow_forward</span>
-    </button>
-  </div>
-  <div class="unit-map">
-    <span class="icon map-pin">location_on</span>
   </div>
 </section>
 

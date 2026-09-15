@@ -22,9 +22,10 @@ import { HomeStaff } from './pages/staff/home-staff/home-staff';
 import { PostStaff } from './pages/staff/post-staff/post-staff';
 import { DonationDay } from './pages/staff/donation-day/donation-day';
 import { ProfileStaff } from './pages/staff/profile-staff/profile-staff';
-import { RecordStaff } from './pages/staff/record-staff/record-staff';
+
 import { LocationStaff } from './pages/staff/location-staff/location-staff';
 import { BookingHistory } from './pages/donor/booking-history/booking-history';
+import { RecordStaff } from './pages/staff/record-staff/record-staff';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -54,5 +55,6 @@ export const routes: Routes = [
   { path: 'donation-day-staff', component: DonationDay },
   { path: 'profile-staff', component: ProfileStaff },
   { path: 'record-staff', component: RecordStaff },
+  { path: 'record-staff/:bookingId', component: RecordStaff },
   { path: 'location-staff', component: LocationStaff },
 ];

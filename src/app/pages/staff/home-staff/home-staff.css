@@ -438,3 +438,12 @@
   display: block;
   margin-bottom: 8px;
 }
+
+.btn-record {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
+  background: #eaf2ff; color: #1c5cc9; border: 1px solid #c7ddff; border-radius: 10px;
+  font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  text-decoration: none; transition: all .2s;
+}
+.btn-record:hover { background: #1c5cc9; color: #fff; border-color: #1c5cc9; }
+.btn-record .icon { font-size: 16px; }

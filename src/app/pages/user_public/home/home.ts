@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NgFor, NgIf, DatePipe } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from '../../../services/api';
@@ -8,16 +8,6 @@ import { AuthService } from '../../../services/api';
 interface CareItem {
   title: string;
   desc: string;
-}
-
-interface MobileUnit {
-  name: string;
-  schedule: string;
-}
-
-interface StatBlock {
-  num: string;
-  label: string;
 }
 
 @Component({
@@ -29,13 +19,7 @@ interface StatBlock {
 export class Home implements OnInit {
   posts: any[] = [];
 
-  stats: StatBlock[] = [
-    { num: '12,482', label: 'ผู้บริจาคในปีนี้' },
-    { num: '37,446', label: 'ชีวิตที่ได้รับความช่วยเหลือ' },
-    { num: '150+', label: 'จุดรับบริจาคทั่วประเทศ' },
-    { num: '24/7', label: 'ความพร้อมของทีมแพทย์' },
-  ];
-
+  // ── แท็บก่อน/หลังบริจาค ──
   activeCareTab: 'before' | 'after' = 'before';
 
   careBefore: CareItem[] = [
@@ -76,14 +60,7 @@ export class Home implements OnInit {
     },
   ];
 
-  mobileUnits: MobileUnit[] = [
-    {
-      name: 'เซ็นทรัลพลาซ่า แพร่ริค',
-      schedule: 'จันทร์ - พุธ | 10:00 - 18:00',
-    },
-    { name: 'ตลาดน้ำเก่าเวียง', schedule: 'เสาร์ - อาทิตย์ | 09:00 - 15:00' },
-  ];
-
+  // ── วิดีโอแนะนำ (YouTube) ──
   videoId = 'BERz-VhCb2o';
   videoThumbnail = `https://img.youtube.com/vi/BERz-VhCb2o/maxresdefault.jpg`;
   videoUrl: SafeResourceUrl;
@@ -100,6 +77,7 @@ export class Home implements OnInit {
     );
   }
 
+  // ── กดจองคิว: ต้องล็อคอินก่อนเท่านั้น ──
   goToBooking() {
     if (this.auth.isLoggedIn()) {
       this.router.navigate(['/booking']);

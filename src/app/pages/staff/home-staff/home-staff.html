@@ -97,7 +97,11 @@
                       (click)="updateStatus(b.Booking_ID, 'rejected')">
                 <span class="icon">close</span> ปฏิเสธ
               </button>
-              <span class="text-muted" *ngIf="b.booking_status !== 'pending'">
+              <!-- ✅ ใหม่: เจ้าหน้าที่บันทึกข้อมูล ณ จุดรับบริการ ได้เฉพาะรายการที่อนุมัติแล้วเท่านั้น -->
+              <a class="btn-record" *ngIf="b.booking_status === 'approved'" [routerLink]="['/record-staff', b.Booking_ID]">
+                <span class="icon">edit_note</span> บันทึกข้อมูล
+              </a>
+              <span class="text-muted" *ngIf="b.booking_status !== 'pending' && b.booking_status !== 'approved'">
                 {{ getStatusLabel(b.booking_status) }}
               </span>
             </div>

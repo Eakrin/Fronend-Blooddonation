@@ -122,25 +122,21 @@
         </div>
       </div>
 
+      <!-- ✅ แก้ไข: เปลี่ยนจาก dropdown เลือกเวลา (จำกัดทีละ 30 นาที) เป็น
+           native time picker ของเบราว์เซอร์ (input type="time") พิมพ์/เลือกเวลาได้ละเอียดกว่า -->
       <div class="form-row">
         <div class="form-group">
           <label>เวลาเริ่ม</label>
           <div class="input-wrapper">
             <span class="icon input-icon">schedule</span>
-            <select class="select-input" [(ngModel)]="startTime">
-              <option value="">เลือกเวลา</option>
-              <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
-            </select>
+            <input type="time" class="select-input" [(ngModel)]="startTime">
           </div>
         </div>
         <div class="form-group">
           <label>เวลาสิ้นสุด</label>
           <div class="input-wrapper">
             <span class="icon input-icon">schedule</span>
-            <select class="select-input" [(ngModel)]="endTime">
-              <option value="">เลือกเวลา</option>
-              <option *ngFor="let t of timeSlots" [value]="t">{{ t }}</option>
-            </select>
+            <input type="time" class="select-input" [(ngModel)]="endTime">
           </div>
         </div>
       </div>

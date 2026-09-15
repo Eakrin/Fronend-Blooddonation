@@ -1,4 +1,4 @@
-  <div class="booking-page">
+<div class="booking-page" *ngIf="!checkingAssessment; else assessmentChecking">
 
     <!-- Header -->
     <div class="booking-header">
@@ -205,3 +205,13 @@
     </div>
 
   </div>
+
+  <!-- ✅ ใหม่: แสดงระหว่างเช็คผลประเมินสุขภาพก่อนเข้าฟอร์มจอง กันไม่ให้ฟอร์มโผล่มาแวบก่อนเด้งไปหน้าประเมิน -->
+  <ng-template #assessmentChecking>
+    <div class="booking-page">
+      <div class="empty-state">
+        <span class="icon">hourglass_empty</span>
+        <p>กำลังตรวจสอบผลการประเมินสุขภาพ...</p>
+      </div>
+    </div>
+  </ng-template>

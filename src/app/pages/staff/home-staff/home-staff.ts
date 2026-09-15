@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home-staff',
   standalone: true,
-  imports: [NgIf, FormsModule, NgFor, DatePipe],
+  imports: [NgIf, FormsModule, NgFor, DatePipe, RouterLink], // ✅ เพิ่ม RouterLink
   templateUrl: './home-staff.html',
   styleUrl: './home-staff.css',
 })

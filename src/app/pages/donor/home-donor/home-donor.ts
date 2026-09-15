@@ -13,9 +13,13 @@ import { HttpClient } from '@angular/common/http';
 export class HomeDonor implements OnInit {
   userName = '';
   bloodPressure = '-';
-  hemoglobin = '-';
+  hemoglobin = '-'; // หมายเหตุ: ไม่มีคอลัมน์เก็บค่านี้ใน ER ปัจจุบัน คงเป็น "-" ตลอด
   bookings: any[] = [];
   showAllBookings = false;
+
+  // ✅ ใหม่: ผลประเมินสุขภาพล่าสุด ดึงจาก Health_Assessment.result_status จริง
+  // null = ยังไม่เคยประเมิน (แสดงเหลือง), 'pass' = เขียว, 'fail' = แดง, 'pending' = เหลือง
+  assessmentStatus: 'pass' | 'fail' | 'pending' | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -26,6 +30,7 @@ export class HomeDonor implements OnInit {
       this.userName = parsed.name + ' ' + (parsed.lastname || '');
     }
     this.loadBookings();
+    this.loadHealthSummary();
   }
 
   loadBookings() {
@@ -40,6 +45,45 @@ export class HomeDonor implements OnInit {
         },
         error: () => {},
       });
+  }
+
+  // ✅ ใหม่: ดึงผลประเมินสุขภาพล่าสุด + ความดันโลหิตล่าสุด มาแทนของ hardcode เดิม
+  loadHealthSummary() {
+    const token = localStorage.getItem('token');
+    this.http
+      .get<any>('http://localhost:3000/api/health-assessment/latest-summary', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .subscribe({
+        next: (res) => {
+          this.assessmentStatus = res.result_status;
+          this.bloodPressure = res.pressure || '-';
+        },
+        error: () => {
+          // โหลดไม่สำเร็จ ปล่อยเป็นค่า default (เหลือง/ไม่มีข้อมูล) ไม่บล็อกหน้าอื่น
+        },
+      });
+  }
+
+  // ✅ ใหม่: label + class ของ badge ผลประเมิน (เขียว/แดง/เหลือง)
+  get assessmentLabel(): string {
+    if (this.assessmentStatus === 'pass')
+      return 'ร่างกายพร้อมสำหรับการบริจาคเบื้องต้น';
+    if (this.assessmentStatus === 'fail')
+      return 'ยังไม่ผ่านเกณฑ์การบริจาคในครั้งล่าสุด';
+    return 'ยังไม่มีผลการประเมิน กรุณาทำแบบประเมินก่อน';
+  }
+
+  get assessmentClass(): string {
+    if (this.assessmentStatus === 'pass') return 'status-badge-pass';
+    if (this.assessmentStatus === 'fail') return 'status-badge-fail';
+    return 'status-badge-pending';
+  }
+
+  get assessmentIcon(): string {
+    if (this.assessmentStatus === 'pass') return 'check_circle';
+    if (this.assessmentStatus === 'fail') return 'cancel';
+    return 'schedule';
   }
 
   // เช็คว่ามีการจองที่ active อยู่ไหม
@@ -79,10 +123,16 @@ export class HomeDonor implements OnInit {
   cancelBooking(bookingId: number) {
     if (!confirm('ต้องการยกเลิกการจองนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
+    // ✅ แก้ไข: route จริงของ backend คือ PUT /api/booking/cancel/:booking_id
+    // (ก่อนหน้านี้ยิง DELETE /api/booking/:id ซึ่งไม่ตรงกับ route ไหนเลย เลย error "เกิดข้อผิดพลาด")
     this.http
-      .delete(`http://localhost:3000/api/booking/${bookingId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `http://localhost:3000/api/booking/cancel/${bookingId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      )
       .subscribe({
         next: () => {
           this.loadBookings();
