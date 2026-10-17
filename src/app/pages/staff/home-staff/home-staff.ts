@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-home-staff',
@@ -27,7 +28,7 @@ export class HomeStaff implements OnInit {
     this.isLoading = true;
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/booking/all', {
+      .get(environment.apiUrl + '/api/booking/all', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -59,7 +60,7 @@ export class HomeStaff implements OnInit {
     const token = localStorage.getItem('token');
     this.http
       .put(
-        `http://localhost:3000/api/booking/${bookingId}/status`,
+        `${environment.apiUrl}/api/booking/${bookingId}/status`,
         { booking_status: status },
         { headers: { Authorization: `Bearer ${token}` } },
       )

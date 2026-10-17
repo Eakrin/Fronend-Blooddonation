@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-post-staff',
@@ -59,7 +60,7 @@ export class PostStaff implements OnInit {
     // ✅ เพิ่ม
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/donation-day', {
+      .get(environment.apiUrl + '/api/donation-day', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -84,7 +85,7 @@ export class PostStaff implements OnInit {
   loadLocations() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/location', {
+      .get(environment.apiUrl + '/api/location', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -98,7 +99,7 @@ export class PostStaff implements OnInit {
   loadPosts() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/post', {
+      .get(environment.apiUrl + '/api/post', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -140,11 +141,11 @@ export class PostStaff implements OnInit {
 
     const req = this.editingId
       ? this.http.put(
-          `http://localhost:3000/api/post/${this.editingId}`,
+          `${environment.apiUrl}/api/post/${this.editingId}`,
           data,
           { headers: { Authorization: `Bearer ${token}` } },
         )
-      : this.http.post('http://localhost:3000/api/post', data, {
+      : this.http.post(environment.apiUrl + '/api/post', data, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -181,7 +182,7 @@ export class PostStaff implements OnInit {
     if (!confirm('ต้องการลบประกาศนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
     this.http
-      .delete(`http://localhost:3000/api/post/${id}`, {
+      .delete(`${environment.apiUrl}/api/post/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

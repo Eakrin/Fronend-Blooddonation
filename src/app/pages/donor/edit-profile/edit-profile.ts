@@ -9,6 +9,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 // ✅ ตรวจว่ารหัสผ่านใหม่กับยืนยันรหัสผ่านตรงกัน
 function passwordsMatchValidator(
@@ -169,7 +170,7 @@ export class EditProfileComponent implements OnInit {
     // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
     this.http
       .put<{ message: string; profile: string | null }>(
-        'http://localhost:3000/api/update-profile/update-profile',
+        environment.apiUrl + '/api/update-profile/update-profile',
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -235,7 +236,7 @@ export class EditProfileComponent implements OnInit {
     // หมายเหตุ: path นี้เป็นตัวอย่าง อาจต้องแก้ให้ตรงกับ endpoint จริงของ backend
     this.http
       .put(
-        'http://localhost:3000/api/update-profile/change-password',
+        environment.apiUrl + '/api/update-profile/change-password',
         { currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } },
       )

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-donation-day',
@@ -50,7 +51,7 @@ export class DonationDay implements OnInit {
   loadLocations() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/location', {
+      .get(environment.apiUrl + '/api/location', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -64,7 +65,7 @@ export class DonationDay implements OnInit {
   loadSlots() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/donation-day', {
+      .get(environment.apiUrl + '/api/donation-day', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -138,11 +139,11 @@ export class DonationDay implements OnInit {
 
     const req = this.editingId
       ? this.http.put(
-          `http://localhost:3000/api/donation-day/${this.editingId}`,
+          `${environment.apiUrl}/api/donation-day/${this.editingId}`,
           data,
           { headers: { Authorization: `Bearer ${token}` } },
         )
-      : this.http.post('http://localhost:3000/api/donation-day', data, {
+      : this.http.post(environment.apiUrl + '/api/donation-day', data, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -163,7 +164,7 @@ export class DonationDay implements OnInit {
     if (!confirm('ต้องการลบรายการนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
     this.http
-      .delete(`http://localhost:3000/api/donation-day/${slotId}`, {
+      .delete(`${environment.apiUrl}/api/donation-day/${slotId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

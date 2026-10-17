@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-booking-history',
@@ -23,7 +24,7 @@ export class BookingHistory implements OnInit {
   loadBookings() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/booking', {
+      .get(environment.apiUrl + '/api/booking', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -41,7 +42,7 @@ export class BookingHistory implements OnInit {
     if (!confirm('ต้องการยกเลิกการจองนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
     this.http
-      .delete(`http://localhost:3000/api/booking/${bookingId}`, {
+      .delete(`${environment.apiUrl}/api/booking/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

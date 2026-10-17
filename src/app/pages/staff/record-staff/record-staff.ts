@@ -3,6 +3,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-record-staff',
@@ -80,7 +81,7 @@ export class RecordStaff implements OnInit {
   loadBookingInfo(bookingId: number): void {
     const token = localStorage.getItem('token');
     this.http
-      .get<any>(`http://localhost:3000/api/record/booking/${bookingId}`, {
+      .get<any>(`${environment.apiUrl}/api/record/booking/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -116,7 +117,7 @@ export class RecordStaff implements OnInit {
   loadDonationTypes(): void {
     const token = localStorage.getItem('token');
     this.http
-      .get<any[]>('http://localhost:3000/api/record/donation-types', {
+      .get<any[]>(environment.apiUrl + '/api/record/donation-types', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -163,7 +164,7 @@ export class RecordStaff implements OnInit {
     };
 
     this.http
-      .post('http://localhost:3000/api/record', payload, {
+      .post(environment.apiUrl + '/api/record', payload, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

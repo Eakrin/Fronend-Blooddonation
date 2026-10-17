@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/api';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-booking',
@@ -57,7 +58,7 @@ export class BookingComponent implements OnInit {
     }
 
     this.http
-      .get<any>('http://localhost:3000/api/health-assessment', {
+      .get<any>(environment.apiUrl + '/api/health-assessment', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -79,7 +80,7 @@ export class BookingComponent implements OnInit {
   }
 
   loadLocations() {
-    this.http.get('http://localhost:3000/api/location').subscribe({
+    this.http.get(environment.apiUrl + '/api/location').subscribe({
       next: (res: any) => {
         this.locations = res;
       },
@@ -88,7 +89,7 @@ export class BookingComponent implements OnInit {
   }
 
   loadSlots() {
-    this.http.get('http://localhost:3000/api/donation-day').subscribe({
+    this.http.get(environment.apiUrl + '/api/donation-day').subscribe({
       next: (res: any) => {
         this.allSlots = res;
         if (this.locationId) {

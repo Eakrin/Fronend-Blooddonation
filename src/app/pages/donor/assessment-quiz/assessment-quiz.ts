@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/api';
+import { environment } from '../../../../environments/environment';
 
 type Severity = 'hard' | 'soft';
 type ResultLevel = 'green' | 'yellow' | 'red';
@@ -86,7 +87,7 @@ export class AssessmentQuiz implements OnInit {
   // ✅ ตาม ER: ดึงคำถามจาก Assessment_Question ผ่าน API
   loadQuestions() {
     const token = this.auth.getToken();
-    fetch('http://localhost:3000/api/health-assessment/questions', {
+    fetch(environment.apiUrl + '/api/health-assessment/questions', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -192,7 +193,7 @@ export class AssessmentQuiz implements OnInit {
       assessment_date: new Date().toISOString(),
     };
 
-    fetch('http://localhost:3000/api/health-assessment', {
+    fetch(environment.apiUrl + '/api/health-assessment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

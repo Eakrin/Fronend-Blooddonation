@@ -6,6 +6,7 @@ import { NgIf } from '@angular/common'; // ✅ ใหม่: ใช้กับ 
 import { AuthService } from '../../../services/api';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth, googleProvider } from '../../../firebase-config';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -84,7 +85,7 @@ export class Register {
     // หมายเหตุ: ห้ามใส่ Content-Type header เอง ต้องปล่อยให้เบราว์เซอร์ตั้ง
     // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
     this.http
-      .post('http://localhost:3000/api/auth/register', formData)
+      .post(environment.apiUrl + '/api/auth/register', formData)
       .subscribe({
         next: (res: any) => {
           alert('สมัครสมาชิกสำเร็จ!');
@@ -107,7 +108,7 @@ export class Register {
       const idToken = await result.user.getIdToken();
 
       this.http
-        .post('http://localhost:3000/api/auth/google', { idToken })
+        .post(environment.apiUrl + '/api/auth/google', { idToken })
         .subscribe({
           next: (res: any) => {
             this.isGoogleLoading = false;

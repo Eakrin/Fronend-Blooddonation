@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-home-donor',
@@ -36,7 +37,7 @@ export class HomeDonor implements OnInit {
   loadBookings() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/booking', {
+      .get(environment.apiUrl + '/api/booking', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -51,7 +52,7 @@ export class HomeDonor implements OnInit {
   loadHealthSummary() {
     const token = localStorage.getItem('token');
     this.http
-      .get<any>('http://localhost:3000/api/health-assessment/latest-summary', {
+      .get<any>(environment.apiUrl + '/api/health-assessment/latest-summary', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -127,7 +128,7 @@ export class HomeDonor implements OnInit {
     // (ก่อนหน้านี้ยิง DELETE /api/booking/:id ซึ่งไม่ตรงกับ route ไหนเลย เลย error "เกิดข้อผิดพลาด")
     this.http
       .put(
-        `http://localhost:3000/api/booking/cancel/${bookingId}`,
+        `${environment.apiUrl}/api/booking/cancel/${bookingId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },

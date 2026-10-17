@@ -3,6 +3,7 @@ import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-profile-staff',
@@ -93,7 +94,7 @@ export class ProfileStaff implements OnInit {
     if (this.newPassword) data.password = this.newPassword;
 
     this.http
-      .put(`http://localhost:3000/api/admin/staff/${user.id}`, data, {
+      .put(`${environment.apiUrl}/api/admin/staff/${user.id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
