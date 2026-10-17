@@ -4,13 +4,11 @@
     <div class="header-top">
       <div>
         <h2>บันทึกข้อมูลสุขภาพและประเมินผล</h2>
-        <!-- ✅ ใหม่: ใช้ข้อมูลจริงจาก loadBookingInfo() แทนของ hardcode เดิม -->
         <div class="donor-tag" *ngIf="!isLoadingDonor">
           <span class="tag-badge">Booking ID: {{ bookingId }}</span>
           <span class="donor-info">
             {{ donor.name }} {{ donor.lastname }} | อายุ {{ donor.age ?? '-' }} ปี | เพศ {{ donor.gender || '-' }} | หมู่เลือด {{ donor.blood_type || '-' }} | โทร {{ donor.phone || '-' }} | สถานที่ {{ locationName || 'ไม่มีข้อมูล' }}
           </span>
-          <!-- ✅ ใหม่: ผลการประเมินสุขภาพก่อนจอง (ดึงจาก Health_assessment ที่ผูกกับ booking นี้) -->
           <span class="tag-badge result"
             [class.pass]="assessmentResult === 'pass'"
             [class.pending]="assessmentResult === 'pending'"
@@ -31,7 +29,6 @@
       <div class="section-icon"><span class="icon">event</span></div>
       <h3>วันเวลาที่เข้ารับบริการ</h3>
     </div>
-    <!-- ✅ แยกวันกับเวลาเป็นคนละช่อง แทน datetime-local ตัวเดียว (ใช้งานง่ายกว่าบนมือถือ) -->
     <div class="datetime-row">
       <div class="health-field">
         <label>วันที่</label>
@@ -123,7 +120,6 @@
           <option value="incomplete">บริจาคไม่สำเร็จ (Incomplete)</option>
         </select>
       </div>
-      <!-- ✅ ใหม่: ประเภทการบริจาค ดึงจากตาราง Donationtype (dropdown ไม่ใช่พิมพ์เอง) -->
       <div class="health-field">
         <label>ประเภทการบริจาค</label>
         <select [(ngModel)]="donationTypeId" class="select-field">
@@ -131,7 +127,6 @@
           <option *ngFor="let t of donationTypes" [ngValue]="t.DonationType_ID">{{ t.Type }}</option>
         </select>
       </div>
-      <!-- ✅ ใหม่: อ่านอย่างเดียว คำนวณจากประวัติ Donation_Record จริง ไม่ใช่ให้เจ้าหน้าที่พิมพ์เอง -->
       <div class="health-field">
         <label>บริจาคครั้งแรก</label>
         <div class="readonly-value">{{ firstDonationDisplay || '-' }}</div>
@@ -143,30 +138,29 @@
     </div>
   </div>
 
-  <!-- 3. แบบประเมินสุขภาพ -->
+  <!-- 3. ผลแบบประเมินสุขภาพ (ผู้บริจาคตอบเอง เจ้าหน้าที่ดูอย่างเดียว) -->
   <div class="section-card">
     <div class="section-title">
       <div class="section-num green">3</div>
       <div class="section-icon green"><span class="icon">fact_check</span></div>
-      <h3>แบบประเมินสุขภาพ <span class="en-title">(Health Assessment Checklist)</span></h3>
+      <h3>ผลแบบประเมินสุขภาพของผู้บริจาค <span class="en-title">(Health Assessment Result)</span></h3>
     </div>
 
-    <div class="checklist">
-      <div class="check-item" *ngFor="let q of questions; let i = index">
-        <div class="check-content">
-          <p class="check-q">{{ i + 1 }}. {{ q.th }}</p>
-          <p class="check-en">{{ q.en }}</p>
-        </div>
-        <div class="check-btns">
-          <button class="btn-yes" [class.active]="q.answer === true" (click)="q.answer = true">
-            ใช่ (Yes)
-          </button>
-          <button class="btn-no" [class.active]="q.answer === false" (click)="q.answer = false">
-            ไม่ใช่ (No)
-          </button>
-        </div>
-      </div>
+    <div class="readonly-value">
+      <span class="tag-badge result"
+        [class.pass]="assessmentResult === 'pass'"
+        [class.pending]="assessmentResult === 'pending'"
+        [class.fail]="assessmentResult === 'fail'">
+        {{ getAssessmentLabel(assessmentResult) }}
+      </span>
+      <span *ngIf="assessmentDate"> (ทำเมื่อ {{ assessmentDate }})</span>
     </div>
+    <p class="field-note" *ngIf="assessmentResult === 'fail' || assessmentResult === 'pending'">
+      * ผู้บริจาคมีคำตอบที่ไม่เข้าเกณฑ์ กรุณาสอบถามเพิ่มเติมก่อนพิจารณารับบริจาค
+    </p>
+    <p class="field-note" *ngIf="!assessmentResult">
+      * ผู้บริจาคยังไม่ได้ทำแบบประเมินออนไลน์
+    </p>
   </div>
 
   <!-- 4. บันทึกเพิ่มเติม -->

@@ -175,6 +175,7 @@
     </div>
     <div class="result-badge pass-badge">ผ่านการประเมิน</div>
     <h2>ยินดีด้วย! ท่านผ่านเกณฑ์การประเมินสุขภาพเบื้องต้น</h2>
+    <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
     <p>คุณสมบัติของท่านพร้อมสำหรับการบริจาคโลหิต สามารถดำเนินการจองคิวได้เลย</p>
 
     <div class="result-info-grid">
@@ -210,6 +211,7 @@
     </div>
     <div class="result-badge fail-badge">ไม่ผ่านการประเมิน</div>
     <h2>ขออภัย ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
+    <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
     <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
 
 <div class="result-note fail-note">

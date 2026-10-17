@@ -15,7 +15,8 @@ export class PostStaff implements OnInit {
   donationDate = '';
   startTime = '';
   endTime = '';
-  locationId: number | null = null;
+  locationId: number | null = null; // ใช้แสดงชื่อสถานที่เท่านั้น (ไม่ส่งไป backend)
+  donationDayId: number | null = null; // ✅ ตาม ER: Post เชื่อมกับ DONATION_Day (ส่ง DonationD_ID ไป backend)
   text = '';
   isLoading = false;
   errorMsg = '';
@@ -44,6 +45,7 @@ export class PostStaff implements OnInit {
 
     if (selected) {
       this.locationId = selected.Location_ID;
+      this.donationDayId = selected.DonationD_ID; // ✅ ตาม ER
       // กรองเอา time slots ของวันนั้น
       this.timeSlotOptions = this.donationDays.filter((d) => {
         const date = new Date(d.Donation_date).toISOString().split('T')[0];
@@ -118,7 +120,7 @@ export class PostStaff implements OnInit {
       !this.donationDate ||
       !this.startTime ||
       !this.endTime ||
-      !this.locationId
+      !this.donationDayId
     ) {
       this.errorMsg = 'กรุณากรอกข้อมูลให้ครบถ้วน';
       return;
@@ -131,7 +133,7 @@ export class PostStaff implements OnInit {
     const data = {
       Toppic: this.topic,
       Text: this.text,
-      Location_ID: this.locationId,
+      DonationD_ID: this.donationDayId, // ✅ ตาม ER (แทน Location_ID เดิม)
       Start_time: `${this.donationDate} ${this.startTime}`,
       End_time: `${this.donationDate} ${this.endTime}`,
     };
@@ -162,7 +164,11 @@ export class PostStaff implements OnInit {
   editPost(post: any) {
     this.editingId = post.Post_ID;
     this.topic = post.Toppic;
-    this.locationId = post.Location_ID;
+    this.donationDayId = post.DonationD_ID; // ✅ ตาม ER
+    const day = this.donationDays.find(
+      (d) => d.DonationD_ID === post.DonationD_ID,
+    );
+    this.locationId = day ? day.Location_ID : null;
     this.text = post.Text || '';
     const start = new Date(post.Start_time);
     const end = new Date(post.End_time);
@@ -190,6 +196,7 @@ export class PostStaff implements OnInit {
     this.startTime = '';
     this.endTime = '';
     this.locationId = null;
+    this.donationDayId = null;
     this.text = '';
     this.editingId = null;
     this.errorMsg = '';

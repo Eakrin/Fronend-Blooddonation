@@ -25,6 +25,10 @@ export class AssessmentQuiz implements OnInit {
   resultLevel: ResultLevel = 'green';
   failedQuestions: any[] = [];
 
+  // ✅ ตาม ER: คะแนนที่ได้ = ผลรวม Score ของข้อที่ตอบถูก (ตอบถูกได้ Score ตอบผิดได้ 0)
+  scoreEarned = 0;
+  scoreMax = 0;
+
   // คงชื่อ property เดิมไว้เผื่อมีที่อื่นในโค้ด (เช่น html) อ้างถึงอยู่
   get isAssessmentPassed(): boolean {
     return this.resultLevel === 'green';
@@ -46,361 +50,26 @@ export class AssessmentQuiz implements OnInit {
     deferredReason: '',
   };
 
-  // ── หมายเหตุการจัดระดับ severity ──────────────────────────────────────────
-  // หลักการ: hard = ข้อห้ามเด็ดขาด/ภาวะปัจจุบันที่ห้ามบริจาคจริง ๆ (ตรงตามเกณฑ์สภากาชาดไทย)
-  //          soft = ภาวะที่ต้องเลื่อนบริจาคเป็นการชั่วคราว หรือต้องให้เจ้าหน้าที่พิจารณาเป็นรายบุคคล
-  // ข้อ 11 (ตั้งครรภ์/ให้นมบุตรอยู่ขณะนี้), 22 (ปลูกถ่ายอวัยวะ/เซลล์ต้นกำเนิด),
-  // 24 (ตับอักเสบหลังอายุ 11 ปี), 26 (พาหะตับอักเสบ), 34 (อาการ/ผลตรวจ HIV),
-  // 38 (ไม่มั่นใจว่าโลหิตปลอดภัย) → เป็นเงื่อนไขห้ามเด็ดขาดตามเกณฑ์จริง จัดเป็น hard
-  // ข้อ 32 (ประวัติเสพยาเสพติด) → เกณฑ์จริงแยกกรณีฉีด (ห้ามเด็ดขาด) กับกิน (เลื่อน 1 ปี)
-  //   แบบฟอร์มนี้เป็นคำถามใช่/ไม่ใช่เดียวแยกกรณีไม่ได้ จึงเลือก hard เพื่อความปลอดภัย
-  // ข้อ 35, 36 (พำนักในสหราชอาณาจักร/ฝรั่งเศส/ไอร์แลนด์) → ตรวจสอบกับแบบฟอร์มจริงของสภากาชาดแล้ว
-  //   พบว่าการพำนักเพียงอย่างเดียวไม่ได้ห้ามบริจาคทันที (ต้องใช้โลหิตที่ผ่านกระบวนการพิเศษ
-  //   หรือมีประวัติ CJD ในครอบครัวจึงห้ามเด็ดขาด) จึงจัดเป็น soft ไม่ใช่ hard
-  // ข้อ 4 (โรคประจำตัว) → ขึ้นกับชนิด/ความรุนแรงของโรค ต้องให้เจ้าหน้าที่พิจารณาเป็นรายบุคคล จึงเป็น soft
+  // ── ระดับความรุนแรง (hard = ข้อห้ามเด็ดขาด / soft = ต้องเลื่อนหรือให้เจ้าหน้าที่พิจารณา) ──
+  // ER ไม่มีคอลัมน์ severity ใน Assessment_Question จึงกำหนดรายการข้อ hard ไว้ที่นี่
+  // ข้อ 11 (ตั้งครรภ์/ให้นมบุตรอยู่), 22 (ปลูกถ่ายอวัยวะ/เซลล์ต้นกำเนิด), 24 (ตับอักเสบหลังอายุ 11 ปี),
+  // 26 (พาหะตับอักเสบ), 32 (ประวัติเสพยาเสพติด), 34 (อาการ/ผลตรวจ HIV), 38 (ไม่มั่นใจว่าโลหิตปลอดภัย)
+  // ข้อที่เหลือเป็น soft (เช่น ข้อ 35, 36 พำนักในต่างประเทศ ข้อ 4 โรคประจำตัว ต้องให้เจ้าหน้าที่พิจารณา)
+  private readonly hardQuestionIds = [11, 22, 24, 26, 32, 34, 38];
+
+  // ✅ ตาม ER: คำถามโหลดจากตาราง Assessment_Question (ไม่ฝังในโค้ดอีกต่อไป)
+  // expected = answer ในตาราง (1 = คำตอบที่ถูกคือ "ใช่", 0 = คำตอบที่ถูกคือ "ไม่ใช่")
   questions: {
     id: number;
     step: number;
     question: string;
     expected: boolean;
     severity: Severity;
+    score: number;
     userAnswer: boolean | null;
-  }[] = [
-    {
-      id: 1,
-      step: 1,
-      question: 'คุณรู้สึกสบายดี สุขภาพแข็งแรง พร้อมที่จะบริจาคโลหิตหรือไม่?',
-      expected: true,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 2,
-      step: 1,
-      question:
-        'คุณนอนหลับพักผ่อนเพียงพอ (ไม่น้อยกว่า 5 ชั่วโมง) ในคืนที่ผ่านมาหรือไม่?',
-      expected: true,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 3,
-      step: 1,
-      question:
-        'คุณรับประทานอาหารที่มีไขมันสูง ภายใน 6 ชั่วโมงที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 4,
-      step: 1,
-      question: 'คุณมีโรคประจำตัว หรือเคยเป็นโรคประจำตัวร้ายแรงหรือไม่?',
-      expected: false,
-      severity: 'soft', // ขึ้นกับชนิดโรค ต้องให้เจ้าหน้าที่พิจารณาเป็นรายบุคคล
-      userAnswer: null,
-    },
-    {
-      id: 5,
-      step: 1,
-      question:
-        'คุณรับประทานยาปฏิชีวนะ (ยาฆ่าเชื้อ) ภายใน 7 วันที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 6,
-      step: 1,
-      question:
-        'คุณรับประทานยาแอสไพริน ยาคลายกล้ามเนื้อ หรือยาแก้ปวดข้อ ภายใน 2 วันที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 7,
-      step: 1,
-      question:
-        'คุณมีการใช้ ยา หรือ สมุนไพร หรือ อาหารเสริม อื่นๆ เป็นประจำหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 8,
-      step: 1,
-      question: 'คุณดื่มแอลกอฮอล์ภายใน 24 ชั่วโมงที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 9,
-      step: 1,
-      question:
-        'คุณเคยบริจาคเซลล์ต้นกำเนิดเม็ดโลหิต ในระยะ 6 เดือนที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 10,
-      step: 1,
-      question:
-        'คุณเคยตั้งครรภ์ หรือแท้งบุตร มาก่อนหรือไม่? (ผู้ชายให้ตอบ ไม่ใช่)',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 11,
-      step: 1,
-      question:
-        'คุณอยู่ในช่วงตั้งครรภ์ หรือให้นมบุตรอยู่หรือไม่? (ผู้ชายให้ตอบ ไม่ใช่)',
-      expected: false,
-      severity: 'hard', // ภาวะปัจจุบันที่ห้ามบริจาคเด็ดขาดในระยะนี้
-      userAnswer: null,
-    },
-    {
-      id: 12,
-      step: 1,
-      question:
-        'คุณคลอดบุตร หรือแท้งบุตร ภายใน 6 เดือนที่ผ่านมาหรือไม่? (ผู้ชายให้ตอบ ไม่ใช่)',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 13,
-      step: 2,
-      question:
-        'พฤติกรรมทางเพศ / เพศวิถี ของท่านในปัจจุบัน (เลือกข้อที่ตรงกับท่าน)',
-      expected: true,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 14,
-      step: 2,
-      question:
-        'ท่านหรือคู่ของท่านเคยมีเพศสัมพันธ์กับผู้ที่ไม่ใช่คู่ของตน / ผู้บริการทางเพศ / ผู้เสพยาเสพติด หรือผู้ติดเชื้อเอชไอวีหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 15,
-      step: 2,
-      question:
-        'คุณเคยใช้ยารักษาหรือป้องกันการติดเชื้อเอชไอวี (เช่น PEP หรือ PrEP) หรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 16,
-      step: 2,
-      question:
-        'คุณเพิ่งอุดฟัน ขูดหินปูน (ภายใน 3 วัน) หรือถอนฟัน รักษารากฟัน (ภายใน 7 วัน) ที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 17,
-      step: 2,
-      question: 'คุณมีอาการท้องเสีย ท้องร่วง ภายใน 7 วันที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 18,
-      step: 2,
-      question:
-        'คุณทำหัตถการเสริมความงามผ่านผิวหนัง เช่น เจาะหู สัก ลบสัก ฝังเข็ม ฉีดสารต่างๆ ภายใน 4 เดือนที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 19,
-      step: 2,
-      question: 'คุณได้รับการผ่าตัดเล็ก ภายใน 7 วันที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 20,
-      step: 2,
-      question: 'คุณได้รับการผ่าตัดใหญ่ ภายใน 6 เดือนที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 21,
-      step: 2,
-      question:
-        'คุณเจ็บป่วยและได้รับโลหิต หรือส่วนประกอบโลหิตจากผู้อื่น ภายใน 1 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 22,
-      step: 2,
-      question:
-        'คุณเคยได้รับการปลูกถามอวัยวะ หรือเซลล์ต้นกำเนิดเม็ดโลหิตมาก่อนหรือไม่?',
-      expected: false,
-      severity: 'hard', // เกณฑ์จริง: ห้ามบริจาคเด็ดขาด
-      userAnswer: null,
-    },
-    {
-      id: 23,
-      step: 2,
-      question: 'คุณเคยถูกเข็มที่เปื้อนเลือดตำ ในระยะ 1 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 24,
-      step: 3,
-      question: 'คุณเคยป่วยเป็นโรคตับอักเสบ หลังอายุ 11 ปีหรือไม่?',
-      expected: false,
-      severity: 'hard', // เกณฑ์จริง: ห้ามบริจาคเด็ดขาด
-      userAnswer: null,
-    },
-    {
-      id: 25,
-      step: 3,
-      question:
-        'คู่ของท่านหรือบุคคลในครอบครัว เป็นโรคตับอักเสบ ในระยะเวลา 1 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 26,
-      step: 3,
-      question: 'คุณเคยตรวจพบว่าเป็นพาหะของโรคตับอักเสบหรือไม่?',
-      expected: false,
-      severity: 'hard', // เกณฑ์จริง: ห้ามบริจาคเด็ดขาด
-      userAnswer: null,
-    },
-    {
-      id: 27,
-      step: 3,
-      question: 'คุณเคยป่วยเป็นโรคมาลาเรีย ในระยะ 3 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 28,
-      step: 3,
-      question:
-        'คุณเคยเข้าไปในพื้นที่เชื้อมาลาเรียชุกชุม ในระยะ 1 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 29,
-      step: 3,
-      question:
-        'คุณเคยป่วยเป็นไข้หวัดใหญ่ / ไข้เลือดออก / ชิคุนกุนยา / ไข้ซิกา / โควิด-19 ในระยะ 1 เดือนที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 30,
-      step: 3,
-      question: 'คุณได้รับวัคซีนเพื่อป้องกันโรคในระยะ 2 เดือนที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 31,
-      step: 3,
-      question:
-        'คุณได้รับเซรุ่ม (เช่น เซรุ่มพิษสุนัขบ้า) ภายใน 1 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 32,
-      step: 3,
-      question: 'คุณเคยมีประวัติเสพยาเสพติด หรือใช้สารเสพติดให้โทษหรือไม่?',
-      expected: false,
-      // เกณฑ์จริง: ฉีด = ห้ามเด็ดขาด, กิน = เลื่อน 1 ปี — แบบฟอร์มนี้แยกกรณีไม่ได้
-      // จึงเลือก hard เพื่อความปลอดภัยของผู้รับโลหิตเป็นหลัก
-      severity: 'hard',
-      userAnswer: null,
-    },
-    {
-      id: 33,
-      step: 3,
-      question:
-        'คุณเคยถูกควบคุมตัวหรือจองจำในเรือนจำติดต่อกันเกิน 72 ชั่วโมง ในช่วง 1 ปีที่ผ่านมาหรือไม่?',
-      expected: false,
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 34,
-      step: 3,
-      question:
-        'คุณเคยมีน้ำหนักลด มีไข้ มีต่อมน้ำเหลืองโตโดยไม่ทราบสาเหตุ ในระยะ 3 เดือน หรือเคยตรวจพบเชื้อ HIV หรือไม่?',
-      expected: false,
-      severity: 'hard', // มีส่วนของ "ตรวจพบเชื้อ HIV" ซึ่งเป็นข้อห้ามเด็ดขาด จึงจัด hard ทั้งข้อเพื่อความปลอดภัย
-      userAnswer: null,
-    },
-    {
-      id: 35,
-      step: 3,
-      question:
-        'ช่วง พ.ศ. 2523 - 2539 คุณเคยพำนักในสหราชอาณาจักร สะสมรวมเกิน 3 เดือนหรือไม่?',
-      expected: false,
-      // ตรวจสอบกับเกณฑ์จริงแล้ว: พำนักอย่างเดียวไม่ได้ห้ามบริจาคทันที
-      // (ต้องใช้โลหิตที่ผ่านกระบวนการพิเศษ หรือมีประวัติ CJD ในครอบครัวจึงห้ามเด็ดขาด)
-      severity: 'soft',
-      userAnswer: null,
-    },
-    {
-      id: 36,
-      step: 3,
-      question:
-        'ช่วง พ.ศ. 2523 - 2544 คุณเคยพำนักในฝรั่งเศส หรือไอร์แลนด์ สะสมรวมเกิน 5 ปีหรือไม่?',
-      expected: false,
-      severity: 'soft', // เหตุผลเดียวกับข้อ 35
-      userAnswer: null,
-    },
-    {
-      id: 37,
-      step: 3,
-      question:
-        'คุณมีบาดแผลสด แผลติดเชื้อ หรือผื่นคันขึ้นตามร่างกายในขณะนี้หรือไม่?',
-      expected: false,
-      severity: 'soft', // ภาวะชั่วคราว รอให้แผล/ผื่นหายก่อนได้
-      userAnswer: null,
-    },
-    {
-      id: 38,
-      step: 3,
-      question:
-        'คุณมั่นใจว่าโลหิตของท่านมีความปลอดภัยสูง และพร้อมส่งต่อเพื่อช่วยชีวิตผู้ป่วยหรือไม่?',
-      expected: true,
-      severity: 'hard', // การไม่มั่นใจ/ไม่ยืนยัน คือสัญญาณเสี่ยงที่ไม่เปิดเผยรายละเอียด ต้องกันไว้ก่อนอย่างเข้มงวด
-      userAnswer: null,
-    },
-  ];
+  }[] = [];
+
+  isLoadingQuestions = true;
 
   constructor(
     private auth: AuthService,
@@ -411,6 +80,33 @@ export class AssessmentQuiz implements OnInit {
     localStorage.removeItem('assessment_passed');
     this.currentStep = 0;
     this.progressPercent = 0;
+    this.loadQuestions();
+  }
+
+  // ✅ ตาม ER: ดึงคำถามจาก Assessment_Question ผ่าน API
+  loadQuestions() {
+    const token = this.auth.getToken();
+    fetch('http://localhost:3000/api/health-assessment/questions', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((rows: any[]) => {
+        this.questions = rows.map((r) => ({
+          id: r.AQ_ID,
+          // แบ่งขั้นตอนตามเลขข้อ: 1-12 = ขั้น 1, 13-23 = ขั้น 2, 24 ขึ้นไป = ขั้น 3
+          step: r.AQ_ID <= 12 ? 1 : r.AQ_ID <= 23 ? 2 : 3,
+          question: r.question_text,
+          expected: Number(r.answer) === 1,
+          severity: this.hardQuestionIds.includes(r.AQ_ID) ? 'hard' : 'soft',
+          score: Number(r.Score) || 0,
+          userAnswer: null,
+        }));
+        this.isLoadingQuestions = false;
+      })
+      .catch(() => {
+        this.isLoadingQuestions = false;
+        alert('โหลดคำถามแบบประเมินไม่สำเร็จ');
+      });
   }
 
   get filteredQuestions() {
@@ -457,6 +153,12 @@ export class AssessmentQuiz implements OnInit {
       (q) => q.userAnswer !== q.expected,
     );
     this.failedQuestions = wrongAnswers;
+
+    // ✅ คำนวณคะแนน: ตอบถูกได้ Score (ปกติ 1) ตอบผิดได้ 0
+    this.scoreMax = this.questions.reduce((sum, q) => sum + q.score, 0);
+    this.scoreEarned = this.questions
+      .filter((q) => q.userAnswer === q.expected)
+      .reduce((sum, q) => sum + q.score, 0);
 
     const hasHardFail = wrongAnswers.some((q) => q.severity === 'hard');
     const hasSoftFail = wrongAnswers.some((q) => q.severity === 'soft');
@@ -518,6 +220,8 @@ export class AssessmentQuiz implements OnInit {
     this.progressPercent = 0;
     this.resultLevel = 'green';
     this.failedQuestions = [];
+    this.scoreEarned = 0;
+    this.scoreMax = 0;
     this.questions.forEach((q) => (q.userAnswer = null));
     this.donorHistory = {
       donationType: '',

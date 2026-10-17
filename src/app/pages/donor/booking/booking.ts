@@ -13,8 +13,10 @@ import { AuthService } from '../../../services/api';
   styleUrl: './booking.css',
 })
 export class BookingComponent implements OnInit {
+  // ✅ ตาม ER: ประเภทการบริจาคอยู่ที่ Donation_Record (เจ้าหน้าที่เลือก) จึงตัดขั้น "ประเภท" ออก
+  // ขั้นตอน: 1 = สถานที่, 2 = วันที่, 3 = เวลา, 4 = ยืนยัน
   currentStep = 1;
-  donationType = '';
+  readonly lastStep = 4;
   locationId: number | null = null;
   selectedSlotId: number | null = null;
   selectedDate = '';
@@ -24,30 +26,7 @@ export class BookingComponent implements OnInit {
   availableDates: string[] = [];
   isLoading = false;
 
-  // ✅ ใหม่: เช็คก่อนว่าพร้อมให้กรอกฟอร์มจองไหม (มีผลประเมินสุขภาพที่ยังไม่ถูกใช้และผ่านเกณฑ์)
-  // ป้องกันไม่ให้ผู้ใช้กรอกฟอร์มจนครบ 5 ขั้นตอนแล้วมาเจอ error ตอนกดยืนยันตอนจบ
   checkingAssessment = true;
-
-  donationTypes = [
-    {
-      value: 'whole',
-      label: 'บริจาคโลหิตรวม',
-      icon: '🩸',
-      desc: 'บริจาคเลือดทั้งหมด ใช้เวลาประมาณ 10-15 นาที',
-    },
-    {
-      value: 'plasma',
-      label: 'บริจาคพลาสม่า',
-      icon: '💧',
-      desc: 'บริจาคน้ำเลือด เหมาะสำหรับผู้บริจาคบ่อย',
-    },
-    {
-      value: 'platelets',
-      label: 'บริจาคเกล็ดโลหิต',
-      icon: '🧬',
-      desc: 'บริจาคเกล็ดเลือด ช่วยผู้ป่วยมะเร็ง',
-    },
-  ];
 
   constructor(
     private auth: AuthService,
@@ -57,15 +36,10 @@ export class BookingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // ✅ ใหม่: เช็คผลประเมินสุขภาพก่อนเป็นอันดับแรก ถ้ายังไม่พร้อมจะเด้งไปหน้าประเมินทันที
     this.checkAssessmentBeforeBooking();
     this.loadLocations();
     this.loadSlots();
 
-    // ✅ ใหม่: รับ locationId ที่ส่งมาจากหน้ารายชื่อสถานที่ (ตอนกด "จองคิวบริจาค"
-    // ที่การ์ดสถานที่ใดสถานที่หนึ่ง) มา pre-select ให้เลย ไม่ต้องเลือกซ้ำใน step 2
-    // หมายเหตุ: แค่เก็บค่า locationId ไว้ก่อน ส่วนการคำนวณ availableDates (onLocationChange)
-    // จะเรียกอีกทีหลัง loadSlots() โหลดข้อมูล allSlots เสร็จ (ดูใน loadSlots ด้านล่าง)
     this.route.queryParams.subscribe((params) => {
       const locationId = params['locationId'];
       if (locationId) {
@@ -74,10 +48,6 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  // ✅ ใหม่: ต้องมี Health_Assessment ล่าสุดที่ (1) result_status = 'pass' และ
-  // (2) Booking_ID ยังเป็น NULL (ยังไม่เคยถูกใช้ผูกกับการจองอื่นมาก่อน) เท่านั้น
-  // ถึงจะถือว่า "พร้อมจอง" ถ้าไม่เข้าเงื่อนไขนี้ (ไม่เคยประเมิน / ประเมินไปแล้วแต่ใช้ไปกับ
-  // booking เก่า / fail / pending) ให้เด้งไปทำแบบประเมินใหม่ก่อน
   checkAssessmentBeforeBooking() {
     const token = this.auth.getToken();
     if (!token) {
@@ -121,8 +91,6 @@ export class BookingComponent implements OnInit {
     this.http.get('http://localhost:3000/api/donation-day').subscribe({
       next: (res: any) => {
         this.allSlots = res;
-        // ✅ ใหม่: ถ้ามี locationId มาจาก query param อยู่แล้ว (มาจากหน้ารายชื่อสถานที่)
-        // ให้คำนวณวันที่ว่างของสถานที่นั้นทันทีที่ allSlots โหลดเสร็จ
         if (this.locationId) {
           this.onLocationChange();
         }
@@ -187,21 +155,16 @@ export class BookingComponent implements OnInit {
       : '-';
   }
 
-  getDonationTypeLabel(): string {
-    const t = this.donationTypes.find((t) => t.value === this.donationType);
-    return t ? t.label : '-';
-  }
-
   canProceed(): boolean {
-    if (this.currentStep === 1) return !!this.donationType;
-    if (this.currentStep === 2) return !!this.locationId;
-    if (this.currentStep === 3) return !!this.selectedDate;
-    if (this.currentStep === 4) return !!this.selectedSlotId;
+    if (this.currentStep === 1) return !!this.locationId;
+    if (this.currentStep === 2) return !!this.selectedDate;
+    if (this.currentStep === 3) return !!this.selectedSlotId;
     return false;
   }
 
   next() {
-    if (this.canProceed() && this.currentStep < 5) this.currentStep++;
+    if (this.canProceed() && this.currentStep < this.lastStep)
+      this.currentStep++;
   }
 
   prev() {
@@ -223,8 +186,6 @@ export class BookingComponent implements OnInit {
     const booking_datetime = `${this.selectedDate} ${slot.Start_time}`;
 
     this.isLoading = true;
-    // ✅ ใหม่: ส่ง Slot_ID ไปด้วย เพื่อให้ backend บันทึกผูก booking กับสถานที่/ช่วงเวลาจริง
-    // (ก่อนหน้านี้ส่งแค่ booking_datetime ทำให้ระบบไม่รู้ว่า booking นี้เป็นของสถานที่ไหน)
     this.auth
       .createBooking({ booking_datetime, Slot_ID: this.selectedSlotId }, token)
       .subscribe({

@@ -70,7 +70,7 @@
           <label>สถานที่</label>
           <div class="input-wrapper">
             <span class="icon input-icon">location_on</span>
-            <select class="select-input" [(ngModel)]="locationId">
+               <select class="select-input" [(ngModel)]="locationId" disabled>
               <option [ngValue]="null" disabled>เลือกสถานที่</option>
               <option *ngFor="let loc of locations" [ngValue]="loc.Location_ID">
                 {{ loc.name }}
@@ -124,7 +124,7 @@
           <div class="post-meta">
             <span><span class="icon">calendar_today</span> {{ post.Start_time | date:'d MMM yyyy' }}</span>
             <span><span class="icon">schedule</span> {{ post.Start_time | date:'HH:mm' }} - {{ post.End_time | date:'HH:mm' }}</span>
-            <span><span class="icon">location_on</span> {{ getLocationName(post.Location_ID) }}</span>
+            <span><span class="icon">location_on</span> {{ post.location || '-' }}</span>
           </div>
         </div>
 
