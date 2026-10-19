@@ -16,7 +16,6 @@ export class HomeDonor implements OnInit {
   bookings: any[] = [];
   showAllBookings = false;
 
-  // ผลประเมินสุขภาพล่าสุดจาก Health_Assessment.result_status
   // null = ยังไม่เคยประเมิน, 'pass' = เขียว, 'fail' = แดง, 'pending' = เหลือง
   assessmentStatus: 'pass' | 'fail' | 'pending' | null = null;
 
@@ -82,24 +81,27 @@ export class HomeDonor implements OnInit {
     return 'schedule';
   }
 
-  // เช็คว่ามีการจองที่ active อยู่ไหม
+  // การจองที่ยังต้องดำเนินการอยู่ (รอพิจารณา/อนุมัติ และยังไม่ถูกบันทึกการบริจาค)
   get hasActiveBooking(): boolean {
-    return this.bookings.some((b) => b.booking_status !== 'cancelled');
+    return this.bookings.some(
+      (b) =>
+        (b.booking_status === 'pending' || b.booking_status === 'approved') &&
+        !b.donation_status,
+    );
   }
 
-  // เช็คว่าจองถี่เกินไปไหม (ต้องห่างกัน 56 วัน = 8 สัปดาห์)
+  // นับ 56 วัน (8 สัปดาห์) จากวันที่บริจาคสำเร็จจริงเท่านั้น
   get lastDonationWarning(): string {
-    const active = this.bookings
-      .filter((b) => b.booking_status !== 'cancelled')
+    const donated = this.bookings
+      .filter((b) => b.donation_status === 'completed' && b.donated_at)
       .sort(
         (a, b) =>
-          new Date(b.booking_datetime).getTime() -
-          new Date(a.booking_datetime).getTime(),
+          new Date(b.donated_at).getTime() - new Date(a.donated_at).getTime(),
       );
 
-    if (active.length === 0) return '';
+    if (donated.length === 0) return '';
 
-    const last = new Date(active[0].booking_datetime);
+    const last = new Date(donated[0].donated_at);
     const now = new Date();
     const diffDays = Math.floor(
       (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24),
@@ -135,6 +137,42 @@ export class HomeDonor implements OnInit {
           alert(err.error?.message || 'เกิดข้อผิดพลาด');
         },
       });
+  }
+
+  // สถานะรวม: ถ้ามีผลบันทึกการบริจาคแล้วใช้ donation_status แทน
+  private statusKey(b: any): string {
+    if (b.booking_status === 'cancelled') return 'cancelled';
+    if (b.donation_status === 'completed') return 'completed';
+    if (b.donation_status === 'deferred') return 'deferred';
+    if (b.donation_status === 'incomplete') return 'incomplete';
+    return b.booking_status;
+  }
+
+  getBookingLabel(b: any): string {
+    const map: any = {
+      pending: 'รอพิจารณา',
+      approved: 'ผ่านการอนุมัติ',
+      rejected: 'ไม่ผ่านเกณฑ์',
+      cancelled: 'ยกเลิก',
+      completed: 'บริจาคสำเร็จ',
+      deferred: 'เลื่อนบริจาค',
+      incomplete: 'บริจาคไม่สำเร็จ',
+    };
+    const key = this.statusKey(b);
+    return map[key] || key;
+  }
+
+  getBookingClass(b: any): string {
+    const map: any = {
+      pending: 'status-pending',
+      approved: 'status-approved',
+      rejected: 'status-rejected',
+      cancelled: 'status-cancelled',
+      completed: 'status-approved',
+      deferred: 'status-pending',
+      incomplete: 'status-rejected',
+    };
+    return map[this.statusKey(b)] || '';
   }
 
   getStatusLabel(status: string): string {

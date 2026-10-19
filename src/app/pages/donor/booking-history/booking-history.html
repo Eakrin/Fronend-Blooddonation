@@ -27,17 +27,10 @@
         <p class="history-id">รหัสจอง #{{ b.Booking_ID }}</p>
       </div>
       <div class="history-right">
-        <div class="history-status" [class.approved]="b.booking_status === 'approved'"
-          [class.pending]="b.booking_status === 'pending'" [class.rejected]="b.booking_status === 'rejected'"
-          [class.cancelled]="b.booking_status === 'cancelled'">
-          <span class="icon">
-            {{ b.booking_status === 'approved' ? 'check_circle' :
-            b.booking_status === 'pending' ? 'hourglass_empty' :
-            b.booking_status === 'rejected' ? 'cancel' : 'block' }}
-          </span>
-          {{ getStatusLabel(b.booking_status) }}
+        <div class="history-status" [ngClass]="statusKey(b)">
+          <span class="icon">{{ getStatusIcon(b) }}</span>
+          {{ getStatusLabel(b) }}
         </div>
-        <!-- ✅ ปุ่มยกเลิกเฉพาะ pending -->
         <button class="btn-cancel-booking" *ngIf="b.booking_status === 'pending'" (click)="cancelBooking(b.Booking_ID)">
           <span class="icon">close</span> ยกเลิก
         </button>
