@@ -223,3 +223,7 @@
   .history-card { flex-wrap: wrap; }
   .history-right { width: 100%; justify-content: space-between; margin-top: 8px; }
 }
+
+.history-status.completed { background: #dcfce7; color: #15803d; }
+.history-status.deferred { background: #fef3c7; color: #b45309; }
+.history-status.incomplete { background: #fee2e2; color: #b91c1c; }
