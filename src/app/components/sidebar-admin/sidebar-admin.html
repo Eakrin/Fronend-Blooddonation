@@ -1,4 +1,10 @@
-<aside class="sidebar" [class.collapsed]="isCollapsed">
+<!-- ปุ่มเมนู (แสดงเฉพาะมือถือ) -->
+<button class="mobile-menu-btn" *ngIf="isMobile" (click)="toggle()" aria-label="เปิดเมนู">
+  <span class="icon">menu</span>
+</button>
+<div class="mobile-backdrop" [class.show]="isMobile && isOpen" (click)="closeMobile()"></div>
+
+<aside class="sidebar" [class.collapsed]="isCollapsed" [class.open]="isOpen">
   <div class="sidebar-header">
     <div class="logo-icon">H</div>
     <div class="logo-text" *ngIf="!isCollapsed">
@@ -6,24 +12,25 @@
       <p>ระบบจัดการคิวบริจาค</p>
     </div>
     <button class="toggle-btn" (click)="toggle()">
-      <span class="icon">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</span>
+      <span class="icon" *ngIf="isMobile">close</span>
+      <span class="icon" *ngIf="!isMobile">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</span>
     </button>
   </div>
 
   <nav class="sidebar-menu">
-    <a routerLink="/home-admin" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'หน้าแรก' : ''">
+    <a routerLink="/home-admin" routerLinkActive="active" class="menu-item" (click)="closeMobile()" [title]="isCollapsed ? 'หน้าแรก' : ''">
       <span class="icon">home</span>
       <span class="menu-text" *ngIf="!isCollapsed">หน้าแรก</span>
     </a>
-    <a routerLink="/manage-accounts" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'จัดการเจ้าหน้าที่' : ''">
+    <a routerLink="/manage-accounts" routerLinkActive="active" class="menu-item" (click)="closeMobile()" [title]="isCollapsed ? 'จัดการเจ้าหน้าที่' : ''">
       <span class="icon">people</span>
       <span class="menu-text" *ngIf="!isCollapsed">จัดการเจ้าหน้าที่</span>
     </a>
-    <a routerLink="/settings" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'ตั้งค่าหน่วยงาน' : ''">
+    <a routerLink="/settings" routerLinkActive="active" class="menu-item" (click)="closeMobile()" [title]="isCollapsed ? 'ตั้งค่าหน่วยงาน' : ''">
       <span class="icon">apartment</span>
       <span class="menu-text" *ngIf="!isCollapsed">ตั้งค่าหน่วยงาน</span>
     </a>
-    <a routerLink="/profile-admin" routerLinkActive="active" class="menu-item" [title]="isCollapsed ? 'ข้อมูลส่วนตัว' : ''">
+    <a routerLink="/profile-admin" routerLinkActive="active" class="menu-item" (click)="closeMobile()" [title]="isCollapsed ? 'ข้อมูลส่วนตัว' : ''">
       <span class="icon">person</span>
       <span class="menu-text" *ngIf="!isCollapsed">ข้อมูลส่วนตัว</span>
     </a>

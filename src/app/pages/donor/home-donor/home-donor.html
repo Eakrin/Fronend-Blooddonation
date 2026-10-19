@@ -13,7 +13,7 @@
       </h1>
       <p>การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน</p>
 
-      <!-- ✅ แสดงปุ่มจองเฉพาะตอนยังไม่ได้จอง หรือจองถูกยกเลิกหมดแล้ว -->
+      <!-- แสดงปุ่มจองเฉพาะตอนยังไม่ได้จอง หรือจองถูกยกเลิกหมดแล้ว -->
       <button class="btn-donate" routerLink="/assessment-quiz" *ngIf="!hasActiveBooking">
         <span class="icon">calendar_today</span>
         จองคิวบริจาคโลหิต
@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <!-- ✅ STATUS BAR: ย้ายแจ้งเตือนออกจาก hero มาไว้พื้นขาวแยกส่วน อ่านง่ายขึ้น -->
+  <!-- STATUS BAR -->
   <div class="status-bar" *ngIf="hasActiveBooking || lastDonationWarning">
     <div class="status-chip status-chip-ok" *ngIf="hasActiveBooking">
       <span class="icon">check_circle</span>
@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <!-- สุขภาพ -->
+    <!-- ผลการประเมินสุขภาพ -->
     <div class="card">
       <div class="card-header">
         <div class="card-title">
@@ -101,23 +101,10 @@
         </div>
         <a class="card-link" routerLink="/assessment-quiz">ประเมินใหม่</a>
       </div>
-      <!-- ✅ ใหม่: ดึงจาก Health_Assessment.result_status จริง แทนข้อความ hardcode เดิม
-           เขียว = pass, แดง = fail, เหลือง = pending หรือยังไม่เคยประเมิน -->
+      <!-- ดึงจาก Health_Assessment.result_status: เขียว = pass, แดง = fail, เหลือง = pending หรือยังไม่เคยประเมิน -->
       <div class="status-badge" [class]="assessmentClass">
         <span class="icon">{{ assessmentIcon }}</span>
         {{ assessmentLabel }}
-      </div>
-      <div class="health-grid">
-        <div class="health-box">
-          <p>ความดันโลหิต</p>
-          <h4>{{ bloodPressure }}</h4>
-          <small>mmHg</small>
-        </div>
-        <div class="health-box">
-          <p>ค่า Hemoglobin</p>
-          <h4>{{ hemoglobin }}</h4>
-          <small>g/dL</small>
-        </div>
       </div>
     </div>
 
@@ -134,7 +121,6 @@
         <p>ดื่มน้ำมาก ๆ อย่างน้อย 3-4 แก้ว และนอนหลับพักผ่อนให้เพียงพอ ไม่น้อยกว่า 5 ชั่วโมงก่อนการบริจาค</p>
       </div>
     </div>
-    <button class="btn-read">อ่านเพิ่มเติม</button>
-  </div>
+    </div>
 
 </div>

@@ -20,10 +20,20 @@ export class SidebarStaff implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (window.innerWidth <= 768) {
+      this.isCollapsed = true;
+    }
+
     const user = localStorage.getItem('user');
     if (user) {
       const parsed = JSON.parse(user);
       this.staffName = parsed.name + ' ' + (parsed.lastname || '');
+    }
+  }
+
+  closeOnMobile() {
+    if (window.innerWidth <= 768) {
+      this.isCollapsed = true;
     }
   }
 

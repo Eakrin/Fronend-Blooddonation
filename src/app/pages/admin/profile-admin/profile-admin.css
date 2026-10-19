@@ -302,3 +302,27 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(193, 18, 31, 0.4);
 }
+
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fdecea;
+  color: #b71c1c;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 12px 0;
+}
+
+/* ไอแพด / จอกลาง */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content { padding: 20px 18px; }
+  .settings-card { padding: 20px; }
+  .data-table { min-width: 0; }
+  .table-container { overflow-x: auto; }
+}
+
+/* คอมพิวเตอร์: ให้เนื้อหากว้างเต็มจอแต่ไม่กว้างเกินไปจนอ่านยาก */
+@media (min-width: 1025px) {
+  .main-content { max-width: 1400px; }
+}

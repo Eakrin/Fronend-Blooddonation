@@ -158,8 +158,9 @@
       </div>
 
       <div class="booking-nav">
-        <button class="btn-prev" (click)="prev()" [disabled]="currentStep === 1">
-          <span class="icon">chevron_left</span> ย้อนกลับ
+        <button class="btn-prev" (click)="prev()">
+          <span class="icon">chevron_left</span>
+          {{ currentStep === 1 ? 'กลับหน้าหลัก' : 'ย้อนกลับ' }}
         </button>
         <button class="btn-next" *ngIf="currentStep < lastStep" (click)="next()" [disabled]="!canProceed()">
           ถัดไป <span class="icon">chevron_right</span>

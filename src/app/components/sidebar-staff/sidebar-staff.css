@@ -238,3 +238,29 @@
 .logout-btn:hover {
   background: #fecaca;
 }
+
+
+@media (max-width: 768px) {
+  /* จองพื้นที่ตอนย่อไว้ที่ host เสมอ เนื้อหาจะไม่ขยับตอนเมนูขยาย */
+  :host {
+    width: 64px;
+    flex-shrink: 0;
+  }
+
+  .sidebar.collapsed {
+    width: 64px;
+    min-width: 64px;
+  }
+
+  /* ตอนขยาย: ลอยทับเนื้อหา */
+  .sidebar:not(.collapsed) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    min-width: 260px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar-header { padding: 16px 10px; }
+}

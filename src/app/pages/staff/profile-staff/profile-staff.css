@@ -408,3 +408,53 @@
 
 .btn-save:hover { transform: translateY(-1px); }
 .btn-save:disabled { opacity: 0.7; cursor: not-allowed; }
+
+
+/* ───────── Responsive ───────── */
+@media (max-width: 900px) {
+  .main-content { padding: 20px 16px; }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .btn-edit { justify-content: center; }
+
+  /* ฟอร์มเรียงคอลัมน์เดียว */
+  .form-grid {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .section-header { padding: 16px 20px; }
+  .avatar-section { padding: 20px; }
+  .password-hint { margin: 0 20px 20px; }
+}
+
+@media (max-width: 520px) {
+  .main-content { padding: 16px 12px; }
+
+  .page-header h2 { font-size: 19px; }
+
+  /* รูปโปรไฟล์อยู่กึ่งกลาง ข้อมูลเรียงใต้รูป */
+  .avatar-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .avatar-actions { justify-content: center; }
+
+  /* ปุ่มล่างเต็มความกว้าง กดง่ายบนมือถือ */
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-save {
+    width: 100%;
+    justify-content: center;
+  }
+}

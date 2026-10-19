@@ -840,3 +840,17 @@
   width: 10%;
   text-align: center;
 }
+
+
+/* ไอแพด / จอกลาง */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content { padding: 20px 18px; }
+  .settings-card { padding: 20px; }
+  .data-table { min-width: 0; }
+  .table-container { overflow-x: auto; }
+}
+
+/* คอมพิวเตอร์: ให้เนื้อหากว้างเต็มจอแต่ไม่กว้างเกินไปจนอ่านยาก */
+@media (min-width: 1025px) {
+  .main-content { max-width: 1400px; }
+}

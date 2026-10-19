@@ -26,7 +26,7 @@ export class RecordStaff implements OnInit {
   locationName: string | null = null;
   isLoadingDonor = true;
 
-  // ✅ ตาม ER: ผู้บริจาคเป็นคนตอบแบบประเมินเอง เจ้าหน้าที่ดูผลอย่างเดียว (Health_Assessment ล่าสุดของผู้บริจาค)
+  // ตาม ER: ผู้บริจาคเป็นคนตอบแบบประเมินเอง เจ้าหน้าที่ดูผลอย่างเดียว (Health_Assessment ล่าสุดของผู้บริจาค)
   assessmentResult: string | null = null;
   assessmentDate: string | null = null;
 
@@ -49,9 +49,7 @@ export class RecordStaff implements OnInit {
   temp: number | null = null;
   height: number | null = null;
   weight: number | null = null;
-  hb: number | null = null; // ยังไม่มีคอลัมน์เก็บใน ER
   bloodVolume: number | null = null;
-  notes = '';
 
   donationStatus: 'completed' | 'deferred' | 'incomplete' = 'completed';
 
@@ -137,6 +135,11 @@ export class RecordStaff implements OnInit {
     return status ? map[status] || status : 'ยังไม่ได้ทำแบบประเมิน';
   }
 
+  getGenderLabel(g: string): string {
+    const map: any = { male: 'ชาย', female: 'หญิง' };
+    return map[g] || g || '-';
+  }
+
   saveAll() {
     if (!this.bookingId) {
       alert('ไม่พบ Booking ID กรุณาเข้าหน้านี้จากรายชื่อผู้จองเท่านั้น');
@@ -149,7 +152,7 @@ export class RecordStaff implements OnInit {
 
     const token = localStorage.getItem('token');
 
-    // ✅ เจ้าหน้าที่บันทึกเฉพาะส่วนของเจ้าหน้าที่ (Donation_Record) ไม่ส่งผลประเมินอีก
+    // เจ้าหน้าที่บันทึกเฉพาะส่วนของเจ้าหน้าที่ (Donation_Record) ไม่ส่งผลประเมินอีก
     const payload = {
       bookingId: this.bookingId,
       donation_datetime: `${this.serviceDate} ${this.serviceTime}:00`,

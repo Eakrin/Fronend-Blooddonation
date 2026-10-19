@@ -19,13 +19,13 @@
   <div class="news-grid" *ngIf="!isLoading && posts.length > 0">
     <div class="news-card" *ngFor="let post of posts">
       <div class="news-img-wrap">
-        <img src="assets/news-placeholder.jpg" alt="{{ post.Toppic }}">
+        <img src="/assets/news-placeholder.jpg" [alt]="post.Toppic">
         <span class="news-cat">ACTIVITY</span>
       </div>
       <div class="news-body">
-        <p class="news-date" *ngIf="post.created_at">
+        <p class="news-date" *ngIf="post.Start_time">
           <span class="icon">calendar_today</span>
-          {{ post.created_at | date:'d MMMM yyyy' }}
+          {{ post.Start_time | date:'d MMMM yyyy' }}
         </p>
         <h3>{{ post.Toppic }}</h3>
         <p class="news-text">{{ post.Text || 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>

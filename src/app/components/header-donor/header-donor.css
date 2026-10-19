@@ -241,9 +241,107 @@
   margin: 2px 0;
 }
 
-/* ── RESPONSIVE ── */
+/* ── ปุ่มเมนูและเมนูบนมือถือ (ซ่อนบนจอใหญ่) ── */
+.menu-toggle {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+/* ── RESPONSIVE: มือถือ/ไอแพดแนวตั้ง ── */
 @media (max-width: 900px) {
   .container { padding: 0 20px; }
   .menu { display: none; }
   .user-text { display: none; }
+
+  /* รูปโปรไฟล์และรายการเดิมย้ายไปอยู่ในเมนูสามขีดแทน */
+  .avatar,
+  .dropdown {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #8f1a1a;
+    padding: 8px 14px 14px;
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.3);
+    animation: dropIn 0.18s ease both;
+  }
+
+  .mobile-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 14px 12px;
+    border-radius: 10px;
+  }
+
+  .mobile-menu a.active {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .mobile-user {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 12px 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .mobile-user .d-name {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .mobile-user .d-role {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 12px;
+  }
+
+  .mobile-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.18);
+    margin: 6px 0;
+  }
+
+  .mobile-action {
+    cursor: pointer;
+  }
+  .mobile-action.logout {
+    color: #fecaca;
+  }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 14px; }
+  .logo-text span { display: none; }
+  .user-info { gap: 10px; }
+  .divider { display: none; }
 }

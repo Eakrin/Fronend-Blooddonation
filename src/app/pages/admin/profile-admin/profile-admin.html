@@ -9,14 +9,12 @@
   <div class="settings-card profile-card">
     <div class="avatar-section">
       <div class="avatar-wrapper">
-        <img src="assets/default-avatar.png" class="avatar-img" onerror="this.style.display='none'">
         <div class="avatar-placeholder"><span class="icon">person</span></div>
-        <button class="avatar-edit-btn"><span class="icon">photo_camera</span></button>
       </div>
       <div class="profile-info">
-        <h3>ผู้ดูแลระบบ (Admin)</h3>
+        <h3>{{ name || 'ผู้ดูแลระบบ' }}</h3>
         <span class="staff-id-badge">
-          <span class="icon">badge</span> รหัสพนักงาน: AD-99812
+          <span class="icon">badge</span> ผู้ดูแลระบบ (Admin)
         </span>
       </div>
     </div>
@@ -29,13 +27,23 @@
       <h3>ข้อมูลการติดต่อ</h3>
     </div>
     <div class="divider"></div>
-    <div class="form-group">
-      <label>อีเมล (Email)</label>
-      <div class="input-wrapper">
-        <span class="icon input-icon">mail</span>
-        <input type="email" [(ngModel)]="email" placeholder="admin@suthawet.go.th">
+    <div class="form-row">
+      <div class="form-group">
+        <label>อีเมล (Email)</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">mail</span>
+          <input type="email" [(ngModel)]="email" placeholder="admin@suthawet.go.th">
+        </div>
+        <span class="input-hint">อีเมลนี้ใช้สำหรับเข้าสู่ระบบ และต้องไม่ซ้ำกับผู้ใช้งานอื่น</span>
       </div>
-      <span class="input-hint">อีเมลนี้ใช้สำหรับกู้คืนรหัสผ่านและรับการแจ้งเตือนสำคัญจากระบบ</span>
+      <div class="form-group">
+        <label>เบอร์โทรศัพท์</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">phone</span>
+          <input type="tel" [(ngModel)]="phone" placeholder="0xx-xxx-xxxx">
+        </div>
+        <span class="input-hint">เบอร์โทรศัพท์ต้องไม่ซ้ำกับผู้ใช้งานอื่น</span>
+      </div>
     </div>
   </div>
 
@@ -50,7 +58,7 @@
     <div class="password-layout">
       <div class="password-fields">
         <div class="form-group">
-          <label>รหัสผ่านปัจจุบัน (Current Password) <span class="required">*</span></label>
+          <label>รหัสผ่านปัจจุบัน (Current Password) <span class="optional">(กรอกเมื่อต้องการเปลี่ยนรหัสผ่าน)</span></label>
           <div class="input-wrapper">
             <span class="icon input-icon">lock</span>
             <input type="password" [(ngModel)]="currentPassword" placeholder="••••••••">
@@ -79,18 +87,22 @@
         <p class="rules-title">ข้อกำหนดรหัสผ่าน</p>
         <ul>
           <li><span class="icon check-icon">check_circle</span> ความยาวอย่างน้อย 8 ตัวอักษร</li>
-          <li><span class="icon check-icon">check_circle</span> ประกอบด้วยตัวอักษรพิมพ์ใหญ่และพิมพ์เล็ก</li>
-          <li><span class="icon check-icon">check_circle</span> มีตัวเลขหรืออักขระพิเศษอย่างน้อย 1 ตัว</li>
+          <li><span class="icon check-icon">check_circle</span> แนะนำให้ผสมตัวอักษรพิมพ์ใหญ่ พิมพ์เล็ก และตัวเลข</li>
         </ul>
       </div>
     </div>
   </div>
 
+  <div class="error-box" *ngIf="errorMsg">
+    <span class="icon">error</span> {{ errorMsg }}
+  </div>
+
   <!-- Actions -->
   <div class="form-actions">
-    <button class="btn-cancel">ยกเลิก</button>
-    <button class="btn-save">
-      <span class="icon">save</span> บันทึกการเปลี่ยนแปลง
+    <button class="btn-cancel" (click)="cancel()">ยกเลิก</button>
+    <button class="btn-save" (click)="save()" [disabled]="isLoading">
+      <span class="icon">save</span>
+      {{ isLoading ? 'กำลังบันทึก...' : 'บันทึกการเปลี่ยนแปลง' }}
     </button>
   </div>
 

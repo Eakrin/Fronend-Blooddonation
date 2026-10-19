@@ -17,52 +17,43 @@ export class PostStaff implements OnInit {
   startTime = '';
   endTime = '';
   locationId: number | null = null; // ใช้แสดงชื่อสถานที่เท่านั้น (ไม่ส่งไป backend)
-  donationDayId: number | null = null; // ✅ ตาม ER: Post เชื่อมกับ DONATION_Day (ส่ง DonationD_ID ไป backend)
+  donationDayId: number | null = null; // ตาม ER: Post เชื่อมกับ DONATION_Day (ส่ง DonationD_ID)
+  selectedSlotId: number | null = null; // ช่วงรับบริจาคที่เลือก (Slot_ID)
   text = '';
   isLoading = false;
   errorMsg = '';
   posts: any[] = [];
   locations: any[] = [];
-  timeSlots: string[] = []; // ✅ เพิ่ม
+  donationDays: any[] = [];
   editingId: number | null = null;
-  donationDays: any[] = []; // ✅ เพิ่ม
-  timeSlotOptions: any[] = []; // ✅ เพิ่ม
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.loadPosts();
     this.loadLocations();
-    this.generateTimeSlots(); // ✅ เพิ่ม
-    this.loadDonationDays(); // ✅ เพิ่ม
+    this.loadDonationDays();
   }
 
-  // เมื่อเลือกวันที่แล้วให้ load time slots ของวันนั้น
-  onDateChange() {
-    const selected = this.donationDays.find((d) => {
-      const date = new Date(d.Donation_date).toISOString().split('T')[0];
-      return date === this.donationDate;
-    });
-
-    if (selected) {
-      this.locationId = selected.Location_ID;
-      this.donationDayId = selected.DonationD_ID; // ✅ ตาม ER
-      // กรองเอา time slots ของวันนั้น
-      this.timeSlotOptions = this.donationDays.filter((d) => {
-        const date = new Date(d.Donation_date).toISOString().split('T')[0];
-        return date === this.donationDate;
-      });
-    }
-    this.startTime = '';
-    this.endTime = '';
-  }
-  loadDonationDays() {
-    // ✅ เพิ่ม
+  private authHeaders() {
     const token = localStorage.getItem('token');
+    return { headers: { Authorization: `Bearer ${token}` } };
+  }
+
+  // เลือกช่วงรับบริจาค แล้วเติมวัน เวลา สถานที่ให้อัตโนมัติ
+  onSlotChange() {
+    const s = this.donationDays.find((d) => d.Slot_ID === this.selectedSlotId);
+    if (!s) return;
+    this.donationDate = String(s.Donation_date).split('T')[0];
+    this.startTime = String(s.Start_time).slice(0, 5);
+    this.endTime = String(s.End_time).slice(0, 5);
+    this.locationId = s.Location_ID;
+    this.donationDayId = s.DonationD_ID;
+  }
+
+  loadDonationDays() {
     this.http
-      .get(environment.apiUrl + '/api/donation-day', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(environment.apiUrl + '/api/donation-day', this.authHeaders())
       .subscribe({
         next: (res: any) => {
           this.donationDays = res;
@@ -71,23 +62,9 @@ export class PostStaff implements OnInit {
       });
   }
 
-  generateTimeSlots() {
-    // ✅ เพิ่ม
-    for (let h = 6; h <= 20; h++) {
-      for (let m of [0, 30]) {
-        const hour = h.toString().padStart(2, '0');
-        const min = m.toString().padStart(2, '0');
-        this.timeSlots.push(`${hour}:${min}`);
-      }
-    }
-  }
-
   loadLocations() {
-    const token = localStorage.getItem('token');
     this.http
-      .get(environment.apiUrl + '/api/location', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(environment.apiUrl + '/api/location', this.authHeaders())
       .subscribe({
         next: (res: any) => {
           this.locations = res;
@@ -97,11 +74,8 @@ export class PostStaff implements OnInit {
   }
 
   loadPosts() {
-    const token = localStorage.getItem('token');
     this.http
-      .get(environment.apiUrl + '/api/post', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(environment.apiUrl + '/api/post', this.authHeaders())
       .subscribe({
         next: (res: any) => {
           this.posts = res;
@@ -130,11 +104,10 @@ export class PostStaff implements OnInit {
     this.isLoading = true;
     this.errorMsg = '';
 
-    const token = localStorage.getItem('token');
     const data = {
       Toppic: this.topic,
       Text: this.text,
-      DonationD_ID: this.donationDayId, // ✅ ตาม ER (แทน Location_ID เดิม)
+      DonationD_ID: this.donationDayId,
       Start_time: `${this.donationDate} ${this.startTime}`,
       End_time: `${this.donationDate} ${this.endTime}`,
     };
@@ -143,11 +116,13 @@ export class PostStaff implements OnInit {
       ? this.http.put(
           `${environment.apiUrl}/api/post/${this.editingId}`,
           data,
-          { headers: { Authorization: `Bearer ${token}` } },
+          this.authHeaders(),
         )
-      : this.http.post(environment.apiUrl + '/api/post', data, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      : this.http.post(
+          environment.apiUrl + '/api/post',
+          data,
+          this.authHeaders(),
+        );
 
     req.subscribe({
       next: () => {
@@ -165,7 +140,7 @@ export class PostStaff implements OnInit {
   editPost(post: any) {
     this.editingId = post.Post_ID;
     this.topic = post.Toppic;
-    this.donationDayId = post.DonationD_ID; // ✅ ตาม ER
+    this.donationDayId = post.DonationD_ID;
     const day = this.donationDays.find(
       (d) => d.DonationD_ID === post.DonationD_ID,
     );
@@ -176,18 +151,25 @@ export class PostStaff implements OnInit {
     this.donationDate = start.toISOString().split('T')[0];
     this.startTime = start.toTimeString().slice(0, 5);
     this.endTime = end.toTimeString().slice(0, 5);
+
+    // เลือกช่วงรับบริจาคเดิมใน dropdown
+    const match = this.donationDays.find(
+      (d) =>
+        d.DonationD_ID === post.DonationD_ID &&
+        String(d.Start_time).slice(0, 5) === this.startTime,
+    );
+    this.selectedSlotId = match ? match.Slot_ID : null;
   }
 
   deletePost(id: number) {
     if (!confirm('ต้องการลบประกาศนี้ใช่ไหม?')) return;
-    const token = localStorage.getItem('token');
     this.http
-      .delete(`${environment.apiUrl}/api/post/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .delete(`${environment.apiUrl}/api/post/${id}`, this.authHeaders())
       .subscribe({
         next: () => this.loadPosts(),
-        error: () => {},
+        error: (err) => {
+          alert(err.error?.message || 'ลบไม่สำเร็จ');
+        },
       });
   }
 
@@ -198,6 +180,7 @@ export class PostStaff implements OnInit {
     this.endTime = '';
     this.locationId = null;
     this.donationDayId = null;
+    this.selectedSlotId = null;
     this.text = '';
     this.editingId = null;
     this.errorMsg = '';

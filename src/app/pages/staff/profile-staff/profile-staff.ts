@@ -21,7 +21,7 @@ export class ProfileStaff implements OnInit {
   avatarPreview: string | null = null;
   isLoading = false;
   errorMsg = '';
-  isReadOnly = true; // ✅ เริ่มต้นโหมดดูข้อมูล
+  isReadOnly = true;
 
   constructor(
     private http: HttpClient,
@@ -29,6 +29,10 @@ export class ProfileStaff implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadFromStorage();
+  }
+
+  private loadFromStorage() {
     const user = localStorage.getItem('user');
     if (user) {
       const parsed = JSON.parse(user);
@@ -47,13 +51,8 @@ export class ProfileStaff implements OnInit {
     this.newPassword = '';
     this.confirmPassword = '';
     this.errorMsg = '';
-    // คืนค่าเดิม
-    const user = localStorage.getItem('user');
-    if (user) {
-      const parsed = JSON.parse(user);
-      this.name = parsed.name + ' ' + (parsed.lastname || '');
-      this.phone = parsed.phone || '';
-    }
+    // คืนค่าเดิม (รวมอีเมล)
+    this.loadFromStorage();
   }
 
   onFileSelected(event: any) {
@@ -72,8 +71,18 @@ export class ProfileStaff implements OnInit {
   }
 
   save() {
+    if (!this.email.trim()) {
+      this.errorMsg = 'กรุณากรอกอีเมล';
+      return;
+    }
+
     if (this.newPassword && this.newPassword !== this.confirmPassword) {
       this.errorMsg = 'รหัสผ่านไม่ตรงกัน';
+      return;
+    }
+
+    if (this.newPassword && this.newPassword.length < 8) {
+      this.errorMsg = 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร';
       return;
     }
 
@@ -88,7 +97,7 @@ export class ProfileStaff implements OnInit {
       lastname: nameParts.slice(1).join(' ') || '',
       phone: this.phone,
       status: user.status || 'active',
-      email: this.email,
+      email: this.email.trim(),
     };
 
     if (this.newPassword) data.password = this.newPassword;
@@ -108,6 +117,7 @@ export class ProfileStaff implements OnInit {
             name: nameParts[0],
             lastname: nameParts.slice(1).join(' '),
             phone: this.phone,
+            email: this.email.trim(),
           };
           localStorage.setItem('user', JSON.stringify(updated));
           alert('บันทึกสำเร็จ');

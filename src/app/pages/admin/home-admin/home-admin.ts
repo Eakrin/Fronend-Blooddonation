@@ -42,6 +42,7 @@ export class HomeAdmin implements OnInit {
     const map: Record<string, string> = {
       approved: 'ยืนยันแล้ว',
       pending: 'รอดำเนินการ',
+      rejected: 'ไม่ผ่านเกณฑ์',
       cancelled: 'ยกเลิก',
     };
     return map[status] || status;
@@ -51,6 +52,7 @@ export class HomeAdmin implements OnInit {
     const map: Record<string, string> = {
       approved: 'status-success',
       pending: 'status-warning',
+      rejected: 'status-danger',
       cancelled: 'status-danger',
     };
     return map[status] || '';

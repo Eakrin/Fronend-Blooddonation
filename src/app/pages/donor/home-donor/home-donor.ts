@@ -13,13 +13,11 @@ import { environment } from '../../../../environments/environment';
 })
 export class HomeDonor implements OnInit {
   userName = '';
-  bloodPressure = '-';
-  hemoglobin = '-'; // หมายเหตุ: ไม่มีคอลัมน์เก็บค่านี้ใน ER ปัจจุบัน คงเป็น "-" ตลอด
   bookings: any[] = [];
   showAllBookings = false;
 
-  // ✅ ใหม่: ผลประเมินสุขภาพล่าสุด ดึงจาก Health_Assessment.result_status จริง
-  // null = ยังไม่เคยประเมิน (แสดงเหลือง), 'pass' = เขียว, 'fail' = แดง, 'pending' = เหลือง
+  // ผลประเมินสุขภาพล่าสุดจาก Health_Assessment.result_status
+  // null = ยังไม่เคยประเมิน, 'pass' = เขียว, 'fail' = แดง, 'pending' = เหลือง
   assessmentStatus: 'pass' | 'fail' | 'pending' | null = null;
 
   constructor(private http: HttpClient) {}
@@ -48,7 +46,6 @@ export class HomeDonor implements OnInit {
       });
   }
 
-  // ✅ ใหม่: ดึงผลประเมินสุขภาพล่าสุด + ความดันโลหิตล่าสุด มาแทนของ hardcode เดิม
   loadHealthSummary() {
     const token = localStorage.getItem('token');
     this.http
@@ -58,20 +55,18 @@ export class HomeDonor implements OnInit {
       .subscribe({
         next: (res) => {
           this.assessmentStatus = res.result_status;
-          this.bloodPressure = res.pressure || '-';
         },
-        error: () => {
-          // โหลดไม่สำเร็จ ปล่อยเป็นค่า default (เหลือง/ไม่มีข้อมูล) ไม่บล็อกหน้าอื่น
-        },
+        error: () => {},
       });
   }
 
-  // ✅ ใหม่: label + class ของ badge ผลประเมิน (เขียว/แดง/เหลือง)
   get assessmentLabel(): string {
     if (this.assessmentStatus === 'pass')
       return 'ร่างกายพร้อมสำหรับการบริจาคเบื้องต้น';
     if (this.assessmentStatus === 'fail')
       return 'ยังไม่ผ่านเกณฑ์การบริจาคในครั้งล่าสุด';
+    if (this.assessmentStatus === 'pending')
+      return 'รอเจ้าหน้าที่พิจารณาผลการประเมิน';
     return 'ยังไม่มีผลการประเมิน กรุณาทำแบบประเมินก่อน';
   }
 
@@ -124,8 +119,6 @@ export class HomeDonor implements OnInit {
   cancelBooking(bookingId: number) {
     if (!confirm('ต้องการยกเลิกการจองนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
-    // ✅ แก้ไข: route จริงของ backend คือ PUT /api/booking/cancel/:booking_id
-    // (ก่อนหน้านี้ยิง DELETE /api/booking/:id ซึ่งไม่ตรงกับ route ไหนเลย เลย error "เกิดข้อผิดพลาด")
     this.http
       .put(
         `${environment.apiUrl}/api/booking/cancel/${bookingId}`,

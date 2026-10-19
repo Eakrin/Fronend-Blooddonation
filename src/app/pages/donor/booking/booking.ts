@@ -64,7 +64,9 @@ export class BookingComponent implements OnInit {
       .subscribe({
         next: (res) => {
           const ready =
-            !!res && res.Booking_ID === null && res.result_status === 'pass';
+            !!res &&
+            res.Booking_ID === null &&
+            (res.result_status === 'pass' || res.result_status === 'pending');
           if (!ready) {
             alert('กรุณาทำแบบประเมินสุขภาพก่อนทำการจอง');
             this.router.navigate(['/assessment-quiz']);
@@ -169,7 +171,12 @@ export class BookingComponent implements OnInit {
   }
 
   prev() {
-    if (this.currentStep > 1) this.currentStep--;
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    } else {
+      // ขั้นแรก: ย้อนกลับออกจากหน้าจองไปหน้าหลัก
+      this.router.navigate(['/home-donor']);
+    }
   }
 
   confirmBooking() {
