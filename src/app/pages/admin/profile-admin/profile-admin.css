@@ -326,3 +326,32 @@
 @media (min-width: 1025px) {
   .main-content { max-width: 1400px; }
 }
+
+.date-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.date-field input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.date-field input.empty::-webkit-datetime-edit {
+  color: transparent;
+}
+.date-ph {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.google-logo {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-right: 10px;
+}

@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-location',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, DatePipe, RouterLink],
+  imports: [NgFor, NgIf, FormsModule, DatePipe],
   templateUrl: './location.html',
   styleUrls: ['./location.css'],
 })

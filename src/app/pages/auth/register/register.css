@@ -433,3 +433,46 @@
   .row { grid-template-columns: 1fr; gap: 0; }
   .row input, .row select { margin-bottom: 12px; }
 }
+
+/* ── ช่องวันเกิด ── */
+.date-field {
+  position: relative;
+  min-width: 0;
+}
+.date-field input[type="date"] {
+  width: 100%;
+  min-height: 44px;
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: left;
+}
+.date-field input.empty::-webkit-datetime-edit {
+  color: transparent;
+}
+.date-ph {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #98a2b3;
+  pointer-events: none;
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+/* ── โลโก้ Google ── */
+.google-logo {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .form { width: 100%; padding: 28px 22px; border-radius: 20px; }
+  .features, .stats { display: none; }
+  .row { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+  .row input, .row select { margin-bottom: 12px; }
+  .date-field { margin-bottom: 12px; }
+  .mb { margin-bottom: 12px; }
+    .date-field input[type="date"] { margin-bottom: 0; }
+}

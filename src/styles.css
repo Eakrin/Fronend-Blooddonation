@@ -57,3 +57,20 @@ body{
   body:has(app-sidebar-admin) th,
   body:has(app-sidebar-admin) td { white-space: nowrap; }
 }
+
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+  color: #1f2937;
+}
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.2em;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
