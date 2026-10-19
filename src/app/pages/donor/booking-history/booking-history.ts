@@ -42,9 +42,11 @@ export class BookingHistory implements OnInit {
     if (!confirm('ต้องการยกเลิกการจองนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
     this.http
-      .delete(`${environment.apiUrl}/api/booking/${bookingId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `${environment.apiUrl}/api/booking/cancel/${bookingId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
       .subscribe({
         next: () => {
           this.loadBookings();
