@@ -89,7 +89,10 @@
       </div>
 
       <div class="row">
-        <input type="date" [(ngModel)]="birthday">
+        <div class="date-field">
+          <input type="date" [(ngModel)]="birthday" [class.empty]="!birthday">
+          <span class="date-ph" *ngIf="!birthday">วันเกิด (วว/ดด/ปปปป)</span>
+        </div>
         <select [(ngModel)]="gender">
           <option value="">เลือกเพศ</option>
           <option value="male">ชาย</option>
@@ -110,14 +113,6 @@
         <span>ลงทะเบียนตอนนี้</span>
         <span class="icon">arrow_forward</span>
       </button>
-
-      <div class="or"><span>หรือสมัครด้วย</span></div>
-
-      <button class="google" (click)="registerWithGoogle()" [disabled]="isGoogleLoading">
-        <span class="google-mark">G</span>
-        {{ isGoogleLoading ? 'กำลังเชื่อมต่อ...' : 'สมัครด้วย Google Account' }}
-      </button>
-
       <p class="login">
         มีบัญชีอยู่แล้ว?
         <span routerLink="/login">เข้าสู่ระบบ</span>

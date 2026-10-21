@@ -158,78 +158,101 @@
     </div>
 
     <div class="card-actions" *ngIf="currentStep !== 4">
-      <button class="btn-back" (click)='prevStep()' [disabled]="currentStep === 0">
-        <span class="arrow">←</span> ย้อนกลับ
+      <button class="btn-back" (click)="prevStep()">
+        <span class="arrow">←</span> {{ currentStep === 0 ? 'กลับหน้าหลัก' : 'ย้อนกลับ' }}
       </button>
       <button class="btn-next" (click)="nextStep()">
         {{ currentStep === 3 ? 'ส่งแบบประเมิน' : 'ขั้นตอนถัดไป' }} <span class="arrow">→</span>
       </button>
     </div>
 
-<div class="result-container" *ngIf="currentStep === 4">
+    <div class="result-container" *ngIf="currentStep === 4">
 
-  <!-- ✅ ผ่าน -->
-  <div class="result-box pass" *ngIf="isAssessmentPassed">
-    <div class="result-icon-wrap pass">
-      <div class="result-icon-circle">✓</div>
-    </div>
-    <div class="result-badge pass-badge">ผ่านการประเมิน</div>
-    <h2>ยินดีด้วย! ท่านผ่านเกณฑ์การประเมินสุขภาพเบื้องต้น</h2>
-    <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
-    <p>คุณสมบัติของท่านพร้อมสำหรับการบริจาคโลหิต สามารถดำเนินการจองคิวได้เลย</p>
+      <!-- ผ่าน (เขียว) -->
+      <div class="result-box pass" *ngIf="isAssessmentPassed">
+        <div class="result-icon-wrap pass">
+          <div class="result-icon-circle">✓</div>
+        </div>
+        <div class="result-badge pass-badge">ผ่านการประเมิน</div>
+        <h2>ยินดีด้วย! ท่านผ่านเกณฑ์การประเมินสุขภาพเบื้องต้น</h2>
+        <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
+        <p>คุณสมบัติของท่านพร้อมสำหรับการบริจาคโลหิต สามารถดำเนินการจองคิวได้เลย</p>
 
-    <div class="result-info-grid">
-      <div class="result-info-item">
-        <span class="icon">check_circle</span>
-        <span>ไม่มีโรคประจำตัวที่เป็นข้อห้าม</span>
+        <div class="result-info-grid">
+          <div class="result-info-item">
+            <span class="icon">check_circle</span>
+            <span>ไม่มีโรคประจำตัวที่เป็นข้อห้าม</span>
+          </div>
+          <div class="result-info-item">
+            <span class="icon">check_circle</span>
+            <span>สุขภาพพร้อมสำหรับการบริจาค</span>
+          </div>
+          <div class="result-info-item">
+            <span class="icon">check_circle</span>
+            <span>ผ่านการคัดกรองเบื้องต้น</span>
+          </div>
+        </div>
+
+        <div class="result-note">
+          <span class="icon">info</span>
+          <p>หมายเหตุ: ผลการประเมินนี้เป็นเพียงการคัดกรองเบื้องต้น เจ้าหน้าที่จะตรวจสอบอีกครั้ง ณ จุดรับบริจาค</p>
+        </div>
+
+        <button routerLink="/booking" class="btn-go-booking">
+          <span class="icon">calendar_today</span>
+          จองคิวบริจาคโลหิต
+        </button>
+        <button class="btn-go-home" routerLink="/home-donor">
+          <span class="icon">home</span> กลับหน้าหลัก
+        </button>
       </div>
-      <div class="result-info-item">
-        <span class="icon">check_circle</span>
-        <span>สุขภาพพร้อมสำหรับการบริจาค</span>
+
+      <!-- รอเจ้าหน้าที่พิจารณา (เหลือง) -->
+      <div class="result-box pass" *ngIf="isAssessmentPending">
+        <div class="result-icon-wrap pass">
+          <div class="result-icon-circle">!</div>
+        </div>
+        <div class="result-badge pass-badge">รอเจ้าหน้าที่พิจารณา</div>
+        <h2>ผลการประเมินของท่านต้องให้เจ้าหน้าที่ตรวจสอบเพิ่มเติม</h2>
+        <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
+        <p>ท่านสามารถจองคิวได้ เจ้าหน้าที่จะพิจารณาผลและยืนยันภายใน 24 ชั่วโมง ก่อนเข้ารับบริจาค</p>
+
+        <div class="result-actions">
+          <button routerLink="/booking" class="btn-go-booking">
+            <span class="icon">calendar_today</span> จองคิวบริจาคโลหิต
+          </button>
+          <button class="btn-go-home" routerLink="/home-donor">
+            <span class="icon">home</span> กลับหน้าหลัก
+          </button>
+        </div>
       </div>
-      <div class="result-info-item">
-        <span class="icon">check_circle</span>
-        <span>ผ่านการคัดกรองเบื้องต้น</span>
+
+      <!-- ไม่ผ่าน (แดง) -->
+      <div class="result-box fail" *ngIf="resultLevel === 'red'">
+        <div class="result-icon-wrap fail">
+          <div class="result-icon-circle">✕</div>
+        </div>
+        <div class="result-badge fail-badge">ไม่ผ่านการประเมิน</div>
+        <h2>ขออภัย ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
+        <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
+        <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
+
+        <div class="result-note fail-note">
+          <span class="icon">info</span>
+          <p>คำตอบบางส่วนของท่านไม่เข้าเกณฑ์ความปลอดภัยตามมาตรฐานสภากาชาดไทย หากมีข้อสงสัยเกี่ยวกับผลการประเมิน กรุณาปรึกษาเจ้าหน้าที่ที่จุดรับบริจาคโดยตรง เพื่อรับคำแนะนำที่เหมาะสมกับสุขภาพของท่าน</p>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-retry" (click)="resetAssessment()">
+            <span class="icon">refresh</span> ทำแบบประเมินใหม่
+          </button>
+          <button class="btn-go-home" routerLink="/home-donor">
+            <span class="icon">home</span> กลับหน้าหลัก
+          </button>
+        </div>
       </div>
+
     </div>
-
-    <div class="result-note">
-      <span class="icon">info</span>
-      <p>หมายเหตุ: ผลการประเมินนี้เป็นเพียงการคัดกรองเบื้องต้น เจ้าหน้าที่จะตรวจสอบอีกครั้ง ณ จุดรับบริจาค</p>
-    </div>
-
-    <button routerLink="/booking" class="btn-go-booking">
-      <span class="icon">calendar_today</span>
-      จองคิวบริจาคโลหิต
-    </button>
-  </div>
-
-  <!-- ❌ ไม่ผ่าน -->
-  <div class="result-box fail" *ngIf="!isAssessmentPassed">
-    <div class="result-icon-wrap fail">
-      <div class="result-icon-circle">✕</div>
-    </div>
-    <div class="result-badge fail-badge">ไม่ผ่านการประเมิน</div>
-    <h2>ขออภัย ท่านยังไม่ผ่านเกณฑ์การประเมินในครั้งนี้</h2>
-    <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
-    <p class="fail-notice">เพื่อความปลอดภัยสูงสุดของผู้รับโลหิตและตัวท่านเอง ระบบขอแนะนำให้ท่านงดบริจาคโลหิตชั่วคราว</p>
-
-<div class="result-note fail-note">
-  <span class="icon">info</span>
-  <p>คำตอบบางส่วนของท่านไม่เข้าเกณฑ์ความปลอดภัยตามมาตรฐานสภากาชาดไทย หากมีข้อสงสัยเกี่ยวกับผลการประเมิน กรุณาปรึกษาเจ้าหน้าที่ที่จุดรับบริจาคโดยตรง เพื่อรับคำแนะนำที่เหมาะสมกับสุขภาพของท่าน</p>
-</div>
-
-    <div class="result-actions">
-      <button class="btn-retry" (click)="resetAssessment()">
-        <span class="icon">refresh</span> ทำแบบประเมินใหม่
-      </button>
-      <button class="btn-go-home" routerLink="/home-donor">
-        <span class="icon">home</span> กลับหน้าหลัก
-      </button>
-    </div>
-  </div>
-
-</div>
 
   </div>
 

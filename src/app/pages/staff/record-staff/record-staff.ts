@@ -3,6 +3,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-record-staff',
@@ -25,7 +26,7 @@ export class RecordStaff implements OnInit {
   locationName: string | null = null;
   isLoadingDonor = true;
 
-  // ✅ ตาม ER: ผู้บริจาคเป็นคนตอบแบบประเมินเอง เจ้าหน้าที่ดูผลอย่างเดียว (Health_Assessment ล่าสุดของผู้บริจาค)
+  // ตาม ER: ผู้บริจาคเป็นคนตอบแบบประเมินเอง เจ้าหน้าที่ดูผลอย่างเดียว (Health_Assessment ล่าสุดของผู้บริจาค)
   assessmentResult: string | null = null;
   assessmentDate: string | null = null;
 
@@ -48,9 +49,7 @@ export class RecordStaff implements OnInit {
   temp: number | null = null;
   height: number | null = null;
   weight: number | null = null;
-  hb: number | null = null; // ยังไม่มีคอลัมน์เก็บใน ER
   bloodVolume: number | null = null;
-  notes = '';
 
   donationStatus: 'completed' | 'deferred' | 'incomplete' = 'completed';
 
@@ -80,7 +79,7 @@ export class RecordStaff implements OnInit {
   loadBookingInfo(bookingId: number): void {
     const token = localStorage.getItem('token');
     this.http
-      .get<any>(`http://localhost:3000/api/record/booking/${bookingId}`, {
+      .get<any>(`${environment.apiUrl}/api/record/booking/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -116,7 +115,7 @@ export class RecordStaff implements OnInit {
   loadDonationTypes(): void {
     const token = localStorage.getItem('token');
     this.http
-      .get<any[]>('http://localhost:3000/api/record/donation-types', {
+      .get<any[]>(environment.apiUrl + '/api/record/donation-types', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -136,6 +135,11 @@ export class RecordStaff implements OnInit {
     return status ? map[status] || status : 'ยังไม่ได้ทำแบบประเมิน';
   }
 
+  getGenderLabel(g: string): string {
+    const map: any = { male: 'ชาย', female: 'หญิง' };
+    return map[g] || g || '-';
+  }
+
   saveAll() {
     if (!this.bookingId) {
       alert('ไม่พบ Booking ID กรุณาเข้าหน้านี้จากรายชื่อผู้จองเท่านั้น');
@@ -148,7 +152,7 @@ export class RecordStaff implements OnInit {
 
     const token = localStorage.getItem('token');
 
-    // ✅ เจ้าหน้าที่บันทึกเฉพาะส่วนของเจ้าหน้าที่ (Donation_Record) ไม่ส่งผลประเมินอีก
+    // เจ้าหน้าที่บันทึกเฉพาะส่วนของเจ้าหน้าที่ (Donation_Record) ไม่ส่งผลประเมินอีก
     const payload = {
       bookingId: this.bookingId,
       donation_datetime: `${this.serviceDate} ${this.serviceTime}:00`,
@@ -163,7 +167,7 @@ export class RecordStaff implements OnInit {
     };
 
     this.http
-      .post('http://localhost:3000/api/record', payload, {
+      .post(environment.apiUrl + '/api/record', payload, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

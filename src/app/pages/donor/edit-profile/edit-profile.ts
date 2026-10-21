@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -9,8 +9,10 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
-// ✅ ตรวจว่ารหัสผ่านใหม่กับยืนยันรหัสผ่านตรงกัน
+// ตรวจว่ารหัสผ่านใหม่กับยืนยันรหัสผ่านตรงกัน
 function passwordsMatchValidator(
   group: AbstractControl,
 ): ValidationErrors | null {
@@ -40,6 +42,8 @@ export class EditProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private location: Location,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -48,11 +52,20 @@ export class EditProfileComponent implements OnInit {
     this.loadProfileData();
   }
 
+  // ย้อนกลับหน้าที่เพิ่งมา ถ้าเปิดหน้านี้ตรง ๆ ให้ไปหน้าหลัก
+  goBack(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/home-donor']);
+    }
+  }
+
   initForm(): void {
     this.profileForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
-      // ✅ อีเมลแก้ไขได้แล้ว (ห้ามซ้ำ - ตรวจสอบจริงที่ backend)
+      // อีเมลแก้ไขได้ (ห้ามซ้ำ - ตรวจสอบจริงที่ backend)
       email: [
         { value: '', disabled: true },
         [Validators.required, Validators.email],
@@ -147,7 +160,7 @@ export class EditProfileComponent implements OnInit {
     const token = localStorage.getItem('token');
     const rawValue = this.profileForm.getRawValue();
 
-    // ✅ เปลี่ยนจากส่ง JSON ธรรมดา เป็น FormData เพราะอาจมีไฟล์รูปใหม่แนบไปด้วย
+    // ใช้ FormData เพราะอาจมีไฟล์รูปใหม่แนบไปด้วย
     const formData = new FormData();
     formData.append('name', rawValue.name ?? '');
     formData.append('lastname', rawValue.lastname ?? '');
@@ -160,16 +173,14 @@ export class EditProfileComponent implements OnInit {
     formData.append('height', rawValue.height ?? '');
 
     // ชื่อฟิลด์ 'profile' ต้องตรงกับ upload.single('profile') ฝั่ง backend
-    // ถ้าไม่ได้เลือกรูปใหม่ ก็ไม่ต้องแนบไป - backend จะไม่แตะรูปเดิม
     if (this.selectedFile) {
       formData.append('profile', this.selectedFile);
     }
 
-    // หมายเหตุ: ห้ามใส่ Content-Type header เอง ต้องปล่อยให้เบราว์เซอร์ตั้ง
-    // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
+    // ห้ามใส่ Content-Type เอง ให้เบราว์เซอร์ตั้ง multipart/form-data พร้อม boundary
     this.http
       .put<{ message: string; profile: string | null }>(
-        'http://localhost:3000/api/update-profile/update-profile',
+        environment.apiUrl + '/api/update-profile/update-profile',
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -177,8 +188,7 @@ export class EditProfileComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          // ✅ ใหม่: ใช้ URL รูปจริงจาก Cloudinary ที่ backend ส่งกลับมา
-          // แทนที่จะใช้ base64 preview ชั่วคราวที่ frontend สร้างไว้เอง
+          // ใช้ URL รูปจริงจาก Cloudinary ที่ backend ส่งกลับมา
           if (res?.profile) {
             this.avatarPreview = res.profile;
           }
@@ -202,7 +212,7 @@ export class EditProfileComponent implements OnInit {
           this.isReadOnly = true;
         },
         error: (err) => {
-          // ✅ ถ้า backend ตรวจพบอีเมล/เบอร์โทรซ้ำ ควรส่ง error message กลับมาแสดงตรงนี้
+          // backend ส่งข้อความกลับมาเมื่ออีเมล/เบอร์โทรซ้ำ
           alert(err.error?.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่');
         },
       });
@@ -232,10 +242,9 @@ export class EditProfileComponent implements OnInit {
 
     this.isSavingPassword = true;
 
-    // หมายเหตุ: path นี้เป็นตัวอย่าง อาจต้องแก้ให้ตรงกับ endpoint จริงของ backend
     this.http
       .put(
-        'http://localhost:3000/api/update-profile/change-password',
+        environment.apiUrl + '/api/update-profile/change-password',
         { currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } },
       )

@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common'; // ✅ ใหม่: ใช้กับ *ngIf ของรูป preview
+import { NgIf } from '@angular/common';
 import { AuthService } from '../../../services/api';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth, googleProvider } from '../../../firebase-config';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -25,11 +26,9 @@ export class Register {
   weight = '';
   height = '';
 
-  // สถานะโหมดสายตา (เริ่มต้นสว่าง = false)
   isDarkMode = false;
   isGoogleLoading = false;
 
-  // ✅ ใหม่: รูปโปรไฟล์ที่เลือกไว้ตอนสมัคร
   selectedFile: File | null = null;
   avatarPreview: string | null = null;
 
@@ -48,7 +47,6 @@ export class Register {
     }
   }
 
-  // ✅ ใหม่: ตอนเลือกไฟล์รูปจาก input
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -62,42 +60,103 @@ export class Register {
     }
   }
 
+  // ถ้าปีเป็น พ.ศ. (> 2400) แปลงเป็น ค.ศ. ก่อนส่ง
+  private normalizeBirthday(value: string): string {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (!m) return value;
+    let year = Number(m[1]);
+    if (year > 2400) year -= 543;
+    return `${year}-${m[2]}-${m[3]}`;
+  }
+
+  private calcAge(isoDate: string): number {
+    const b = new Date(isoDate);
+    const today = new Date();
+    let age = today.getFullYear() - b.getFullYear();
+    const hadBirthday =
+      today.getMonth() > b.getMonth() ||
+      (today.getMonth() === b.getMonth() && today.getDate() >= b.getDate());
+    if (!hadBirthday) age--;
+    return age;
+  }
+
+  // คืนข้อความ error ถ้าไม่ผ่าน, คืน null ถ้าผ่าน
+  private validate(birthdayIso: string): string | null {
+    if (!this.name.trim() || !this.lastname.trim()) {
+      return 'กรุณากรอกชื่อและนามสกุล';
+    }
+    if (!this.blood_type) return 'กรุณาเลือกหมู่โลหิต';
+
+    const phone = this.phone.replace(/[\s-]/g, '');
+    if (!/^0\d{9}$/.test(phone)) {
+      return 'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก ขึ้นต้นด้วย 0';
+    }
+
+    const w = Number(this.weight);
+    if (!this.weight || isNaN(w) || w < 30 || w > 200) {
+      return 'น้ำหนักต้องอยู่ระหว่าง 30–200 กก.';
+    }
+    const h = Number(this.height);
+    if (!this.height || isNaN(h) || h < 100 || h > 250) {
+      return 'ส่วนสูงต้องอยู่ระหว่าง 100–250 ซม.';
+    }
+
+    if (!birthdayIso) return 'กรุณาเลือกวันเกิด';
+    const age = this.calcAge(birthdayIso);
+    if (isNaN(age) || age < 17 || age > 70) {
+      return 'ผู้บริจาคต้องมีอายุ 17–70 ปี (ตรวจสอบวันเกิดอีกครั้ง)';
+    }
+
+    if (!this.gender) return 'กรุณาเลือกเพศ';
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email.trim())) {
+      return 'รูปแบบอีเมลไม่ถูกต้อง';
+    }
+    if (this.password.length < 8) {
+      return 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+    }
+    return null;
+  }
+
   register() {
-    // ✅ เปลี่ยนจากส่ง JSON ธรรมดา เป็น FormData เพราะต้องแนบไฟล์รูปไปด้วย
+    const birthdayIso = this.normalizeBirthday(this.birthday);
+
+    const error = this.validate(birthdayIso);
+    if (error) {
+      alert(error);
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('name', this.name);
-    formData.append('lastname', this.lastname);
-    formData.append('email', this.email);
+    formData.append('name', this.name.trim());
+    formData.append('lastname', this.lastname.trim());
+    formData.append('email', this.email.trim());
     formData.append('password', this.password);
-    formData.append('phone', this.phone);
+    formData.append('phone', this.phone.replace(/[\s-]/g, ''));
     formData.append('blood_type', this.blood_type);
-    formData.append('birthday', this.birthday);
+    formData.append('birthday', birthdayIso);
     formData.append('gender', this.gender);
     formData.append('weight', this.weight);
     formData.append('height', this.height);
 
-    // ชื่อฟิลด์ 'profile' ต้องตรงกับที่ backend ตั้งไว้ใน upload.single('profile')
     if (this.selectedFile) {
       formData.append('profile', this.selectedFile);
     }
 
-    // หมายเหตุ: ห้ามใส่ Content-Type header เอง ต้องปล่อยให้เบราว์เซอร์ตั้ง
-    // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
+    // ห้ามใส่ Content-Type เอง ให้เบราว์เซอร์ตั้ง multipart/form-data เอง
     this.http
-      .post('http://localhost:3000/api/auth/register', formData)
+      .post(environment.apiUrl + '/api/auth/register', formData)
       .subscribe({
-        next: (res: any) => {
+        next: () => {
           alert('สมัครสมาชิกสำเร็จ!');
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          alert(err.error.message);
+          alert(err.error?.message || 'สมัครสมาชิกไม่สำเร็จ');
         },
       });
   }
 
-  // ✅ ใหม่: สมัครสมาชิก/เข้าสู่ระบบอัตโนมัติด้วย Google
-  // ถ้ายังไม่มีบัญชีในระบบ backend จะสร้างบัญชีผู้บริจาคใหม่ให้อัตโนมัติแล้วเข้าสู่ระบบทันที
   async registerWithGoogle() {
     if (this.isGoogleLoading) return;
     this.isGoogleLoading = true;
@@ -107,7 +166,7 @@ export class Register {
       const idToken = await result.user.getIdToken();
 
       this.http
-        .post('http://localhost:3000/api/auth/google', { idToken })
+        .post(environment.apiUrl + '/api/auth/google', { idToken })
         .subscribe({
           next: (res: any) => {
             this.isGoogleLoading = false;
@@ -131,8 +190,6 @@ export class Register {
             };
             localStorage.setItem('user', JSON.stringify(userPayload));
 
-            // ถ้าเพิ่งสร้างบัญชีใหม่จาก Google ข้อมูลเบอร์โทร/หมู่เลือด ฯลฯ จะยังว่างอยู่
-            // พาไปหน้าแก้ไขโปรไฟล์ให้กรอกข้อมูลที่เหลือให้ครบก่อน
             if (!backendUser.phone || !backendUser.blood_type) {
               alert(
                 'เข้าสู่ระบบสำเร็จ! กรุณากรอกข้อมูลส่วนตัวเพิ่มเติมให้ครบถ้วน',

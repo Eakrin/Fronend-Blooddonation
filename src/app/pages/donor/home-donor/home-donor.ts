@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-home-donor',
@@ -12,13 +13,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomeDonor implements OnInit {
   userName = '';
-  bloodPressure = '-';
-  hemoglobin = '-'; // หมายเหตุ: ไม่มีคอลัมน์เก็บค่านี้ใน ER ปัจจุบัน คงเป็น "-" ตลอด
   bookings: any[] = [];
   showAllBookings = false;
 
-  // ✅ ใหม่: ผลประเมินสุขภาพล่าสุด ดึงจาก Health_Assessment.result_status จริง
-  // null = ยังไม่เคยประเมิน (แสดงเหลือง), 'pass' = เขียว, 'fail' = แดง, 'pending' = เหลือง
+  // null = ยังไม่เคยประเมิน, 'pass' = เขียว, 'fail' = แดง, 'pending' = เหลือง
   assessmentStatus: 'pass' | 'fail' | 'pending' | null = null;
 
   constructor(private http: HttpClient) {}
@@ -36,7 +34,7 @@ export class HomeDonor implements OnInit {
   loadBookings() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/booking', {
+      .get(environment.apiUrl + '/api/booking', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -47,30 +45,27 @@ export class HomeDonor implements OnInit {
       });
   }
 
-  // ✅ ใหม่: ดึงผลประเมินสุขภาพล่าสุด + ความดันโลหิตล่าสุด มาแทนของ hardcode เดิม
   loadHealthSummary() {
     const token = localStorage.getItem('token');
     this.http
-      .get<any>('http://localhost:3000/api/health-assessment/latest-summary', {
+      .get<any>(environment.apiUrl + '/api/health-assessment/latest-summary', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
         next: (res) => {
           this.assessmentStatus = res.result_status;
-          this.bloodPressure = res.pressure || '-';
         },
-        error: () => {
-          // โหลดไม่สำเร็จ ปล่อยเป็นค่า default (เหลือง/ไม่มีข้อมูล) ไม่บล็อกหน้าอื่น
-        },
+        error: () => {},
       });
   }
 
-  // ✅ ใหม่: label + class ของ badge ผลประเมิน (เขียว/แดง/เหลือง)
   get assessmentLabel(): string {
     if (this.assessmentStatus === 'pass')
       return 'ร่างกายพร้อมสำหรับการบริจาคเบื้องต้น';
     if (this.assessmentStatus === 'fail')
       return 'ยังไม่ผ่านเกณฑ์การบริจาคในครั้งล่าสุด';
+    if (this.assessmentStatus === 'pending')
+      return 'รอเจ้าหน้าที่พิจารณาผลการประเมิน';
     return 'ยังไม่มีผลการประเมิน กรุณาทำแบบประเมินก่อน';
   }
 
@@ -86,32 +81,35 @@ export class HomeDonor implements OnInit {
     return 'schedule';
   }
 
-  // เช็คว่ามีการจองที่ active อยู่ไหม
+  // การจองที่ยังต้องดำเนินการอยู่ (รอพิจารณา/อนุมัติ และยังไม่ถูกบันทึกการบริจาค)
   get hasActiveBooking(): boolean {
-    return this.bookings.some((b) => b.booking_status !== 'cancelled');
+    return this.bookings.some(
+      (b) =>
+        (b.booking_status === 'pending' || b.booking_status === 'approved') &&
+        !b.donation_status,
+    );
   }
 
-  // เช็คว่าจองถี่เกินไปไหม (ต้องห่างกัน 56 วัน = 8 สัปดาห์)
+  // นับ 56 วัน (8 สัปดาห์) จากวันที่บริจาคสำเร็จจริงเท่านั้น
   get lastDonationWarning(): string {
-    const active = this.bookings
-      .filter((b) => b.booking_status !== 'cancelled')
+    const donated = this.bookings
+      .filter((b) => b.donation_status === 'completed' && b.donated_at)
       .sort(
         (a, b) =>
-          new Date(b.booking_datetime).getTime() -
-          new Date(a.booking_datetime).getTime(),
+          new Date(b.donated_at).getTime() - new Date(a.donated_at).getTime(),
       );
 
-    if (active.length === 0) return '';
+    if (donated.length === 0) return '';
 
-    const last = new Date(active[0].booking_datetime);
+    const last = new Date(donated[0].donated_at);
     const now = new Date();
     const diffDays = Math.floor(
       (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24),
     );
 
-    if (diffDays < 56) {
-      const remaining = 56 - diffDays;
-      return `ตามเกณฑ์สภากาชาดไทย ท่านต้องรอ ${remaining} วัน ก่อนบริจาคครั้งถัดไป (บริจาคโลหิตรวมห่างกันอย่างน้อย 8 สัปดาห์)`;
+    if (diffDays < 90) {
+      const remaining = 90 - diffDays;
+      return `ตามเกณฑ์สภากาชาดไทย ท่านต้องรอ ${remaining} วัน ก่อนบริจาคครั้งถัดไป (บริจาคโลหิตรวมห่างกันอย่างน้อย 3 เดือน)`;
     }
     return '';
   }
@@ -123,11 +121,9 @@ export class HomeDonor implements OnInit {
   cancelBooking(bookingId: number) {
     if (!confirm('ต้องการยกเลิกการจองนี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
-    // ✅ แก้ไข: route จริงของ backend คือ PUT /api/booking/cancel/:booking_id
-    // (ก่อนหน้านี้ยิง DELETE /api/booking/:id ซึ่งไม่ตรงกับ route ไหนเลย เลย error "เกิดข้อผิดพลาด")
     this.http
       .put(
-        `http://localhost:3000/api/booking/cancel/${bookingId}`,
+        `${environment.apiUrl}/api/booking/cancel/${bookingId}`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -141,6 +137,42 @@ export class HomeDonor implements OnInit {
           alert(err.error?.message || 'เกิดข้อผิดพลาด');
         },
       });
+  }
+
+  // สถานะรวม: ถ้ามีผลบันทึกการบริจาคแล้วใช้ donation_status แทน
+  private statusKey(b: any): string {
+    if (b.booking_status === 'cancelled') return 'cancelled';
+    if (b.donation_status === 'completed') return 'completed';
+    if (b.donation_status === 'deferred') return 'deferred';
+    if (b.donation_status === 'incomplete') return 'incomplete';
+    return b.booking_status;
+  }
+
+  getBookingLabel(b: any): string {
+    const map: any = {
+      pending: 'รอพิจารณา',
+      approved: 'ผ่านการอนุมัติ',
+      rejected: 'ไม่ผ่านเกณฑ์',
+      cancelled: 'ยกเลิก',
+      completed: 'บริจาคสำเร็จ',
+      deferred: 'เลื่อนบริจาค',
+      incomplete: 'บริจาคไม่สำเร็จ',
+    };
+    const key = this.statusKey(b);
+    return map[key] || key;
+  }
+
+  getBookingClass(b: any): string {
+    const map: any = {
+      pending: 'status-pending',
+      approved: 'status-approved',
+      rejected: 'status-rejected',
+      cancelled: 'status-cancelled',
+      completed: 'status-approved',
+      deferred: 'status-pending',
+      incomplete: 'status-rejected',
+    };
+    return map[this.statusKey(b)] || '';
   }
 
   getStatusLabel(status: string): string {

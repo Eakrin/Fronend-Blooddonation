@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../services/api';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth, googleProvider } from '../../../firebase-config';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -96,7 +97,7 @@ export class Login {
       const idToken = await result.user.getIdToken();
 
       this.http
-        .post('http://localhost:3000/api/auth/google', { idToken })
+        .post(environment.apiUrl + '/api/auth/google', { idToken })
         .subscribe({
           next: (res: any) => {
             this.isGoogleLoading = false;

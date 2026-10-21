@@ -130,7 +130,7 @@
         <h2>ข่าวสารและกิจกรรม</h2>
         <p>ติดตามเรื่องราวสร้างแรงบันดาลใจในข่าวสารล่าสุด</p>
       </div>
-      <a href="#" class="news-link">ข่าวสารทั้งหมด <span class="icon">arrow_forward</span></a>
+      <a href="/news" class="news-link">ข่าวสารทั้งหมด <span class="icon">arrow_forward</span></a>
     </div>
     <div class="news-grid">
       <div class="news-card" *ngFor="let post of posts">
@@ -147,13 +147,6 @@
       <div class="news-empty" *ngIf="posts.length === 0">
         <span class="icon">campaign</span>
         <p>ยังไม่มีประกาศในขณะนี้</p>
-      </div>
-
-      <div class="news-announce">
-        <span class="icon">campaign</span>
-        <h4>ประกาศ: รับสมัครพยาบาลวิชาชีพหน่วยเคลื่อนที่</h4>
-        <p>โรงพยาบาลสุธาเวชเปิดรับสมัครบุคลากรทางการแพทย์เพื่อร่วมทีมหน่วยเคลื่อนที่ สนใจสมัครได้แล้ววันนี้</p>
-        <a href="#" class="news-announce-link">ดูรายละเอียด <span class="icon">arrow_forward</span></a>
       </div>
     </div>
   </div>

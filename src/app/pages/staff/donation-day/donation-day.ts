@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-donation-day',
@@ -23,36 +24,23 @@ export class DonationDay implements OnInit {
   startTime = '';
   endTime = '';
   maxQuota: number | null = null;
-  dateOptions: string[] = [];
-  // ✅ เอา timeSlots (list เวลาแบบ 30 นาที) ออก เพราะเปลี่ยนไปใช้
-  // input type="time" ของเบราว์เซอร์แทนแล้ว ไม่ต้อง generate list เองอีก
+  today = new Date().toISOString().split('T')[0];
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.loadSlots();
     this.loadLocations();
-    this.generateDateOptions();
   }
 
-  generateDateOptions() {
-    const today = new Date();
-    for (let i = 0; i < 60; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      this.dateOptions.push(`${yyyy}-${mm}-${dd}`);
-    }
+  private authHeaders() {
+    const token = localStorage.getItem('token');
+    return { headers: { Authorization: `Bearer ${token}` } };
   }
 
   loadLocations() {
-    const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/location', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(environment.apiUrl + '/api/location', this.authHeaders())
       .subscribe({
         next: (res: any) => {
           this.locations = res;
@@ -62,11 +50,8 @@ export class DonationDay implements OnInit {
   }
 
   loadSlots() {
-    const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/donation-day', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(environment.apiUrl + '/api/donation-day', this.authHeaders())
       .subscribe({
         next: (res: any) => {
           this.slots = res;
@@ -106,7 +91,28 @@ export class DonationDay implements OnInit {
     this.isLoading = false;
   }
 
+  // แปลงที่พิมพ์ เช่น 930, 9:30, 0930 ให้เป็น 09:30 ถ้าไม่ใช่เวลาที่ถูกต้องจะคืนค่าว่าง
+  normalizeTime(value: string): string {
+    const digits = (value || '').replace(/\D/g, '');
+    if (digits.length < 3 || digits.length > 4) return '';
+    const h = Number(digits.slice(0, digits.length - 2));
+    const m = Number(digits.slice(-2));
+    if (h > 23 || m > 59) return '';
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+  }
+
   saveSlot() {
+    this.startTime = this.normalizeTime(this.startTime);
+    this.endTime = this.normalizeTime(this.endTime);
+
+    // ปฏิทินของเบราว์เซอร์ภาษาไทยอาจให้ปี พ.ศ. ให้แปลงกลับเป็น ค.ศ.
+    if (this.donationDate) {
+      const [y, m, d] = this.donationDate.split('-');
+      if (Number(y) > 2400) {
+        this.donationDate = `${Number(y) - 543}-${m}-${d}`;
+      }
+    }
+
     if (
       !this.donationDate ||
       !this.locationId ||
@@ -114,11 +120,12 @@ export class DonationDay implements OnInit {
       !this.endTime ||
       !this.maxQuota
     ) {
-      this.errorMsg = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+      this.errorMsg =
+        'กรุณากรอกข้อมูลให้ครบถ้วน (เวลาต้องเป็นรูปแบบ เช่น 09:30)';
       return;
     }
 
-    // ✅ ใหม่: เช็คว่าเวลาสิ้นสุดต้องอยู่หลังเวลาเริ่ม (ป้องกันพิมพ์/เลือกผิดตอนใช้ time picker)
+    // เวลาสิ้นสุดต้องอยู่หลังเวลาเริ่ม
     if (this.endTime <= this.startTime) {
       this.errorMsg = 'เวลาสิ้นสุดต้องอยู่หลังเวลาเริ่ม';
       return;
@@ -127,7 +134,6 @@ export class DonationDay implements OnInit {
     this.isLoading = true;
     this.errorMsg = '';
 
-    const token = localStorage.getItem('token');
     const data = {
       Donation_date: this.donationDate,
       Location_ID: this.locationId,
@@ -138,13 +144,15 @@ export class DonationDay implements OnInit {
 
     const req = this.editingId
       ? this.http.put(
-          `http://localhost:3000/api/donation-day/${this.editingId}`,
+          `${environment.apiUrl}/api/donation-day/${this.editingId}`,
           data,
-          { headers: { Authorization: `Bearer ${token}` } },
+          this.authHeaders(),
         )
-      : this.http.post('http://localhost:3000/api/donation-day', data, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      : this.http.post(
+          environment.apiUrl + '/api/donation-day',
+          data,
+          this.authHeaders(),
+        );
 
     req.subscribe({
       next: () => {
@@ -161,14 +169,18 @@ export class DonationDay implements OnInit {
 
   deleteSlot(slotId: number) {
     if (!confirm('ต้องการลบรายการนี้ใช่ไหม?')) return;
-    const token = localStorage.getItem('token');
     this.http
-      .delete(`http://localhost:3000/api/donation-day/${slotId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .delete(
+        `${environment.apiUrl}/api/donation-day/${slotId}`,
+        this.authHeaders(),
+      )
       .subscribe({
         next: () => this.loadSlots(),
-        error: () => {},
+        error: (err) => {
+          alert(
+            err.error?.message || 'ลบไม่สำเร็จ อาจมีผู้จองช่วงเวลานี้อยู่แล้ว',
+          );
+        },
       });
   }
 }

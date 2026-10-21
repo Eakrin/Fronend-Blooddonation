@@ -538,3 +538,15 @@
   .result-actions { flex-direction: column; }
   .btn-retry, .btn-go-home, .btn-go-booking { width: 100%; justify-content: center; }
 }
+
+
+.result-box .btn-go-home {
+  margin-top: 12px;
+  background: #fff;
+  color: #b71c1c;
+  border: 1px solid #e5b8b8;
+  box-shadow: none;
+}
+.result-box .btn-go-home:hover {
+  background: #fdf1f1;
+}

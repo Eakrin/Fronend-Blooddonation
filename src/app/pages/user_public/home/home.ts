@@ -4,6 +4,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from '../../../services/api';
+import { environment } from '../../../../environments/environment';
 
 interface CareItem {
   title: string;
@@ -100,7 +101,7 @@ export class Home implements OnInit {
   }
 
   loadPosts() {
-    this.http.get('http://localhost:3000/api/post').subscribe({
+    this.http.get(environment.apiUrl + '/api/post').subscribe({
       next: (res: any) => {
         this.posts = res.slice(0, 3);
       },

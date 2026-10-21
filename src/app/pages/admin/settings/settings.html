@@ -7,6 +7,29 @@
 
   <div class="settings-card">
 
+    <!-- เลือกหน่วยงาน -->
+    <section class="settings-section">
+      <div class="section-title">
+        <span class="icon">apartment</span>
+        <h3>หน่วยงาน / สถานที่</h3>
+      </div>
+      <div class="form-group">
+        <label>เลือกหน่วยงาน</label>
+        <select class="location-select" [ngModel]="selectedId" (ngModelChange)="select($event)">
+          <option *ngFor="let l of locations" [ngValue]="l.Location_ID">{{ l.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ชื่อหน่วยงาน / โรงพยาบาล</label>
+        <div class="input-wrapper">
+          <span class="icon input-icon">domain</span>
+          <input type="text" placeholder="ชื่อหน่วยงาน" [(ngModel)]="name">
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
     <!-- ข้อมูลติดต่อ -->
     <section class="settings-section">
       <div class="section-title">
@@ -34,7 +57,7 @@
 
     <div class="divider"></div>
 
-    <!-- เวลาทำการ -->
+    <!-- เวลาทำการ (แสดงอย่างเดียว) -->
     <section class="settings-section">
       <div class="section-title">
         <span class="icon">schedule</span>
@@ -44,12 +67,12 @@
       <div class="schedule-row">
         <span class="day-label">จันทร์ - ศุกร์</span>
         <div class="time-group">
-          <div class="input-wrapper time-input">
-            <input type="time" [(ngModel)]="weekdayStart">
+          <div class="input-wrapper time-input disabled">
+            <input type="time" [(ngModel)]="weekdayStart" disabled>
           </div>
           <span class="time-sep">ถึง</span>
-          <div class="input-wrapper time-input">
-            <input type="time" [(ngModel)]="weekdayEnd">
+          <div class="input-wrapper time-input disabled">
+            <input type="time" [(ngModel)]="weekdayEnd" disabled>
           </div>
         </div>
         <span class="status-open">เปิดทำการ</span>
@@ -59,15 +82,16 @@
         <span class="day-label">เสาร์ - อาทิตย์</span>
         <div class="time-group">
           <div class="input-wrapper time-input disabled">
-            <input type="time" disabled placeholder="--:--">
+            <input type="time" disabled>
           </div>
           <span class="time-sep">ถึง</span>
           <div class="input-wrapper time-input disabled">
-            <input type="time" disabled placeholder="--:--">
+            <input type="time" disabled>
           </div>
         </div>
         <span class="status-closed">ปิดทำการ</span>
       </div>
+      <span class="input-hint">เวลารับบริจาคจริงกำหนดที่หน้า "วันรับบริจาค" ของเจ้าหน้าที่</span>
     </section>
 
     <div class="divider"></div>
@@ -90,14 +114,17 @@
       <p>ข้อมูลส่วนนี้จะแสดงผลบนหน้าเว็บไซต์และในใบยืนยันการจองคิวของผู้บริจาค กรุณาตรวจสอบความถูกต้องของสถานที่เพื่อป้องกันความสับสน</p>
     </div>
 
-    <!-- Actions -->
-    <div class="form-actions">
-      <button class="btn-cancel">ยกเลิก</button>
-      <button class="btn-save">
-        <span class="icon">save</span> บันทึกการเปลี่ยนแปลง
-      </button>
+    <div class="error-box" *ngIf="errorMsg">
+      <span class="icon">error</span> {{ errorMsg }}
     </div>
 
+    <!-- Actions -->
+    <div class="form-actions">
+      <button class="btn-cancel" (click)="cancel()">ยกเลิก</button>
+      <button class="btn-save" (click)="save()" [disabled]="isLoading">
+        <span class="icon">save</span>
+        {{ isLoading ? 'กำลังบันทึก...' : 'บันทึกการเปลี่ยนแปลง' }}
+      </button>
+    </div>
   </div>
-
 </main>

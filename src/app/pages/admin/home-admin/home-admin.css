@@ -274,3 +274,46 @@
 }
 
 .text-muted { color: #64748b; }
+
+/* ไอแพด / จอกลาง */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content { padding: 20px 18px; }
+  .settings-card { padding: 20px; }
+  .data-table { min-width: 0; }
+  .table-container { overflow-x: auto; }
+}
+
+/* คอมพิวเตอร์: ให้เนื้อหากว้างเต็มจอแต่ไม่กว้างเกินไปจนอ่านยาก */
+@media (min-width: 1025px) {
+  .main-content { max-width: 1400px; }
+}
+
+.chart-bars {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: 12px;
+  height: 200px;
+  padding-top: 8px;
+}
+.bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+.bar-wrapper .bar {
+  width: 55%;
+  max-width: 48px;
+  min-height: 4px;
+  background: linear-gradient(180deg, #d81b2e, #a30f1a);
+  border-radius: 8px 8px 0 0;
+  transition: height 0.4s ease;
+}
+.bar-wrapper span {
+  font-size: 12px;
+  color: #98a2b3;
+}

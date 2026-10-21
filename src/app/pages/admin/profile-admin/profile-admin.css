@@ -302,3 +302,56 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(193, 18, 31, 0.4);
 }
+
+.error-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fdecea;
+  color: #b71c1c;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 12px 0;
+}
+
+/* ไอแพด / จอกลาง */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-content { padding: 20px 18px; }
+  .settings-card { padding: 20px; }
+  .data-table { min-width: 0; }
+  .table-container { overflow-x: auto; }
+}
+
+/* คอมพิวเตอร์: ให้เนื้อหากว้างเต็มจอแต่ไม่กว้างเกินไปจนอ่านยาก */
+@media (min-width: 1025px) {
+  .main-content { max-width: 1400px; }
+}
+
+.date-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.date-field input[type="date"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.date-field input.empty::-webkit-datetime-edit {
+  color: transparent;
+}
+.date-ph {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.google-logo {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-right: 10px;
+}

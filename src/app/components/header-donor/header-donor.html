@@ -1,23 +1,20 @@
 <header class="header">
   <div class="container">
 
-    <!-- Logo -->
     <div class="logo">
       <div class="logo-icon"><span class="icon">opacity</span></div>
       <div class="logo-text">
         <h3>สุทธาเวช</h3>
-        <span>SUTTAVEJ BLOOD CENTER</span>
+        <span>ระบบจองช่วงเวลาบริจาคโลหิต</span>
       </div>
     </div>
 
-    <!-- Menu -->
     <nav class="menu">
       <a routerLink="/home-donor" routerLinkActive="active">หน้าหลัก</a>
       <a routerLink="/location" routerLinkActive="active">ค้นหาสถานที่บริจาค</a>
-      <a routerLink="/booking-history" routerLinkActive="active">คลังของฉัน</a>
+      <a routerLink="/booking-history" routerLinkActive="active">รายการของฉัน</a>
     </nav>
 
-    <!-- Right -->
     <div class="user-info">
 
       <div class="notif-btn">
@@ -52,7 +49,37 @@
         </div>
       </div>
 
+      <button type="button" class="menu-toggle" (click)="toggleMenu()" aria-label="เมนู">
+        <span class="icon">{{ isMenuOpen ? 'close' : 'menu' }}</span>
+      </button>
+
     </div>
 
   </div>
-</header>
+
+  <!-- เมนูบนมือถือ -->
+  <nav class="mobile-menu" *ngIf="isMenuOpen">
+    <div class="mobile-user">
+      <span class="d-name">{{ userName }}</span>
+      <span class="d-role">ผู้บริจาคโลหิต</span>
+    </div>
+
+    <a routerLink="/home-donor" routerLinkActive="active" (click)="closeMenu()">
+      <span class="icon">home</span> หน้าหลัก
+    </a>
+    <a routerLink="/location" routerLinkActive="active" (click)="closeMenu()">
+      <span class="icon">location_on</span> ค้นหาสถานที่บริจาค
+    </a>
+    <a routerLink="/booking-history" routerLinkActive="active" (click)="closeMenu()">
+      <span class="icon">receipt_long</span> รายการของฉัน
+    </a>
+
+    <div class="mobile-divider"></div>
+
+    <a class="mobile-action" (click)="closeMenu(); goToProfile()">
+      <span class="icon">person</span> โปรไฟล์ของฉัน
+    </a>
+    <a class="mobile-action logout" (click)="logout()">
+      <span class="icon">logout</span> ออกจากระบบ
+    </a>
+  </nav>

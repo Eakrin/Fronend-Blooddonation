@@ -44,9 +44,9 @@ export const routes: Routes = [
   { path: 'booking-history', component: BookingHistory },
 
   // โซนของ Admin (ปรับแก้ให้ตรงสิทธิ์)
-  { path: 'home-admin', component: HomeAdmin }, // 👈 2. แก้ให้วิ่งไปที่หน้าหลักของแอดมินก่อน
-  { path: 'manage-accounts', component: ManageAccounts }, // 👈 3. ส่วนหน้านี้เอาไว้กดลิงก์ไปทีหลังเมื่อล็อกอินเข้าหน้าหลักแล้ว
-  { path: 'settings', component: Settings }, // 👈 4. ส่วนหน้านี้เอาไว้กดลิงก์ไปทีหลังเมื่อล็อกอินเข้าหน้าหลักแล้ว
+  { path: 'home-admin', component: HomeAdmin },
+  { path: 'manage-accounts', component: ManageAccounts },
+  { path: 'settings', component: Settings },
   { path: 'profile-admin', component: profileAdmin },
 
   // โซนของ Staff

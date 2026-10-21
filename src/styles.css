@@ -9,3 +9,68 @@ body{
   margin:0;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ===== หน้าแอดมินบนมือถือ (ไม่เกิน 768px) ===== */
+@media (max-width: 768px) {
+  body:has(app-sidebar-admin) .main-content {
+    padding: 64px 14px 24px !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ฟอร์มสองคอลัมน์ ให้เรียงเป็นแถวเดียว */
+  body:has(app-sidebar-admin) .form-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  /* เวลาทำการ */
+  body:has(app-sidebar-admin) .schedule-row { flex-wrap: wrap; gap: 10px; }
+  body:has(app-sidebar-admin) .time-group { flex-wrap: wrap; width: 100%; }
+  body:has(app-sidebar-admin) .time-input { flex: 1 1 130px; min-width: 0; }
+
+  /* เปลี่ยนรหัสผ่าน: กล่องข้อกำหนดลงมาอยู่ใต้ช่องกรอก */
+  body:has(app-sidebar-admin) .password-layout {
+    display: flex !important;
+    flex-direction: column;
+    gap: 16px;
+  }
+  body:has(app-sidebar-admin) .password-rules { width: 100%; box-sizing: border-box; }
+
+  /* ปุ่มล่างเต็มความกว้าง */
+  body:has(app-sidebar-admin) .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  body:has(app-sidebar-admin) .form-actions button { width: 100%; }
+
+  /* ตาราง: เลื่อนซ้าย-ขวาได้ แทนที่จะล้นขอบ */
+  body:has(app-sidebar-admin) .table-container,
+  body:has(app-sidebar-admin) .table-card,
+  body:has(app-sidebar-admin) .list-card,
+  body:has(app-sidebar-admin) .card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  body:has(app-sidebar-admin) table { min-width: 520px; }
+  body:has(app-sidebar-admin) th,
+  body:has(app-sidebar-admin) td { white-space: nowrap; }
+}
+
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+  color: #1f2937;
+}
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.2em;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}

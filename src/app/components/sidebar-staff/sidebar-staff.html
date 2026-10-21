@@ -11,7 +11,7 @@
     </button>
   </div>
 
-  <nav class="sidebar-menu">
+   <nav class="sidebar-menu" (click)="closeOnMobile()">
     <a routerLink="/home-staff" routerLinkActive="active" class="menu-item"
       [title]="isCollapsed ? 'รายชื่อผู้จอง' : ''">
       <span class="icon">groups</span>
@@ -25,10 +25,6 @@
       [title]="isCollapsed ? 'ประชาสัมพันธ์' : ''">
       <span class="icon">campaign</span>
       <span class="menu-text" *ngIf="!isCollapsed">ประชาสัมพันธ์</span>
-    </a>
-    <a routerLink="/record-staff" routerLinkActive="active" class="menu-item">
-      <span class="icon">assignment</span>
-      <span class="menu-text" *ngIf="!isCollapsed">บันทึกการเข้าใช้บริการ</span>
     </a>
     <a routerLink="/location-staff" routerLinkActive="active" class="menu-item">
       <span class="icon">location_on</span>

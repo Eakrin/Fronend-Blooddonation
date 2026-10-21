@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../../services/api';
+import { environment } from '../../../../environments/environment';
 
 type Severity = 'hard' | 'soft';
 type ResultLevel = 'green' | 'yellow' | 'red';
@@ -18,20 +19,23 @@ export class AssessmentQuiz implements OnInit {
   currentStep = 0;
   progressPercent = 0;
 
-  // ✅ ผลลัพธ์ 3 ระดับ ตามสเปก 1.3.3.4
-  // green  = ผ่าน จองคิวได้ทันที
-  // yellow = มีคำตอบที่ต้องให้เจ้าหน้าที่ตรวจสอบก่อนอนุญาตให้จอง
-  // red    = ไม่ผ่าน (มีคำตอบที่เป็นข้อห้ามเด็ดขาด)
+  // ผลลัพธ์ 3 ระดับ: green = ผ่าน / yellow = ให้เจ้าหน้าที่ตรวจสอบ / red = ไม่ผ่าน
   resultLevel: ResultLevel = 'green';
   failedQuestions: any[] = [];
 
-  // ✅ ตาม ER: คะแนนที่ได้ = ผลรวม Score ของข้อที่ตอบถูก (ตอบถูกได้ Score ตอบผิดได้ 0)
+  // ตาม ER: คะแนนที่ได้ = ผลรวม Score ของข้อที่ตอบถูก
   scoreEarned = 0;
   scoreMax = 0;
 
-  // คงชื่อ property เดิมไว้เผื่อมีที่อื่นในโค้ด (เช่น html) อ้างถึงอยู่
+  // เส้นทางหน้าแก้ไขโปรไฟล์ (ถ้าใน app.routes.ts ใช้ path อื่น ให้แก้ตรงนี้ที่เดียว)
+  private readonly profilePath = '/edit-profile';
+
   get isAssessmentPassed(): boolean {
     return this.resultLevel === 'green';
+  }
+
+  get isAssessmentPending(): boolean {
+    return this.resultLevel === 'yellow';
   }
 
   stepTitles = [
@@ -50,15 +54,11 @@ export class AssessmentQuiz implements OnInit {
     deferredReason: '',
   };
 
-  // ── ระดับความรุนแรง (hard = ข้อห้ามเด็ดขาด / soft = ต้องเลื่อนหรือให้เจ้าหน้าที่พิจารณา) ──
-  // ER ไม่มีคอลัมน์ severity ใน Assessment_Question จึงกำหนดรายการข้อ hard ไว้ที่นี่
-  // ข้อ 11 (ตั้งครรภ์/ให้นมบุตรอยู่), 22 (ปลูกถ่ายอวัยวะ/เซลล์ต้นกำเนิด), 24 (ตับอักเสบหลังอายุ 11 ปี),
-  // 26 (พาหะตับอักเสบ), 32 (ประวัติเสพยาเสพติด), 34 (อาการ/ผลตรวจ HIV), 38 (ไม่มั่นใจว่าโลหิตปลอดภัย)
-  // ข้อที่เหลือเป็น soft (เช่น ข้อ 35, 36 พำนักในต่างประเทศ ข้อ 4 โรคประจำตัว ต้องให้เจ้าหน้าที่พิจารณา)
+  // ข้อ hard = ข้อห้ามเด็ดขาด, ข้อที่เหลือ = soft (ให้เจ้าหน้าที่พิจารณา)
   private readonly hardQuestionIds = [11, 22, 24, 26, 32, 34, 38];
 
-  // ✅ ตาม ER: คำถามโหลดจากตาราง Assessment_Question (ไม่ฝังในโค้ดอีกต่อไป)
-  // expected = answer ในตาราง (1 = คำตอบที่ถูกคือ "ใช่", 0 = คำตอบที่ถูกคือ "ไม่ใช่")
+  // คำถามโหลดจากตาราง Assessment_Question
+  // expected = answer ในตาราง (1 = คำตอบที่ถูกคือ "ใช่", 0 = "ไม่ใช่")
   questions: {
     id: number;
     step: number;
@@ -81,12 +81,31 @@ export class AssessmentQuiz implements OnInit {
     this.currentStep = 0;
     this.progressPercent = 0;
     this.loadQuestions();
+    this.checkProfile(); // บัญชี Google ที่ยังกรอกโปรไฟล์ไม่ครบ จะถูกส่งไปกรอกก่อน
   }
 
-  // ✅ ตาม ER: ดึงคำถามจาก Assessment_Question ผ่าน API
+  // บัญชี Google ที่ยังกรอกโปรไฟล์ไม่ครบ ต้องกรอกก่อนจึงทำแบบประเมินได้
+  checkProfile() {
+    const token = this.auth.getToken();
+    fetch(environment.apiUrl + '/api/health-assessment/profile-status', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((r: any) => {
+        if (r && r.complete === false) {
+          alert(
+            'กรุณากรอกข้อมูลส่วนตัวให้ครบก่อนทำแบบประเมิน\nข้อมูลที่ยังขาด: ' +
+              r.missing.join(', '),
+          );
+          this.router.navigate([this.profilePath]);
+        }
+      })
+      .catch(() => {});
+  }
+
   loadQuestions() {
     const token = this.auth.getToken();
-    fetch('http://localhost:3000/api/health-assessment/questions', {
+    fetch(environment.apiUrl + '/api/health-assessment/questions', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -145,6 +164,9 @@ export class AssessmentQuiz implements OnInit {
     if (this.currentStep > 0) {
       this.currentStep--;
       this.updateProgress();
+    } else {
+      // ขั้นแรก: ย้อนกลับออกจากหน้าแบบประเมินไปหน้าหลัก
+      this.router.navigate(['/home-donor']);
     }
   }
 
@@ -154,7 +176,7 @@ export class AssessmentQuiz implements OnInit {
     );
     this.failedQuestions = wrongAnswers;
 
-    // ✅ คำนวณคะแนน: ตอบถูกได้ Score (ปกติ 1) ตอบผิดได้ 0
+    // คำนวณคะแนน: ตอบถูกได้ Score (ปกติ 1) ตอบผิดได้ 0
     this.scoreMax = this.questions.reduce((sum, q) => sum + q.score, 0);
     this.scoreEarned = this.questions
       .filter((q) => q.userAnswer === q.expected)
@@ -172,15 +194,14 @@ export class AssessmentQuiz implements OnInit {
     }
 
     this.saveAssessmentToDatabase();
-    this.currentStep = 4; // ✅ แสดงผลก่อนเสมอ ไม่ redirect เลย
+    this.currentStep = 4; // แสดงผลก่อนเสมอ
   }
 
   saveAssessmentToDatabase() {
     const token = this.auth.getToken();
     if (!token) return;
 
-    // ✅ ค่าต้องตรงกับ ENUM ของคอลัมน์ result_status ในตาราง Health_Assessment จริง
-    // (enum('pass','fail','pending')) ไม่ใช่ 'passed'/'failed'/'pending_review'
+    // ค่าต้องตรงกับ ENUM ของ result_status ใน Health_Assessment (pass/fail/pending)
     const statusMap: Record<ResultLevel, string> = {
       green: 'pass',
       yellow: 'pending',
@@ -192,7 +213,7 @@ export class AssessmentQuiz implements OnInit {
       assessment_date: new Date().toISOString(),
     };
 
-    fetch('http://localhost:3000/api/health-assessment', {
+    fetch(environment.apiUrl + '/api/health-assessment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -200,11 +221,18 @@ export class AssessmentQuiz implements OnInit {
       },
       body: JSON.stringify(payload),
     })
-      .then(() => {
-        console.log('✅ บันทึก Health_Assessment สำเร็จ');
+      .then(async (res) => {
+        if (!res.ok) {
+          // เช่น 403 กรณีบัญชี Google ยังกรอกโปรไฟล์ไม่ครบ (backend กันไว้อีกชั้น)
+          const body = await res.json().catch(() => ({}));
+          alert(body.message || 'บันทึกผลแบบประเมินไม่สำเร็จ');
+          if (res.status === 403) this.router.navigate([this.profilePath]);
+          return;
+        }
+        console.log('บันทึก Health_Assessment สำเร็จ');
       })
       .catch((err) => {
-        console.error('❌ บันทึกไม่สำเร็จ', err);
+        console.error('บันทึกไม่สำเร็จ', err);
       });
 
     if (this.resultLevel === 'green') {

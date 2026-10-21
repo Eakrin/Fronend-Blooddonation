@@ -427,3 +427,13 @@
   .login-box { width: 100%; padding: 32px 24px; border-radius: 20px; }
   .features, .stats { display: none; }
 }
+.google-logo {
+  flex-shrink: 0;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}

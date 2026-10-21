@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-location-staff',
@@ -51,7 +52,7 @@ export class LocationStaff implements OnInit {
   loadLocations() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/location', {
+      .get(environment.apiUrl + '/api/location', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -103,11 +104,11 @@ export class LocationStaff implements OnInit {
 
     const req = this.editingId
       ? this.http.put(
-          `http://localhost:3000/api/location/${this.editingId}`,
+          `${environment.apiUrl}/api/location/${this.editingId}`,
           this.form,
           { headers: { Authorization: `Bearer ${token}` } },
         )
-      : this.http.post('http://localhost:3000/api/location', this.form, {
+      : this.http.post(environment.apiUrl + '/api/location', this.form, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -128,7 +129,7 @@ export class LocationStaff implements OnInit {
     if (!confirm('ต้องการลบสถานที่นี้ใช่ไหม?')) return;
     const token = localStorage.getItem('token');
     this.http
-      .delete(`http://localhost:3000/api/location/${id}`, {
+      .delete(`${environment.apiUrl}/api/location/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

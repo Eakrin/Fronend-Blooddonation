@@ -3,11 +3,12 @@ import { Router, RouterLink } from '@angular/router';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-location',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, DatePipe, RouterLink],
+  imports: [NgFor, NgIf, FormsModule, DatePipe],
   templateUrl: './location.html',
   styleUrls: ['./location.css'],
 })
@@ -32,7 +33,7 @@ export class Location implements OnInit {
   }
 
   loadLocations() {
-    this.http.get('http://localhost:3000/api/location').subscribe({
+    this.http.get(environment.apiUrl + '/api/location').subscribe({
       next: (res: any) => {
         this.locations = res;
       },
@@ -41,7 +42,7 @@ export class Location implements OnInit {
   }
 
   loadDonationDays() {
-    this.http.get('http://localhost:3000/api/donation-day').subscribe({
+    this.http.get(environment.apiUrl + '/api/donation-day').subscribe({
       next: (res: any) => {
         this.donationDays = res;
       },
@@ -57,7 +58,7 @@ export class Location implements OnInit {
     if (!token) return; // ยังไม่ล็อกอิน ไม่ต้องเช็ค ปล่อยให้กดจองแล้วเด้งไป /login เอง
 
     this.http
-      .get<any[]>('http://localhost:3000/api/booking', {
+      .get<any[]>(environment.apiUrl + '/api/booking', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({

@@ -30,19 +30,41 @@
     </div>
   </header>
 
+  <!-- แจ้งเตือนเมื่อมีผลประเมินสีเหลืองที่รอพิจารณาเกิน 24 ชั่วโมง -->
+  <div class="overdue-alert" *ngIf="overdueCount > 0">
+    <span class="icon">warning</span>
+    มี {{ overdueCount }} รายการที่ผลประเมินสีเหลืองรอพิจารณาเกิน 24 ชั่วโมง กรุณาตรวจสอบและอนุมัติ/ปฏิเสธ
+  </div>
+
+  <!-- แท็บสถานะ: กดเลือกดูเฉพาะกลุ่มที่ต้องการ -->
+  <div class="tab-group">
+    <button class="tab-chip" [class.active]="filterStatus === ''" (click)="setStatusTab('')">
+      ทั้งหมด <span class="tab-count">{{ countTab('') }}</span>
+    </button>
+    <button class="tab-chip" [class.active]="filterStatus === 'pending'" (click)="setStatusTab('pending')">
+      รอพิจารณา <span class="tab-count">{{ countTab('pending') }}</span>
+    </button>
+    <button class="tab-chip" [class.active]="filterStatus === 'approved'" (click)="setStatusTab('approved')">
+      อนุมัติแล้ว <span class="tab-count">{{ countTab('approved') }}</span>
+    </button>
+    <button class="tab-chip" [class.active]="filterStatus === 'other'" (click)="setStatusTab('other')">
+      ไม่ผ่าน/ยกเลิก <span class="tab-count">{{ countTab('other') }}</span>
+    </button>
+  </div>
+
   <!-- Filter Bar -->
   <div class="filter-bar">
     <div class="search-box">
       <span class="icon search-icon">search</span>
-      <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาด้วยชื่อ-นามสกุล หรือเบอร์โทรศัพท์...">
+      <input type="text" [(ngModel)]="searchText" (ngModelChange)="page = 1" placeholder="ค้นหาด้วยชื่อ-นามสกุล หรือเบอร์โทรศัพท์...">
     </div>
-    <select class="filter-select" [(ngModel)]="filterStatus">
-      <option value="">ทุกสถานะ</option>
-      <option value="pending">รอพิจารณา</option>
-      <option value="approved">อนุมัติแล้ว</option>
-      <option value="rejected">ไม่ผ่านเกณฑ์</option>
-      <option value="cancelled">ยกเลิก</option>
-    </select>
+    <div class="date-filter">
+      <span class="icon">calendar_today</span>
+      <input type="date" class="date-input" [(ngModel)]="filterDate" (ngModelChange)="page = 1" title="กรองตามวันที่จอง">
+    </div>
+    <button class="btn-clear" *ngIf="hasActiveFilter" (click)="clearFilters()">
+      <span class="icon">filter_alt_off</span> ล้างตัวกรอง
+    </button>
   </div>
 
   <!-- Table -->
@@ -52,14 +74,17 @@
         <tr>
           <th>ชื่อ-นามสกุล</th>
           <th>เบอร์โทร</th>
-          <th>วันที่/เวลาจอง</th>
+          <th>สถานที่</th>
+          <th>วันที่และช่วงเวลาที่จอง</th>
           <th>ผลคัดกรองสุขภาพ</th>
           <th>สถานะการจอง</th>
           <th class="text-center">จัดการ</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let b of filteredBookings">
+        <tr *ngFor="let b of pagedBookings"
+            [class.row-overdue]="isOverdue(b)"
+            [class.row-pending]="!isOverdue(b) && b.booking_status === 'pending'">
           <td>
             <div class="donor-profile">
               <div class="donor-avatar">{{ getInitials(b.name, b.lastname) }}</div>
@@ -67,7 +92,14 @@
             </div>
           </td>
           <td class="text-muted">{{ b.phone || '-' }}</td>
-          <td class="text-muted">{{ b.booking_datetime | date:'d MMM yyyy HH:mm' }}</td>
+          <td class="text-muted">{{ b.location_name || '-' }}</td>
+          <td>
+            <div class="slot-date">{{ b.booking_datetime | date:'d MMM yyyy' }}</div>
+            <div class="slot-time">
+              <span class="icon">schedule</span>
+              {{ getSlotRange(b) }}
+            </div>
+          </td>
           <td>
             <span class="status-badge"
               [class.ready]="b.assessment_status === 'pass'"
@@ -75,6 +107,11 @@
               [class.failed]="b.assessment_status === 'fail'">
               ● {{ getAssessmentLabel(b.assessment_status) }}
             </span>
+            <!-- ขอบเขต 1.3.2.6: ผลสีเหลืองต้องให้เจ้าหน้าที่พิจารณาภายใน 24 ชม. -->
+            <div class="wait-note" *ngIf="isWaitingReview(b)" [class.overdue]="isOverdue(b)">
+              <span class="icon">schedule</span>
+              {{ isOverdue(b) ? 'เกิน 24 ชม. แล้ว' : 'รอมาแล้ว ' + getWaitHours(b) + ' ชม. (เหลือ ' + (24 - getWaitHours(b)) + ' ชม.)' }}
+            </div>
           </td>
           <td>
             <span class="status-badge"
@@ -97,7 +134,7 @@
                       (click)="updateStatus(b.Booking_ID, 'rejected')">
                 <span class="icon">close</span> ปฏิเสธ
               </button>
-              <!-- ✅ ใหม่: เจ้าหน้าที่บันทึกข้อมูล ณ จุดรับบริการ ได้เฉพาะรายการที่อนุมัติแล้วเท่านั้น -->
+              <!-- เจ้าหน้าที่บันทึกข้อมูล ณ จุดรับบริการ ได้เฉพาะรายการที่อนุมัติแล้วเท่านั้น -->
               <a class="btn-record" *ngIf="b.booking_status === 'approved'" [routerLink]="['/record-staff', b.Booking_ID]">
                 <span class="icon">edit_note</span> บันทึกข้อมูล
               </a>
@@ -109,7 +146,7 @@
         </tr>
 
         <tr *ngIf="filteredBookings.length === 0">
-          <td colspan="6" class="empty-row">
+          <td colspan="7" class="empty-row">
             <span class="icon">inbox</span>
             <p>ไม่พบรายการ</p>
           </td>
@@ -118,8 +155,18 @@
     </table>
 
     <div class="table-footer">
-      <span class="entry-info">ทั้งหมด {{ filteredBookings.length }} รายการ</span>
+      <span class="entry-info">
+        แสดง {{ rangeStart }}-{{ rangeEnd }} จากทั้งหมด {{ filteredBookings.length }} รายการ
+      </span>
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+          <span class="icon">chevron_left</span>
+        </button>
+        <span class="page-info">หน้า {{ currentPage }} / {{ totalPages }}</span>
+        <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+          <span class="icon">chevron_right</span>
+        </button>
+      </div>
     </div>
   </div>
-
 </main>

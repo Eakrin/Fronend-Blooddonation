@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-manage-accounts',
@@ -58,7 +59,7 @@ export class ManageAccounts implements OnInit {
   loadStaff() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/admin/staff', {
+      .get(environment.apiUrl + '/api/admin/staff', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -74,7 +75,7 @@ export class ManageAccounts implements OnInit {
   loadAdmins() {
     const token = localStorage.getItem('token');
     this.http
-      .get('http://localhost:3000/api/admin/admins', {
+      .get(environment.apiUrl + '/api/admin/admins', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .subscribe({
@@ -89,7 +90,7 @@ export class ManageAccounts implements OnInit {
     const token = localStorage.getItem('token');
     this.http
       .put(
-        `http://localhost:3000/api/admin/admins/${admin.Admin_ID}/status`,
+        `${environment.apiUrl}/api/admin/admins/${admin.Admin_ID}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -159,8 +160,8 @@ export class ManageAccounts implements OnInit {
         };
 
     const url = isAdmin
-      ? 'http://localhost:3000/api/admin/create-admin'
-      : 'http://localhost:3000/api/admin/create-staff';
+      ? environment.apiUrl + '/api/admin/create-admin'
+      : environment.apiUrl + '/api/admin/create-staff';
 
     this.http
       .post(url, data, { headers: { Authorization: `Bearer ${token}` } })
@@ -227,7 +228,7 @@ export class ManageAccounts implements OnInit {
 
     this.http
       .put(
-        `http://localhost:3000/api/admin/staff/${this.editStaff.Staff_ID}`,
+        `${environment.apiUrl}/api/admin/staff/${this.editStaff.Staff_ID}`,
         data,
         { headers: { Authorization: `Bearer ${token}` } },
       )
