@@ -107,9 +107,9 @@ export class HomeDonor implements OnInit {
       (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24),
     );
 
-    if (diffDays < 56) {
-      const remaining = 56 - diffDays;
-      return `ตามเกณฑ์สภากาชาดไทย ท่านต้องรอ ${remaining} วัน ก่อนบริจาคครั้งถัดไป (บริจาคโลหิตรวมห่างกันอย่างน้อย 8 สัปดาห์)`;
+    if (diffDays < 90) {
+      const remaining = 90 - diffDays;
+      return `ตามเกณฑ์สภากาชาดไทย ท่านต้องรอ ${remaining} วัน ก่อนบริจาคครั้งถัดไป (บริจาคโลหิตรวมห่างกันอย่างน้อย 3 เดือน)`;
     }
     return '';
   }
