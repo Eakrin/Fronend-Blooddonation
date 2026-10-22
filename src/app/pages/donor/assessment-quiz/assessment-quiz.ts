@@ -37,6 +37,15 @@ export class AssessmentQuiz implements OnInit {
   get isAssessmentPending(): boolean {
     return this.resultLevel === 'yellow';
   }
+  get resultReason(): string {
+    if (this.resultLevel === 'red') {
+      return 'ขณะนี้สุขภาพหรือประวัติของท่านยังไม่เข้าเกณฑ์การบริจาคโลหิตของสภากาชาดไทย';
+    }
+    if (this.resultLevel === 'yellow') {
+      return 'เจ้าหน้าที่จะซักถามข้อมูลสุขภาพเพิ่มเติมก่อนวันบริจาค';
+    }
+    return '';
+  }
 
   stepTitles = [
     'ข้อมูลทั่วไปและประวัติการบริจาค',
