@@ -1,31 +1,31 @@
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
-<div class="profile-container">
-
-  <!-- PAGE TITLE -->
-  <div class="page-title-section">
-    <div class="back-row">
-      <button type="button" class="btn-back-page" (click)="goBack()">
-        <span class="material-icons-round">arrow_back</span> ย้อนกลับ
-      </button>
-    </div>
-    <div class="page-title-left">
-      <div class="page-title-icon">
-        <span class="material-icons-round">manage_accounts</span>
-      </div>
+<!-- HERO -->
+<section class="p-hero">
+  <span class="drop d1"></span>
+  <span class="drop d2"></span>
+  <span class="drop d3"></span>
+  <div class="hero-inner">
+    <button type="button" class="btn-back-page" (click)="goBack()">
+      <span class="material-icons-round">arrow_back</span> ย้อนกลับ
+    </button>
+    <div class="hero-title">
+      <div class="page-title-icon"><span class="material-icons-round">manage_accounts</span></div>
       <div>
         <h1 class="page-title">โปรไฟล์ของฉัน</h1>
         <p class="page-subtitle">จัดการข้อมูลส่วนตัวและความปลอดภัยของบัญชีคุณ</p>
       </div>
     </div>
   </div>
+</section>
+
+<div class="profile-container">
 
   <!-- LEFT COL -->
   <div class="left-col">
 
     <div class="profile-card avatar-card">
-      <div class="avatar-card-bg"></div>
       <div class="avatar-section">
         <div class="avatar-wrapper">
           <div class="avatar-ring"></div>
@@ -34,7 +34,7 @@
             <span *ngIf="!avatarPreview" class="material-icons-round avatar-icon">person</span>
           </div>
           <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden>
-          <button type="button" class="upload-btn" (click)="fileInput.click()" [disabled]="isReadOnly">
+          <button type="button" class="upload-btn" (click)="fileInput.click()" [disabled]="isReadOnly" title="เปลี่ยนรูปโปรไฟล์">
             <span class="material-icons-round">photo_camera</span>
           </button>
         </div>
@@ -47,6 +47,8 @@
           <span class="material-icons-round role-icon">favorite</span>
           ผู้บริจาคโลหิต
         </span>
+
+        <p class="avatar-hint" *ngIf="!isReadOnly">กดไอคอนกล้องเพื่อเปลี่ยนรูปโปรไฟล์</p>
 
         <div class="profile-stats">
           <div class="stat-item" *ngIf="profileForm.get('blood_type')?.value">
@@ -69,18 +71,13 @@
 
     <div class="profile-card tips-card">
       <div class="tips-header">
-        <span class="material-icons-round tips-icon">lightbulb</span>
+        <span class="tips-icon-wrap"><span class="material-icons-round tips-icon">lightbulb</span></span>
         <span class="tips-title">คำแนะนำ</span>
       </div>
       <ul class="tips-list">
-        <li>
-          <span class="tip-dot"></span>
-          กรุณาใช้อีเมลที่ติดต่อได้จริงเพื่อรับผลตรวจทางออนไลน์
-        </li>
-        <li>
-          <span class="tip-dot"></span>
-          ข้อมูลส่วนตัวจะถูกเก็บเป็นความลับตามโยบาย PDPA
-        </li>
+        <li><span class="tip-dot"></span>กรุณาใช้อีเมลที่ติดต่อได้จริง เพื่อรับการแจ้งเตือนนัดหมาย</li>
+        <li><span class="tip-dot"></span>ข้อมูลส่วนตัวจะถูกเก็บเป็นความลับตามนโยบาย PDPA</li>
+        <li><span class="tip-dot"></span>น้ำหนักและส่วนสูงควรเป็นข้อมูลปัจจุบัน เพื่อใช้ประเมินความพร้อมก่อนบริจาค</li>
       </ul>
     </div>
 
@@ -137,7 +134,7 @@
         </div>
 
         <div class="form-separator">
-          <span>ข้อมูลสุขภาพ</span>
+          <span><span class="material-icons-round sep-icon">favorite</span> ข้อมูลสุขภาพ</span>
         </div>
 
         <div class="form-row-half">
@@ -180,11 +177,17 @@
         <div class="form-row-half">
           <div class="form-group">
             <label class="form-label">น้ำหนัก (กก.)</label>
-            <input type="number" formControlName="weight" [readonly]="isReadOnly" class="form-input" placeholder="กก.">
+            <div class="input-icon-wrap">
+              <span class="input-prefix-icon material-icons-round">monitor_weight</span>
+              <input type="number" formControlName="weight" [readonly]="isReadOnly" class="form-input has-prefix-icon" placeholder="กก.">
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">ส่วนสูง (ซม.)</label>
-            <input type="number" formControlName="height" [readonly]="isReadOnly" class="form-input" placeholder="ซม.">
+            <div class="input-icon-wrap">
+              <span class="input-prefix-icon material-icons-round">height</span>
+              <input type="number" formControlName="height" [readonly]="isReadOnly" class="form-input has-prefix-icon" placeholder="ซม.">
+            </div>
           </div>
         </div>
 
@@ -216,7 +219,6 @@
         </button>
       </div>
 
-      <!-- ฟอร์มเปลี่ยนรหัสผ่าน -->
       <div class="password-form" *ngIf="showPasswordForm" [formGroup]="passwordForm">
         <div class="form-group">
           <label class="form-label">รหัสผ่านปัจจุบัน</label>

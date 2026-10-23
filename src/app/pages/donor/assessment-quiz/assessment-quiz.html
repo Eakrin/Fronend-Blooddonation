@@ -208,15 +208,19 @@
       </div>
 
       <!-- รอเจ้าหน้าที่พิจารณา (เหลือง) -->
-      <div class="result-box pass" *ngIf="isAssessmentPending">
-        <div class="result-icon-wrap pass">
+      <div class="result-box pending" *ngIf="isAssessmentPending">
+        <div class="result-icon-wrap pending">
           <div class="result-icon-circle">!</div>
         </div>
-        <div class="result-badge pass-badge">รอเจ้าหน้าที่พิจารณา</div>
+        <div class="result-badge pending-badge">รอเจ้าหน้าที่พิจารณา</div>
         <h2>ผลการประเมินของท่านต้องให้เจ้าหน้าที่ตรวจสอบเพิ่มเติม</h2>
         <p class="result-score">คะแนนของท่าน: {{ scoreEarned }} / {{ scoreMax }}</p>
         <p>{{ resultReason }}</p>
-        <p>ท่านสามารถจองคิวได้ เจ้าหน้าที่จะพิจารณาผลและยืนยันภายใน 24 ชั่วโมง ก่อนเข้ารับบริจาค</p>
+        <ul class="reason-list" *ngIf="failedReasons.length">
+          <li *ngFor="let r of failedReasons">ข้อ {{ r.id }}: {{ r.text }}</li>
+        </ul>
+        <p class="reason-source" *ngIf="failedReasons.length">ที่มา: ศูนย์บริการโลหิตแห่งชาติ สภากาชาดไทย</p>
+        <p>ท่านสามารถจองคิวได้ เจ้าหน้าที่จะพิจารณาผลและยืนยันก่อนวันบริจาค</p>
 
         <div class="result-actions">
           <button routerLink="/booking" class="btn-go-booking">
@@ -240,7 +244,13 @@
 
         <div class="result-note fail-note">
           <span class="icon">info</span>
-          <p>{{ resultReason }}</p>
+          <div>
+            <p>{{ resultReason }}</p>
+            <ul class="reason-list" *ngIf="failedReasons.length">
+              <li *ngFor="let r of failedReasons">ข้อ {{ r.id }}: {{ r.text }}</li>
+            </ul>
+            <p class="reason-source" *ngIf="failedReasons.length">ที่มา: ศูนย์บริการโลหิตแห่งชาติ สภากาชาดไทย</p>
+          </div>
         </div>
 
         <div class="result-actions">

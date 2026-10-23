@@ -2,6 +2,10 @@
 
   <!-- HERO -->
   <div class="hero">
+    <span class="drop d1"></span>
+    <span class="drop d2"></span>
+    <span class="drop d3"></span>
+
     <div class="hero-left">
       <div class="hero-badge">
         <span class="icon">favorite</span>
@@ -13,26 +17,77 @@
       </h1>
       <p>การบริจาคของคุณหนึ่งครั้ง สามารถช่วยชีวิตเพื่อนมนุษย์ได้ถึงสามคน</p>
 
-      <!-- แสดงปุ่มจองเฉพาะตอนยังไม่ได้จอง หรือจองถูกยกเลิกหมดแล้ว -->
       <button class="btn-donate" routerLink="/assessment-quiz" *ngIf="!hasActiveBooking">
         <span class="icon">calendar_today</span>
         จองคิวบริจาคโลหิต
+        <span class="icon arrow">arrow_forward</span>
       </button>
     </div>
+
     <div class="hero-right">
-      <img src="assets/blood.png">
+      <img src="assets/blood.png" alt="">
     </div>
   </div>
 
   <!-- STATUS BAR -->
   <div class="status-bar" *ngIf="hasActiveBooking || lastDonationWarning">
     <div class="status-chip status-chip-ok" *ngIf="hasActiveBooking">
-      <span class="icon">check_circle</span>
+      <span class="chip-icon"><span class="icon">check_circle</span></span>
       คุณมีการจองคิวอยู่แล้ว
     </div>
     <div class="status-chip status-chip-warn" *ngIf="lastDonationWarning">
-      <span class="icon">warning</span>
+      <span class="chip-icon"><span class="icon">warning</span></span>
       {{ lastDonationWarning }}
+    </div>
+  </div>
+
+  <!-- สถิติของฉัน -->
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-ic"><span class="icon">water_drop</span></span>
+      <div><strong>{{ donationCount }}</strong><small>ครั้งที่บริจาคแล้ว</small></div>
+    </div>
+    <div class="stat">
+      <span class="stat-ic"><span class="icon">favorite</span></span>
+      <div><strong>{{ donationCount * 3 }}</strong><small>ช่วยชีวิตได้ถึง (คน)</small></div>
+    </div>
+    <div class="stat">
+      <span class="stat-ic"><span class="icon">event_available</span></span>
+      <div><strong class="sm">{{ lastDonationDate ? (lastDonationDate | date:'d MMM yy') : '-' }}</strong><small>บริจาคล่าสุด</small></div>
+    </div>
+    <div class="stat" [class.stat-ok]="canDonateNow">
+      <span class="stat-ic"><span class="icon">{{ canDonateNow ? 'check_circle' : 'hourglass_top' }}</span></span>
+      <div><strong class="sm">{{ canDonateNow ? 'บริจาคได้เลย' : ('อีก ' + daysLeft + ' วัน') }}</strong><small>บริจาคครั้งถัดไป</small></div>
+    </div>
+  </div>
+
+  <!-- เส้นทางของคุณ (คำนวณจากสถานะจริง) -->
+  <div class="journey">
+    <div class="journey-head">
+      <h3>เส้นทางการบริจาคของคุณ</h3>
+      <span>ทำตามทีละขั้น ใช้เวลาไม่นาน</span>
+    </div>
+    <div class="j-steps">
+      <div class="j-step" [class.done]="(assessmentClass || '').includes('pass')" [class.current]="!(assessmentClass || '').includes('pass')">
+        <div class="j-node"><span class="icon">{{ (assessmentClass || '').includes('pass') ? 'check' : 'monitor_heart' }}</span></div>
+        <strong>ประเมินสุขภาพ</strong>
+        <small>ตอบแบบประเมินให้ผ่าน</small>
+      </div>
+      <div class="j-step" [class.done]="hasActiveBooking" [class.current]="(assessmentClass || '').includes('pass') && !hasActiveBooking">
+        <div class="j-node"><span class="icon">{{ hasActiveBooking ? 'check' : 'calendar_today' }}</span></div>
+        <strong>จองคิว</strong>
+        <small>เลือกวัน เวลา สถานที่</small>
+      </div>
+      <div class="j-step" [class.current]="hasActiveBooking">
+        <div class="j-node"><span class="icon">water_drop</span></div>
+        <strong>มาบริจาค</strong>
+        <small>ตามวันและเวลาที่นัด</small>
+      </div>
+      <div class="j-step">
+        <div class="j-node"><span class="icon">self_improvement</span></div>
+        <strong>พักผ่อน</strong>
+        <small>นั่งพักอย่างน้อย 15 นาที</small>
+      </div>
     </div>
   </div>
 
@@ -51,13 +106,10 @@
         </button>
       </div>
 
-      <!-- มีการจอง -->
       <div class="booking-list" *ngIf="bookings.length > 0">
         <div class="booking-item" *ngFor="let b of displayedBookings">
           <div class="booking-left">
-            <div class="booking-icon">
-              <span class="icon">calendar_today</span>
-            </div>
+            <div class="booking-icon"><span class="icon">calendar_today</span></div>
             <div>
               <p class="booking-date">{{ b.booking_datetime | date:'d MMM yyyy HH:mm' }}</p>
               <p class="booking-id">รหัสจอง #{{ b.Booking_ID }}</p>
@@ -69,7 +121,7 @@
             </span>
             <button class="btn-cancel-booking"
                     *ngIf="b.booking_status === 'pending'"
-                    (click)="cancelBooking(b.Booking_ID)">
+                    (click)="cancelBooking(b.Booking_ID)" title="ยกเลิกการจอง">
               <span class="icon">close</span>
             </button>
             <button class="btn-rebook"
@@ -81,11 +133,10 @@
         </div>
       </div>
 
-      <!-- ยังไม่มีการจอง -->
       <div class="empty-box" *ngIf="bookings.length === 0">
         <span class="icon">event_busy</span>
         <p>ยังไม่มีการจองคิวในขณะนี้</p>
-        <span>เริ่มจองครั้งแรกของคุณเลย</span>
+        <span class="empty-sub">เริ่มจองครั้งแรกของคุณเลย</span>
         <button class="btn-book" routerLink="/assessment-quiz">
           <span class="icon">add</span> จองคิวเลย
         </button>
@@ -101,7 +152,6 @@
         </div>
         <a class="card-link" routerLink="/assessment-quiz">ประเมินใหม่</a>
       </div>
-      <!-- ดึงจาก Health_Assessment.result_status: เขียว = pass, แดง = fail, เหลือง = pending หรือยังไม่เคยประเมิน -->
       <div class="status-badge" [class]="assessmentClass">
         <span class="icon">{{ assessmentIcon }}</span>
         {{ assessmentLabel }}
@@ -110,17 +160,60 @@
 
   </div>
 
-  <!-- TIP -->
-  <div class="tip">
-    <div class="tip-content">
-      <div class="tip-icon">
-        <span class="icon">tips_and_updates</span>
+  <!-- วงจรการบริจาค + ประวัติ -->
+  <div class="history-grid">
+
+    <div class="card cycle">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon"><span class="icon">autorenew</span></div>
+          <h3>วงจรการบริจาค</h3>
+        </div>
       </div>
-      <div class="tip-text">
-        <h3>เตรียมตัวก่อนบริจาคโลหิต</h3>
-        <p>ดื่มน้ำมาก ๆ อย่างน้อย 3-4 แก้ว และนอนหลับพักผ่อนให้เพียงพอ ไม่น้อยกว่า 5 ชั่วโมงก่อนการบริจาค</p>
+      <div class="ring" [style.background]="'conic-gradient(#c1121f ' + cooldownPercent + '%, #f3e7e7 0)'">
+        <div class="ring-inner">
+          <ng-container *ngIf="!canDonateNow">
+            <strong>{{ daysLeft }}</strong>
+            <small>วันที่เหลือ</small>
+          </ng-container>
+          <ng-container *ngIf="canDonateNow">
+            <span class="icon ring-ok">water_drop</span>
+            <small>พร้อมบริจาค</small>
+          </ng-container>
+        </div>
+      </div>
+      <p class="cycle-text" *ngIf="!canDonateNow">บริจาคครั้งถัดไปได้ตั้งแต่ <strong>{{ nextEligibleDate | date:'d MMM yyyy' }}</strong></p>
+      <p class="cycle-text" *ngIf="canDonateNow">{{ lastDonationDate ? 'ครบกำหนดแล้ว บริจาคครั้งต่อไปได้เลย' : 'ยังไม่เคยบริจาคกับเรา เริ่มครั้งแรกได้เลย' }}</p>
+      <span class="cycle-note">ห่างกันอย่างน้อย 3 เดือน ตามเกณฑ์สภากาชาดไทย</span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="card-icon"><span class="icon">history</span></div>
+          <h3>ประวัติการบริจาค</h3>
+        </div>
+        <span class="count-chip" *ngIf="donationCount > 0">{{ donationCount }} ครั้ง</span>
+      </div>
+
+      <div class="timeline" *ngIf="completed.length > 0">
+        <div class="tl-item" *ngFor="let d of completed.slice(0, 4)">
+          <span class="tl-dot"><span class="icon">water_drop</span></span>
+          <div>
+            <strong>บริจาคโลหิตสำเร็จ</strong>
+            <small>{{ d.donated_at | date:'d MMMM yyyy' }}</small>
+          </div>
+          <span class="tl-tag">+1 ครั้ง</span>
+        </div>
+      </div>
+
+      <div class="empty-box" *ngIf="completed.length === 0">
+        <span class="icon">volunteer_activism</span>
+        <p>ยังไม่มีประวัติการบริจาค</p>
+        <span class="empty-sub">เมื่อบริจาคสำเร็จ ประวัติจะแสดงที่นี่</span>
       </div>
     </div>
-    </div>
+
+  </div>
 
 </div>

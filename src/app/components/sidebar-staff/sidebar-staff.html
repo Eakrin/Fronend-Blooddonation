@@ -1,36 +1,45 @@
 <aside class="sidebar" [class.collapsed]="isCollapsed">
 
+  <span class="deco d1"></span>
+  <span class="deco d2"></span>
+
   <div class="sidebar-header">
-    <div class="logo-icon">🩸</div>
-    <div class="logo-text" *ngIf="!isCollapsed">
-      <h3>สุทธาเวช</h3>
-      <p>ระบบจัดการผู้บริจาคเลือด</p>
-    </div>
-    <button class="toggle-btn" (click)="toggle()">
+    <img *ngIf="!isCollapsed" src="assets/logo-horizontal.png" alt="โลโก้สุทธาเวช" class="logo-wide">
+    <img *ngIf="isCollapsed" src="assets/logo.png" alt="โลโก้สุทธาเวช" class="logo-img">
+    <button class="toggle-btn" (click)="toggle()" [title]="isCollapsed ? 'ขยายเมนู' : 'ย่อเมนู'">
       <span class="icon">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</span>
     </button>
   </div>
 
-   <nav class="sidebar-menu" (click)="closeOnMobile()">
+  <nav class="sidebar-menu" (click)="closeOnMobile()">
+    <p class="menu-label" *ngIf="!isCollapsed">เมนูหลัก</p>
+
     <a routerLink="/home-staff" routerLinkActive="active" class="menu-item"
       [title]="isCollapsed ? 'รายชื่อผู้จอง' : ''">
       <span class="icon">groups</span>
       <span class="menu-text" *ngIf="!isCollapsed">รายชื่อผู้จอง</span>
     </a>
-<a routerLink="/donation-day-staff" routerLinkActive="active" class="menu-item">
-  <span class="icon">calendar_month</span>
-  <span class="menu-text" *ngIf="!isCollapsed">ตารางรับบริจาค</span>
-</a>
+    <a routerLink="/donation-day-staff" routerLinkActive="active" class="menu-item"
+      [title]="isCollapsed ? 'ตารางรับบริจาค' : ''">
+      <span class="icon">calendar_month</span>
+      <span class="menu-text" *ngIf="!isCollapsed">ตารางรับบริจาค</span>
+    </a>
     <a routerLink="/post-staff" routerLinkActive="active" class="menu-item"
       [title]="isCollapsed ? 'ประชาสัมพันธ์' : ''">
       <span class="icon">campaign</span>
       <span class="menu-text" *ngIf="!isCollapsed">ประชาสัมพันธ์</span>
     </a>
-    <a routerLink="/location-staff" routerLinkActive="active" class="menu-item">
+    <a routerLink="/location-staff" routerLinkActive="active" class="menu-item"
+      [title]="isCollapsed ? 'จัดการสถานที่' : ''">
       <span class="icon">location_on</span>
       <span class="menu-text" *ngIf="!isCollapsed">จัดการสถานที่</span>
     </a>
-    <a routerLink="/profile-staff" routerLinkActive="active" class="menu-item">
+
+    <p class="menu-label" *ngIf="!isCollapsed">บัญชี</p>
+    <div class="menu-divider" *ngIf="isCollapsed"></div>
+
+    <a routerLink="/profile-staff" routerLinkActive="active" class="menu-item"
+      [title]="isCollapsed ? 'ข้อมูลส่วนตัว' : ''">
       <span class="icon">person</span>
       <span class="menu-text" *ngIf="!isCollapsed">ข้อมูลส่วนตัว</span>
     </a>
@@ -45,7 +54,7 @@
       </div>
     </div>
     <div class="staff-avatar-only" *ngIf="isCollapsed">{{ staffName.charAt(0) }}</div>
-    <button class="logout-btn" (click)="logout()">
+    <button class="logout-btn" (click)="logout()" [title]="isCollapsed ? 'ออกจากระบบ' : ''">
       <span class="icon">logout</span>
       <span class="menu-text" *ngIf="!isCollapsed">ออกจากระบบ</span>
     </button>

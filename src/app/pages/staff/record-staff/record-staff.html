@@ -85,6 +85,20 @@
           <span class="unit">kg</span>
         </div>
       </div>
+      <!-- ✅ ใหม่: หมู่เลือด เติมจากข้อมูลผู้บริจาคให้ก่อน แก้ได้ -->
+      <div class="health-field">
+  <label>หมู่เลือด (BLOOD GROUP)</label>
+  <div class="input-unit-wrapper">
+    <select [(ngModel)]="bloodType" class="select-field blood-select">
+      <option value="">เลือก</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="AB">AB</option>
+      <option value="O">O</option>
+    </select>
+    <span class="unit">ABO</span>
+  </div>
+</div>
     </div>
   </div>
 

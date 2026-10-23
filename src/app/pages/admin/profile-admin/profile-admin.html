@@ -1,32 +1,37 @@
 <main class="main-content">
 
-  <header class="page-header">
-    <h2>การตั้งค่าข้อมูลส่วนตัว</h2>
-    <p>จัดการข้อมูลบัญชีผู้ใช้งานและรหัสผ่านเพื่อความปลอดภัยของระบบ</p>
-  </header>
+  <!-- ═════════ BANNER + โปรไฟล์ ═════════ -->
+  <header class="page-banner">
+    <span class="deco d1"></span>
+    <span class="deco d2"></span>
 
-  <!-- โปรไฟล์ -->
-  <div class="settings-card profile-card">
-    <div class="avatar-section">
-      <div class="avatar-wrapper">
-        <div class="avatar-placeholder"><span class="icon">person</span></div>
+    <div class="banner-top">
+      <span class="banner-chip"><span class="icon">manage_accounts</span> Account Settings</span>
+      <h2>การตั้งค่าข้อมูลส่วนตัว</h2>
+      <p>จัดการข้อมูลบัญชีผู้ใช้งานและรหัสผ่านเพื่อความปลอดภัยของระบบ</p>
+    </div>
+
+    <div class="profile-strip">
+      <div class="avatar-placeholder">
+        <span class="avatar-letter" *ngIf="name">{{ name.charAt(0) }}</span>
+        <span class="icon" *ngIf="!name">person</span>
       </div>
       <div class="profile-info">
         <h3>{{ name || 'ผู้ดูแลระบบ' }}</h3>
         <span class="staff-id-badge">
-          <span class="icon">badge</span> ผู้ดูแลระบบ (Admin)
+          <span class="icon">verified_user</span> ผู้ดูแลระบบ (Admin)
         </span>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- ข้อมูลติดต่อ -->
+  <!-- ═════════ ข้อมูลติดต่อ ═════════ -->
   <div class="settings-card">
     <div class="section-title">
-      <span class="icon">contact_mail</span>
+      <span class="title-ic"><span class="icon">contact_mail</span></span>
       <h3>ข้อมูลการติดต่อ</h3>
     </div>
-    <div class="divider"></div>
+
     <div class="form-row">
       <div class="form-group">
         <label>อีเมล (Email)</label>
@@ -47,13 +52,12 @@
     </div>
   </div>
 
-  <!-- เปลี่ยนรหัสผ่าน -->
+  <!-- ═════════ เปลี่ยนรหัสผ่าน ═════════ -->
   <div class="settings-card">
     <div class="section-title">
-      <span class="icon">security</span>
+      <span class="title-ic"><span class="icon">security</span></span>
       <h3>เปลี่ยนรหัสผ่าน</h3>
     </div>
-    <div class="divider"></div>
 
     <div class="password-layout">
       <div class="password-fields">
@@ -84,7 +88,7 @@
       </div>
 
       <div class="password-rules">
-        <p class="rules-title">ข้อกำหนดรหัสผ่าน</p>
+        <p class="rules-title"><span class="icon">shield</span> ข้อกำหนดรหัสผ่าน</p>
         <ul>
           <li><span class="icon check-icon">check_circle</span> ความยาวอย่างน้อย 8 ตัวอักษร</li>
           <li><span class="icon check-icon">check_circle</span> แนะนำให้ผสมตัวอักษรพิมพ์ใหญ่ พิมพ์เล็ก และตัวเลข</li>
@@ -97,7 +101,7 @@
     <span class="icon">error</span> {{ errorMsg }}
   </div>
 
-  <!-- Actions -->
+  <!-- ═════════ Actions ═════════ -->
   <div class="form-actions">
     <button class="btn-cancel" (click)="cancel()">ยกเลิก</button>
     <button class="btn-save" (click)="save()" [disabled]="isLoading">

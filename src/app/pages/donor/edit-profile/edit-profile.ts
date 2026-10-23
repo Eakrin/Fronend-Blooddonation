@@ -1,4 +1,5 @@
 import { CommonModule, Location } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -9,10 +10,8 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { environment } from '../../../../environments/environment';
 
-// ตรวจว่ารหัสผ่านใหม่กับยืนยันรหัสผ่านตรงกัน
+// ✅ ตรวจว่ารหัสผ่านใหม่กับยืนยันรหัสผ่านตรงกัน
 function passwordsMatchValidator(
   group: AbstractControl,
 ): ValidationErrors | null {
@@ -43,8 +42,12 @@ export class EditProfileComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private location: Location,
-    private router: Router,
   ) {}
+
+  // ปุ่มย้อนกลับ: กลับไปหน้าก่อนหน้า
+  goBack(): void {
+    this.location.back();
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -52,20 +55,11 @@ export class EditProfileComponent implements OnInit {
     this.loadProfileData();
   }
 
-  // ย้อนกลับหน้าที่เพิ่งมา ถ้าเปิดหน้านี้ตรง ๆ ให้ไปหน้าหลัก
-  goBack(): void {
-    if (window.history.length > 1) {
-      this.location.back();
-    } else {
-      this.router.navigate(['/home-donor']);
-    }
-  }
-
   initForm(): void {
     this.profileForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
-      // อีเมลแก้ไขได้ (ห้ามซ้ำ - ตรวจสอบจริงที่ backend)
+      // ✅ อีเมลแก้ไขได้แล้ว (ห้ามซ้ำ - ตรวจสอบจริงที่ backend)
       email: [
         { value: '', disabled: true },
         [Validators.required, Validators.email],
@@ -91,6 +85,32 @@ export class EditProfileComponent implements OnInit {
   }
 
   loadProfileData(): void {
+    // ✅ ใหม่: ดึงข้อมูลล่าสุดจากฐานข้อมูลก่อน (เช่น ส่วนสูง/น้ำหนักที่เจ้าหน้าที่อัปเดตให้)
+    // แล้วค่อยแสดงผล ถ้าดึงไม่ได้ก็ใช้ข้อมูลที่เก็บไว้ตอนล็อกอินแทน
+    const token = localStorage.getItem('token');
+    this.http
+      .get<any>(environment.apiUrl + '/api/update-profile/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .subscribe({
+        next: (fresh) => {
+          const current = JSON.parse(localStorage.getItem('user') || '{}');
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              ...current,
+              ...fresh,
+              weight: fresh.weight !== null ? Number(fresh.weight) : '',
+              height: fresh.height !== null ? Number(fresh.height) : '',
+            }),
+          );
+          this.showProfileFromStorage();
+        },
+        error: () => this.showProfileFromStorage(),
+      });
+  }
+
+  private showProfileFromStorage(): void {
     const userData = localStorage.getItem('user');
     if (!userData) return;
 
@@ -160,7 +180,7 @@ export class EditProfileComponent implements OnInit {
     const token = localStorage.getItem('token');
     const rawValue = this.profileForm.getRawValue();
 
-    // ใช้ FormData เพราะอาจมีไฟล์รูปใหม่แนบไปด้วย
+    // ✅ เปลี่ยนจากส่ง JSON ธรรมดา เป็น FormData เพราะอาจมีไฟล์รูปใหม่แนบไปด้วย
     const formData = new FormData();
     formData.append('name', rawValue.name ?? '');
     formData.append('lastname', rawValue.lastname ?? '');
@@ -173,11 +193,13 @@ export class EditProfileComponent implements OnInit {
     formData.append('height', rawValue.height ?? '');
 
     // ชื่อฟิลด์ 'profile' ต้องตรงกับ upload.single('profile') ฝั่ง backend
+    // ถ้าไม่ได้เลือกรูปใหม่ ก็ไม่ต้องแนบไป - backend จะไม่แตะรูปเดิม
     if (this.selectedFile) {
       formData.append('profile', this.selectedFile);
     }
 
-    // ห้ามใส่ Content-Type เอง ให้เบราว์เซอร์ตั้ง multipart/form-data พร้อม boundary
+    // หมายเหตุ: ห้ามใส่ Content-Type header เอง ต้องปล่อยให้เบราว์เซอร์ตั้ง
+    // multipart/form-data พร้อม boundary ให้อัตโนมัติ ไม่งั้น backend จะอ่านไฟล์ไม่ได้
     this.http
       .put<{ message: string; profile: string | null }>(
         environment.apiUrl + '/api/update-profile/update-profile',
@@ -188,7 +210,8 @@ export class EditProfileComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          // ใช้ URL รูปจริงจาก Cloudinary ที่ backend ส่งกลับมา
+          // ✅ ใหม่: ใช้ URL รูปจริงจาก Cloudinary ที่ backend ส่งกลับมา
+          // แทนที่จะใช้ base64 preview ชั่วคราวที่ frontend สร้างไว้เอง
           if (res?.profile) {
             this.avatarPreview = res.profile;
           }
@@ -212,7 +235,7 @@ export class EditProfileComponent implements OnInit {
           this.isReadOnly = true;
         },
         error: (err) => {
-          // backend ส่งข้อความกลับมาเมื่ออีเมล/เบอร์โทรซ้ำ
+          // ✅ ถ้า backend ตรวจพบอีเมล/เบอร์โทรซ้ำ ควรส่ง error message กลับมาแสดงตรงนี้
           alert(err.error?.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่');
         },
       });
@@ -242,6 +265,7 @@ export class EditProfileComponent implements OnInit {
 
     this.isSavingPassword = true;
 
+    // หมายเหตุ: path นี้เป็นตัวอย่าง อาจต้องแก้ให้ตรงกับ endpoint จริงของ backend
     this.http
       .put(
         environment.apiUrl + '/api/update-profile/change-password',

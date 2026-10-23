@@ -90,28 +90,56 @@ export class HomeDonor implements OnInit {
     );
   }
 
-  // นับ 56 วัน (8 สัปดาห์) จากวันที่บริจาคสำเร็จจริงเท่านั้น
-  get lastDonationWarning(): string {
-    const donated = this.bookings
+  // ── ประวัติและสถิติการบริจาค (นับเฉพาะที่บริจาคสำเร็จจริง) ──
+  get completed(): any[] {
+    return this.bookings
       .filter((b) => b.donation_status === 'completed' && b.donated_at)
       .sort(
         (a, b) =>
           new Date(b.donated_at).getTime() - new Date(a.donated_at).getTime(),
       );
+  }
 
-    if (donated.length === 0) return '';
+  get donationCount(): number {
+    return this.completed.length;
+  }
 
-    const last = new Date(donated[0].donated_at);
-    const now = new Date();
+  get lastDonationDate(): Date | null {
+    return this.completed.length
+      ? new Date(this.completed[0].donated_at)
+      : null;
+  }
+
+  // บริจาคครั้งถัดไปได้ = ครั้งล่าสุด + 90 วัน (3 เดือน)
+  get nextEligibleDate(): Date | null {
+    const last = this.lastDonationDate;
+    if (!last) return null;
+    return new Date(last.getTime() + 90 * 24 * 60 * 60 * 1000);
+  }
+
+  get daysLeft(): number {
+    const last = this.lastDonationDate;
+    if (!last) return 0;
     const diffDays = Math.floor(
-      (now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24),
+      (Date.now() - last.getTime()) / (1000 * 60 * 60 * 24),
     );
+    return Math.max(0, 90 - diffDays);
+  }
 
-    if (diffDays < 90) {
-      const remaining = 90 - diffDays;
-      return `ตามเกณฑ์สภากาชาดไทย ท่านต้องรอ ${remaining} วัน ก่อนบริจาคครั้งถัดไป (บริจาคโลหิตรวมห่างกันอย่างน้อย 3 เดือน)`;
-    }
-    return '';
+  get canDonateNow(): boolean {
+    return this.daysLeft === 0;
+  }
+
+  // % ความคืบหน้าของวงแหวนนับถอยหลัง (เต็ม 100 = ครบ 90 วันแล้ว)
+  get cooldownPercent(): number {
+    if (!this.lastDonationDate) return 100;
+    return Math.min(100, Math.round(((90 - this.daysLeft) / 90) * 100));
+  }
+
+  // นับ 90 วัน (3 เดือน) จากวันที่บริจาคสำเร็จจริงเท่านั้น
+  get lastDonationWarning(): string {
+    if (this.canDonateNow) return '';
+    return `ตามเกณฑ์สภากาชาดไทย ท่านต้องรอ ${this.daysLeft} วัน ก่อนบริจาคครั้งถัดไป (บริจาคโลหิตรวมห่างกันอย่างน้อย 3 เดือน)`;
   }
 
   get displayedBookings(): any[] {

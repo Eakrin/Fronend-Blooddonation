@@ -26,6 +26,10 @@ export class DonationDay implements OnInit {
   maxQuota: number | null = null;
   today = new Date().toISOString().split('T')[0];
 
+  // ตัวกรองรายการ: all = ทั้งหมด, open = เปิดรับ (ยังไม่เต็ม), full = เต็มแล้ว, closed = ปิด
+  filter: 'all' | 'open' | 'full' | 'closed' = 'all';
+  searchText = '';
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
@@ -36,6 +40,47 @@ export class DonationDay implements OnInit {
   private authHeaders() {
     const token = localStorage.getItem('token');
     return { headers: { Authorization: `Bearer ${token}` } };
+  }
+
+  // ── สรุปและตัวกรอง ──
+  private isFull(s: any): boolean {
+    return (s.booked || 0) >= s.max_quota;
+  }
+
+  private groupOf(s: any): 'open' | 'full' | 'closed' {
+    if (s.Status !== 'active') return 'closed';
+    return this.isFull(s) ? 'full' : 'open';
+  }
+
+  get openCount(): number {
+    return this.slots.filter((s) => this.groupOf(s) === 'open').length;
+  }
+
+  get fullCount(): number {
+    return this.slots.filter((s) => this.groupOf(s) === 'full').length;
+  }
+
+  get closedCount(): number {
+    return this.slots.filter((s) => this.groupOf(s) === 'closed').length;
+  }
+
+  get totalBooked(): number {
+    return this.slots.reduce((sum, s) => sum + (Number(s.booked) || 0), 0);
+  }
+
+  get totalQuota(): number {
+    return this.slots.reduce((sum, s) => sum + (Number(s.max_quota) || 0), 0);
+  }
+
+  get filteredSlots(): any[] {
+    const q = this.searchText.trim().toLowerCase();
+    return this.slots.filter((s) => {
+      const matchFilter =
+        this.filter === 'all' || this.groupOf(s) === this.filter;
+      const matchSearch =
+        !q || (s.location_name || '').toLowerCase().includes(q);
+      return matchFilter && matchSearch;
+    });
   }
 
   loadLocations() {

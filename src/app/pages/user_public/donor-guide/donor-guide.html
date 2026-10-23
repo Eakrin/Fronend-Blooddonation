@@ -1,0 +1,140 @@
+<div class="guide-page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="drop d1"></span>
+    <span class="drop d2"></span>
+    <span class="drop d3"></span>
+    <div class="hero-inner">
+      <span class="hero-badge"><span class="icon">menu_book</span> คู่มือผู้บริจาคโลหิต</span>
+      <h1>รู้ก่อนให้ <span>ปลอดภัยทั้งสองฝ่าย</span></h1>
+      <p>เตรียมตัว ทำความเข้าใจขั้นตอน และเช็กคุณสมบัติของตนเอง ก่อนมาเป็นส่วนหนึ่งของการต่อลมหายใจให้ผู้อื่น</p>
+      <div class="hero-chips">
+        <div class="chip"><strong>17-70</strong><span>ปี</span></div>
+        <div class="chip"><strong>45+</strong><span>กก.</span></div>
+        <div class="chip"><strong>3</strong><span>เดือน/ครั้ง</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- แท็บ -->
+  <nav class="tabs-bar">
+    <div class="tabs">
+      <button class="tab" [class.active]="activeTab === 'prep'" (click)="setTab('prep')">
+        <span class="icon">fact_check</span> การเตรียมตัว
+      </button>
+      <button class="tab" [class.active]="activeTab === 'steps'" (click)="setTab('steps')">
+        <span class="icon">route</span> ขั้นตอนการบริจาค
+      </button>
+      <button class="tab" [class.active]="activeTab === 'criteria'" (click)="setTab('criteria')">
+        <span class="icon">verified_user</span> คุณสมบัติ
+      </button>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <!-- การเตรียมตัว -->
+    <section *ngIf="activeTab === 'prep'" class="fade">
+      <div class="phases">
+
+        <div class="phase before">
+          <div class="phase-head"><span class="icon">schedule</span><div><small>STEP 1</small><h2>ก่อนบริจาค</h2></div></div>
+          <div class="phase-body">
+            <div class="p-item" *ngFor="let it of before">
+              <span class="p-icon"><span class="icon">{{ it.icon }}</span></span>
+              <div><h4>{{ it.title }}</h4><p>{{ it.desc }}</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase during">
+          <div class="phase-head"><span class="icon">water_drop</span><div><small>STEP 2</small><h2>ขณะบริจาค</h2></div></div>
+          <div class="phase-body">
+            <div class="p-item simple" *ngFor="let t of during">
+              <span class="p-icon"><span class="icon">check</span></span>
+              <div><p>{{ t }}</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase after">
+          <div class="phase-head"><span class="icon">spa</span><div><small>STEP 3</small><h2>หลังบริจาค</h2></div></div>
+          <div class="phase-body">
+            <div class="p-item" *ngFor="let it of after">
+              <span class="p-icon"><span class="icon">{{ it.icon }}</span></span>
+              <div><h4>{{ it.title }}</h4><p>{{ it.desc }}</p></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ขั้นตอน -->
+    <section *ngIf="activeTab === 'steps'" class="fade">
+      <div class="section-title">
+        <h2>ขั้นตอนการบริจาคโลหิต</h2>
+        <p>ตั้งแต่ถึงจุดรับบริจาคจนกลับบ้านอย่างปลอดภัย</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-item" *ngFor="let s of steps; let i = index">
+          <div class="tl-node">{{ i + 1 }}</div>
+          <div class="tl-card">
+            <div class="tl-icon"><span class="icon">{{ s.icon }}</span></div>
+            <div>
+              <h4>{{ cleanTitle(s.title) }}</h4>
+              <p>{{ s.desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- คุณสมบัติ -->
+    <section *ngIf="activeTab === 'criteria'" class="fade">
+      <div class="section-title">
+        <h2>คุณสมบัติผู้บริจาคโลหิต</h2>
+        <p>ทั้งหมด {{ criteria.length }} ข้อ · กดที่หัวข้อเพื่อดูรายละเอียดและระยะเวลาที่ต้องเว้น</p>
+      </div>
+
+      <div class="search-box">
+        <span class="icon">search</span>
+        <input type="text" [(ngModel)]="search" placeholder="ค้นหา เช่น ผ่าตัด ยา ตั้งครรภ์ มาลาเรีย">
+        <button class="clear" *ngIf="search" (click)="search = ''" aria-label="ล้างคำค้นหา"><span class="icon">close</span></button>
+      </div>
+
+      <div class="accordion">
+        <div class="acc-item" *ngFor="let x of filteredCriteria" [class.open]="openCriterion === x.n">
+          <button class="acc-head" (click)="toggleCriterion(x.n)">
+            <span class="acc-num">{{ x.n }}</span>
+            <span class="acc-title">{{ x.c.title }}</span>
+            <span class="icon acc-toggle">{{ openCriterion === x.n ? 'expand_less' : 'expand_more' }}</span>
+          </button>
+          <div class="acc-body" *ngIf="openCriterion === x.n">{{ x.c.desc }}</div>
+        </div>
+
+        <div class="empty" *ngIf="filteredCriteria.length === 0">
+          <span class="icon">search_off</span>
+          <p>ไม่พบข้อที่ตรงกับ "{{ search }}"</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+      <div>
+        <h3>พร้อมแล้วใช่ไหม?</h3>
+        <p>ทำแบบประเมินสุขภาพออนไลน์ แล้วเลือกวันเวลาที่สะดวกได้เลย</p>
+      </div>
+      <a routerLink="/booking" class="btn-cta">จองคิวบริจาคโลหิต <span class="icon">arrow_forward</span></a>
+    </section>
+
+    <p class="source">
+      ข้อมูลสรุปจากเกณฑ์ของศูนย์บริการโลหิตแห่งชาติ สภากาชาดไทย
+      (<a href="https://thaibloodcentre.redcross.or.th/donor-eligibility/" target="_blank" rel="noopener">thaibloodcentre.redcross.or.th</a>)
+      เกณฑ์อาจมีการปรับปรุง ควรสอบถามเจ้าหน้าที่ ณ จุดรับบริจาคอีกครั้ง
+    </p>
+  </div>
+
+</div>

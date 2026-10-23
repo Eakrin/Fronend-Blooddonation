@@ -55,6 +55,36 @@
           <textarea [(ngModel)]="text" placeholder="ระบุคุณสมบัติของผู้บริจาค หรือสิ่งที่ต้องเตรียมมา" rows="5"></textarea>
         </div>
 
+        <div class="form-group">
+          <label>รูปโปสเตอร์ (ไม่บังคับ)</label>
+
+          <div class="image-preview" *ngIf="imagePreview; else noImage">
+            <img [src]="imagePreview" alt="ตัวอย่างโปสเตอร์">
+          </div>
+          <ng-template #noImage>
+            <div class="image-preview empty">
+              <span class="icon">image</span>
+              <span>ยังไม่ได้เลือกรูป</span>
+            </div>
+          </ng-template>
+
+          <div class="image-actions">
+            <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" (change)="onFileSelected($event)" hidden>
+            <button type="button" class="btn-upload" (click)="fileInput.click()">
+              <span class="icon">upload</span>
+              {{ imagePreview ? 'เปลี่ยนรูป' : 'เลือกรูป' }}
+            </button>
+            <button type="button" class="btn-remove-img" *ngIf="imagePreview" (click)="clearImage(fileInput)">
+              <span class="icon">delete</span> ลบรูป
+            </button>
+          </div>
+
+          <p class="image-hint">
+            ใช้ได้ทั้งภาพแนวนอนและแนวตั้ง ภาพจะแสดงเป็นแบนเนอร์หน้าแรกโดย<strong>ไม่ถูกตัด</strong>
+            (แนะนำแนวนอน 1600 × 640 พิกเซลจะเต็มกรอบสวยที่สุด) · รองรับ JPG, PNG, WEBP ไม่เกิน {{ maxImageMB }} MB
+          </p>
+        </div>
+
         <div class="error-box" *ngIf="errorMsg">
           <span class="icon">error</span> {{ errorMsg }}
         </div>
@@ -80,6 +110,7 @@
 
       <div class="post-list">
         <div class="post-item" *ngFor="let post of posts">
+          <img class="post-thumb" *ngIf="post.image" [src]="post.image" alt="โปสเตอร์">
           <div class="post-item-header">
             <span class="post-status active">● กำลังแสดงผล</span>
             <div class="post-actions">

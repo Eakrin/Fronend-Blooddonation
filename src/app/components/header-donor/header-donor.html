@@ -2,16 +2,13 @@
   <div class="container">
 
     <div class="logo">
-      <div class="logo-icon"><span class="icon">opacity</span></div>
-      <div class="logo-text">
-        <h3>สุทธาเวช</h3>
-        <span>ระบบจองช่วงเวลาบริจาคโลหิต</span>
-      </div>
+      <img src="assets/logo-horizontal.png" alt="โลโก้สุทธาเวช" class="logo-img">
     </div>
 
     <nav class="menu">
       <a routerLink="/home-donor" routerLinkActive="active">หน้าหลัก</a>
       <a routerLink="/location" routerLinkActive="active">ค้นหาสถานที่บริจาค</a>
+      <a routerLink="/donor-guide" routerLinkActive="active">คู่มือผู้บริจาค</a>
       <a routerLink="/booking-history" routerLinkActive="active">รายการของฉัน</a>
     </nav>
 
@@ -70,6 +67,9 @@
     <a routerLink="/location" routerLinkActive="active" (click)="closeMenu()">
       <span class="icon">location_on</span> ค้นหาสถานที่บริจาค
     </a>
+    <a routerLink="/donor-guide" routerLinkActive="active" (click)="closeMenu()">
+      <span class="icon">menu_book</span> คู่มือผู้บริจาค
+    </a>
     <a routerLink="/booking-history" routerLinkActive="active" (click)="closeMenu()">
       <span class="icon">receipt_long</span> รายการของฉัน
     </a>
@@ -83,3 +83,4 @@
       <span class="icon">logout</span> ออกจากระบบ
     </a>
   </nav>
+</header>

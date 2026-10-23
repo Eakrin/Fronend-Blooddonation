@@ -10,6 +10,36 @@
     </button>
   </header>
 
+  <!-- สรุป -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon"><span class="icon">event</span></div>
+      <div><p class="kpi-label">รอบทั้งหมด</p><h3 class="kpi-value">{{ slots.length }} <small>รอบ</small></h3></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green"><span class="icon">event_available</span></div>
+      <div><p class="kpi-label">เปิดรับ</p><h3 class="kpi-value green">{{ openCount }} <small>รอบ</small></h3></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon orange"><span class="icon">groups</span></div>
+      <div><p class="kpi-label">ผู้จองรวม / โควตารวม</p><h3 class="kpi-value orange">{{ totalBooked }} <small>/ {{ totalQuota }} คน</small></h3></div>
+    </div>
+  </div>
+
+  <!-- ตัวกรอง -->
+  <div class="filter-bar">
+    <div class="tab-group">
+      <button class="tab-chip" [class.active]="filter === 'all'" (click)="filter = 'all'">ทั้งหมด <span class="tab-count">{{ slots.length }}</span></button>
+      <button class="tab-chip" [class.active]="filter === 'open'" (click)="filter = 'open'">เปิดรับ <span class="tab-count">{{ openCount }}</span></button>
+      <button class="tab-chip" [class.active]="filter === 'full'" (click)="filter = 'full'">เต็มแล้ว <span class="tab-count">{{ fullCount }}</span></button>
+      <button class="tab-chip" [class.active]="filter === 'closed'" (click)="filter = 'closed'">ปิด <span class="tab-count">{{ closedCount }}</span></button>
+    </div>
+    <div class="search-box">
+      <span class="icon search-icon">search</span>
+      <input type="text" [(ngModel)]="searchText" placeholder="ค้นหาชื่อสถานที่...">
+    </div>
+  </div>
+
   <div class="table-container">
     <table class="data-table">
       <thead>
@@ -23,10 +53,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let slot of slots">
-          <td class="location-main">{{ slot.location_name || '-' }}</td>
-          <td class="text-datetime">{{ slot.Donation_date | date:'d MMM yyyy' }}</td>
-          <td class="text-datetime">{{ slot.Start_time?.slice(0,5) }} - {{ slot.End_time?.slice(0,5) }}</td>
+        <tr *ngFor="let slot of filteredSlots">
+          <td>
+            <div class="loc-cell">
+              <span class="loc-ic"><span class="icon">location_on</span></span>
+              <span class="location-main">{{ slot.location_name || '-' }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="date-cell">
+              <div class="date-block">
+                <strong>{{ slot.Donation_date | date:'d' }}</strong>
+                <small>{{ slot.Donation_date | date:'MMM' }}</small>
+              </div>
+              <span class="text-datetime">{{ slot.Donation_date | date:'yyyy' }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="time-pill"><span class="icon">schedule</span> {{ slot.Start_time?.slice(0,5) }} - {{ slot.End_time?.slice(0,5) }}</span>
+          </td>
           <td>
             <div class="quota-wrapper">
               <div class="quota-label"
@@ -50,27 +95,27 @@
           </td>
           <td>
             <div class="actions-group">
-              <button class="btn-action edit" (click)="openEditModal(slot)">
+              <button class="btn-action edit" (click)="openEditModal(slot)" title="แก้ไข">
                 <span class="icon">edit</span>
               </button>
-              <button class="btn-action delete" (click)="deleteSlot(slot.Slot_ID)">
+              <button class="btn-action delete" (click)="deleteSlot(slot.Slot_ID)" title="ลบ">
                 <span class="icon">delete</span>
               </button>
             </div>
           </td>
         </tr>
 
-        <tr *ngIf="slots.length === 0">
+        <tr *ngIf="filteredSlots.length === 0">
           <td colspan="6" class="empty-row">
             <span class="icon">event_busy</span>
-            <p>ยังไม่มีรายการ</p>
+            <p>{{ slots.length === 0 ? 'ยังไม่มีรายการ' : 'ไม่พบรายการที่ตรงกับตัวกรอง' }}</p>
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="table-footer">
-      <span class="entry-info">ทั้งหมด {{ slots.length }} รายการ</span>
+      <span class="entry-info">แสดง {{ filteredSlots.length }} จากทั้งหมด {{ slots.length }} รายการ</span>
     </div>
   </div>
 

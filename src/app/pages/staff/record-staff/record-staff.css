@@ -1,9 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Round');
 
 :host {
   display: block;
-  font-family: 'Prompt', sans-serif;
+  font-family: 'Sarabun', sans-serif;
+  background: #fbf9f9;
+  min-height: 100vh;
+  --red: #c1121f;
+  --ink: #191414;
+  --muted: #667085;
+  --line: #efe9e9;
 }
 
 .icon {
@@ -14,408 +20,255 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.main-content {
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 28px 24px 100px;
-  box-sizing: border-box;
-}
+.main-content { max-width: 960px; margin: 0 auto; padding: 28px 24px 110px; box-sizing: border-box; }
 
-/* ── HEADER ── */
+/* ═════════ HEADER BANNER ═════════ */
 .page-header {
+  position: relative;
+  overflow: hidden;
   margin-bottom: 22px;
+  background: linear-gradient(135deg, #5f1111 0%, #a30f1a 55%, #d81b2e 100%);
+  border-radius: 26px;
+  padding: 28px 32px;
+  box-shadow: 0 26px 44px -24px rgba(95,17,17,.55);
 }
 
-.header-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+.page-header::before {
+  content: '';
+  position: absolute;
+  width: 220px; height: 220px;
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+  background: rgba(255,255,255,.07);
+  right: 6%; top: -120px;
 }
 
-.page-header h2 {
-  font-size: 22px;
-  font-weight: 700;
-  color: #191414;
-  margin: 0 0 10px 0;
+.page-header::after {
+  content: '';
+  position: absolute;
+  width: 110px; height: 110px;
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+  background: rgba(255,255,255,.06);
+  left: -30px; bottom: -40px;
 }
 
-.donor-tag {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.header-top { position: relative; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+.page-header h2 { font-size: 24px; font-weight: 800; color: #fff; margin: 0 0 14px; letter-spacing: -.3px; }
+
+.donor-tag { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
 .tag-badge {
-  background: #fef2f2;
-  color: #c1121f;
-  border: 1px solid #fecaca;
-  padding: 6px 14px;
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.35);
+  padding: 6px 15px;
   border-radius: 100px;
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.donor-info {
-  font-size: 13.5px;
-  color: #475467;
-}
+.donor-info { font-size: 13.5px; color: rgba(255,255,255,.92); line-height: 1.7; }
 
-/* ✅ ใหม่: badge ผลการประเมิน (เขียว/เหลือง/แดง) */
-.tag-badge.result {
-  background: #f2f4f7;
-  color: #475467;
-  border-color: #eaecf0;
-}
-.tag-badge.result.pass { background: #e7f8ee; color: #0f8a4b; border-color: #b7e4c7; }
-.tag-badge.result.pending { background: #fff4e5; color: #b25e09; border-color: #fed8a8; }
-.tag-badge.result.fail { background: #fef2f2; color: #c1121f; border-color: #fecaca; }
+/* badge ผลประเมิน (ใช้ทั้งในแถบหัวและในการ์ด) */
+.tag-badge.result { background: #fff; color: #475467; border-color: #fff; }
+.tag-badge.result.pass { background: #dcfce7; color: #16803c; border-color: #bbf7d0; }
+.tag-badge.result.pending { background: #fef3c7; color: #b45309; border-color: #fde68a; }
+.tag-badge.result.fail { background: #fee2e2; color: #c1121f; border-color: #fecaca; }
 
-/* ✅ ใหม่: ช่องแสดงผลอย่างเดียว (บริจาคครั้งแรก/ล่าสุด ที่คำนวณจากฐานข้อมูล ไม่ให้แก้ไข) */
-.readonly-value {
-  padding: 11px 14px;
-  border: 1.5px dashed #e5e7eb;
-  border-radius: 11px;
-  font-size: 13.5px;
-  color: #667085;
-  background: #f9fafb;
-}
-
-.header-actions .btn-history {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1.5px solid #e5e7eb;
-  color: #344054;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-}
-
-.header-actions .btn-history:hover {
-  border-color: #c1121f;
-  color: #c1121f;
-  background: #fef2f2;
-}
-
-.header-actions .btn-history .icon {
-  font-size: 17px;
-}
-
-/* ── SECTION CARDS ── */
+/* ═════════ SECTION CARDS ═════════ */
 .section-card {
   background: #fff;
-  border: 1px solid #eaecf0;
-  border-radius: 18px;
-  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 0 0 26px;
   margin-bottom: 18px;
-  box-shadow: 0 4px 14px -8px rgba(16, 24, 40, .06);
+  box-shadow: 0 2px 10px rgba(25,20,20,.04);
+  overflow: hidden;
 }
 
 .section-title {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 18px;
+  padding: 18px 26px;
+  margin-bottom: 22px;
+  background: linear-gradient(135deg, #fef2f2, #fff7f7);
+  border-bottom: 1px solid #f7dcdc;
 }
+
+.section-card > :not(.section-title) { margin-left: 26px; margin-right: 26px; }
+.section-card > .section-title { margin-left: 0; margin-right: 0; }
 
 .section-num {
-  width: 26px;
-  height: 26px;
+  width: 30px; height: 30px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #f2f4f7;
-  color: #475467;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
+  background: #fff;
+  border: 2px solid #fecaca;
+  color: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13.5px;
+  font-weight: 800;
 }
 
-.section-num.orange { background: #fff4e5; color: #b25e09; }
-.section-num.green { background: #e7f8ee; color: #0f8a4b; }
-.section-num.blue { background: #eaf2ff; color: #1c5cc9; }
+.section-num.orange { border-color: #fed7aa; color: #ea580c; }
+.section-num.green { border-color: #bbf7d0; color: #16a34a; }
 
 .section-icon {
-  width: 34px;
-  height: 34px;
+  width: 40px; height: 40px;
   flex-shrink: 0;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f2f4f7;
-  color: #475467;
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  background-image: linear-gradient(135deg, #d81b2e, #a30f1a);
+  color: #fff;
+  box-shadow: 0 8px 14px -6px rgba(193,18,31,.5);
 }
 
-.section-icon .icon { font-size: 18px; }
+.section-icon .icon { font-size: 21px; }
+.section-icon.orange { background-image: linear-gradient(135deg, #fb923c, #ea580c); box-shadow: 0 8px 14px -6px rgba(234,88,12,.5); }
+.section-icon.green { background-image: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 8px 14px -6px rgba(22,163,74,.5); }
 
-.section-icon.red { background: #fef2f2; color: #c1121f; }
-.section-icon.orange { background: #fff4e5; color: #b25e09; }
-.section-icon.green { background: #e7f8ee; color: #0f8a4b; }
-.section-icon.blue { background: #eaf2ff; color: #1c5cc9; }
+.section-title h3 { font-size: 16.5px; font-weight: 800; color: var(--ink); margin: 0; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.section-title .en-title { font-size: 12.5px; font-weight: 500; color: #98a2b3; }
 
-.section-title h3 {
-  font-size: 15.5px;
-  font-weight: 700;
-  color: #191414;
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+/* ═════════ FIELDS ═════════ */
+.health-grid, .donation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 
-.section-title .en-title {
-  font-size: 12px;
-  font-weight: 400;
-  color: #98a2b3;
-}
-
-/* ── FORM FIELDS ── */
-.health-grid, .donation-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.health-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.health-field label {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #475467;
-}
+.health-field { display: flex; flex-direction: column; gap: 7px; }
+.health-field label { font-size: 13px; font-weight: 700; color: #344054; }
 
 .health-field input,
 .health-field select,
 .form-input {
   width: 100%;
-  padding: 11px 14px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 11px;
+  padding: 13px 15px;
+  border: 1.5px solid #e8e2e2;
+  border-radius: 13px;
   font-family: inherit;
-  font-size: 13.5px;
-  color: #191414;
-  background: #fff;
+  font-size: 14px;
+  color: var(--ink);
+  background: #fdfcfc;
   box-sizing: border-box;
-  transition: border-color .2s, box-shadow .2s;
+  transition: all .2s;
 }
 
 .health-field input:focus,
 .health-field select:focus,
-.form-input:focus {
-  outline: none;
-  border-color: #c1121f;
-  box-shadow: 0 0 0 3px rgba(193,18,31,.1);
-}
+.form-input:focus { outline: none; background: #fff; border-color: var(--red); box-shadow: 0 0 0 4px rgba(193,18,31,.1); }
 
-.input-unit-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+.health-field input::placeholder { color: #98a2b3; }
 
-.input-unit-wrapper input {
-  padding-right: 52px;
-}
+.input-unit-wrapper { position: relative; display: flex; align-items: center; }
+.input-unit-wrapper input { padding-right: 62px; }
 
 .input-unit-wrapper .unit {
   position: absolute;
-  right: 14px;
-  font-size: 12px;
-  color: #98a2b3;
-  font-weight: 600;
+  right: 10px;
+  font-size: 11.5px;
+  color: var(--red);
+  font-weight: 800;
+  background: #fef2f2;
+  padding: 3px 9px;
+  border-radius: 100px;
   pointer-events: none;
 }
 
 .select-field {
   cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2398a2b3' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px !important;
 }
 
-/* ── วันที่/เวลา (datetime-local, date) ── */
-.health-field input[type="date"],
-.health-field input[type="datetime-local"],
-.form-input[type="datetime-local"] {
-  cursor: pointer;
-  color-scheme: light; /* กันมือถือบางรุ่นเปลี่ยนเป็น dark mode picker แล้วอ่านไม่ออก */
+.readonly-value {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 13px 15px;
+  border: 1.5px dashed #ead8d8;
+  border-radius: 13px;
+  font-size: 14px;
+  color: #667085;
+  background: #faf7f7;
 }
+
+.section-card > .readonly-value { margin-top: 0; }
+
+.health-field input[type="date"],
+.health-field input[type="time"] { cursor: pointer; color-scheme: light; }
 
 .health-field input[type="date"]::-webkit-calendar-picker-indicator,
-.health-field input[type="datetime-local"]::-webkit-calendar-picker-indicator,
-.form-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+.health-field input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(19%) sepia(84%) saturate(3000%) hue-rotate(345deg) brightness(90%);
   cursor: pointer;
   padding: 4px;
 }
 
-/* ✅ ใหม่: แถววันที่+เวลา แยกกัน 2 ช่อง ใช้งานง่ายกว่า datetime-local ตัวเดียว */
-.datetime-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  max-width: 400px;
-}
+.datetime-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 460px; }
 
 .field-note {
-  font-size: 11px;
-  color: #b25e09;
-  margin: 2px 0 0 0;
-  line-height: 1.5;
-}
-
-/* ── CHECKLIST ── */
-.checklist {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.check-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 16px;
-  background: #f9fafb;
-  border: 1px solid #eaecf0;
-  border-radius: 14px;
-  flex-wrap: wrap;
-}
-
-.check-content {
-  flex: 1;
-  min-width: 220px;
-}
-
-.check-q {
-  font-size: 13.5px;
-  font-weight: 500;
-  color: #191414;
-  margin: 0 0 2px 0;
-  line-height: 1.5;
-}
-
-.check-en {
-  font-size: 11.5px;
-  color: #98a2b3;
-  margin: 0;
-}
-
-.check-btns {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.check-btns button {
-  padding: 8px 18px;
-  border-radius: 10px;
-  border: 1.5px solid #e5e7eb;
-  background: #fff;
-  font-family: inherit;
+  display: block;
   font-size: 12.5px;
   font-weight: 600;
-  color: #475467;
-  cursor: pointer;
-  transition: all .2s;
-}
-
-/* ✅ แก้บั๊ก: เดิม .btn-yes.active แพ้ specificity ของ .check-btns button (Angular เติม
-   attribute selector ให้ทุก compound selector ทำให้ .check-btns button มีน้ำหนักสูงกว่า)
-   เลยกดปุ่มแล้วสีไม่เปลี่ยนทั้งที่ class "active" ถูกเพิ่มเข้าไปแล้วจริงๆ
-   แก้โดยเติม .check-btns นำหน้าเพื่อเพิ่ม specificity ให้ชนะ */
-.check-btns .btn-yes.active {
-  background: #e7f8ee;
-  border-color: #0f8a4b;
-  color: #0f8a4b;
-}
-
-.check-btns .btn-no.active {
-  background: #fef2f2;
-  border-color: #c1121f;
-  color: #c1121f;
-}
-
-.check-btns button:hover { transform: translateY(-1px); }
-
-/* ── NOTES ── */
-.notes-wrapper textarea {
-  width: 100%;
-  padding: 14px;
-  border: 1.5px solid #e5e7eb;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
   border-radius: 12px;
-  font-family: inherit;
-  font-size: 13.5px;
-  color: #191414;
-  resize: vertical;
-  box-sizing: border-box;
-  transition: border-color .2s, box-shadow .2s;
+  padding: 11px 14px;
+  margin-top: 12px !important;
+  margin-bottom: 0;
+  line-height: 1.6;
 }
 
-.notes-wrapper textarea:focus {
-  outline: none;
-  border-color: #c1121f;
-  box-shadow: 0 0 0 3px rgba(193,18,31,.1);
-}
-
-/* ── BOTTOM BAR ── */
+/* ═════════ BOTTOM BAR ═════════ */
 .bottom-bar {
   position: sticky;
-  bottom: 0;
+  bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  background: #fff;
-  border: 1px solid #eaecf0;
-  border-radius: 18px;
-  padding: 16px 22px;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 14px 22px;
   margin-top: 8px;
-  box-shadow: 0 -8px 24px -12px rgba(16, 24, 40, .12);
+  box-shadow: 0 22px 40px -16px rgba(95,17,17,.35);
 }
 
 .status-indicator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #b25e09;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 100px;
 }
 
-.status-indicator .icon { font-size: 19px; }
+.status-indicator .icon { font-size: 20px; }
+.status-indicator.ready { color: #16803c; background: #dcfce7; }
+.status-indicator.not-ready { color: #b45309; background: #fef3c7; }
 
-.status-indicator.ready { color: #0f8a4b; }
-.status-indicator.not-ready { color: #b25e09; }
-
-.bottom-actions {
-  display: flex;
-  gap: 10px;
-}
+.bottom-actions { display: flex; gap: 10px; }
 
 .btn-cancel {
-  padding: 11px 22px;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 14px;
   border: 1.5px solid #e5e7eb;
   background: #fff;
-  color: #475467;
+  color: var(--muted);
   font-family: inherit;
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
@@ -423,74 +276,57 @@
   transition: all .2s;
 }
 
-.btn-cancel:hover {
-  background: #f9fafb;
-  border-color: #d0d5dd;
-}
+.btn-cancel:hover { background: #f8f8f9; }
 
 .btn-confirm {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 11px 24px;
-  background: #c1121f;
+  padding: 12px 28px;
   background-image: linear-gradient(135deg, #d81b2e, #a30f1a);
   color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 10px 22px -8px rgba(193,18,31,.4);
-  transition: all .2s;
+  box-shadow: 0 12px 22px -8px rgba(193,18,31,.55);
+  transition: all .25s;
 }
 
-.btn-confirm .icon { font-size: 17px; }
+.btn-confirm .icon { font-size: 18px; }
+.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 16px 26px -8px rgba(193,18,31,.6); }
 
-.btn-confirm:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 26px -8px rgba(193,18,31,.45);
-}
-
-/* ── RESPONSIVE ── */
+/* ═════════ RESPONSIVE ═════════ */
 @media (max-width: 760px) {
-  .health-grid, .donation-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .health-grid, .donation-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 520px) {
-  .main-content { padding: 20px 16px 90px; }
-  .health-grid, .donation-grid {
-    grid-template-columns: 1fr;
-  }
-  .section-card { padding: 18px; }
+  .main-content { padding: 16px 12px 90px; }
+  .page-header { padding: 22px 18px; border-radius: 22px; }
+  .page-header h2 { font-size: 20px; }
+  .health-grid, .donation-grid { grid-template-columns: 1fr; }
+  .section-title { padding: 16px 18px; }
+  .section-card > :not(.section-title) { margin-left: 18px; margin-right: 18px; }
   .datetime-row { grid-template-columns: 1fr; max-width: 100%; }
   .bottom-bar { flex-direction: column; align-items: stretch; }
-  .bottom-actions { justify-content: stretch; }
+  .status-indicator { justify-content: center; }
   .bottom-actions button, .bottom-actions a { flex: 1; justify-content: center; }
-  .check-btns { width: 100%; }
-  .check-btns button { flex: 1; }
 
-  /* ✅ กัน iOS Safari auto-zoom ตอนแตะ input (เกิดเมื่อ font-size ช่องกรอกเล็กกว่า 16px) */
-  .health-field input,
-  .health-field select,
-  .form-input,
-  .notes-wrapper textarea {
-    font-size: 16px;
-  }
-
-  /* ✅ ปุ่ม/ช่องกรอกบนมือถือ ให้พื้นที่แตะกว้างพอ (แนะนำขั้นต่ำ ~44px ตามหลัก touch target) */
-  .health-field input,
-  .health-field select,
-  .form-input,
-  .check-btns button,
-  .btn-cancel,
-  .btn-confirm {
-    min-height: 46px;
-  }
-
-  .header-top { flex-direction: column; align-items: stretch; }
-  .header-actions .btn-history { width: 100%; justify-content: center; }
+  /* กัน iOS Safari ซูมเองตอนแตะช่องกรอก */
+  .health-field input, .health-field select, .form-input { font-size: 16px; }
+  .health-field input, .health-field select, .form-input, .btn-cancel, .btn-confirm { min-height: 46px; }
 }
+
+
+.blood-select {
+  background-image: none !important;
+  padding: 13px 70px 13px 15px !important;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.input-unit-wrapper .blood-select + .unit { right: 12px; }

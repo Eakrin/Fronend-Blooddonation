@@ -1,13 +1,16 @@
-<div class="news-page">
-
-  <div class="page-header">
-    <span class="tag-badge">
-      <span class="icon">campaign</span>
-      อัปเดตล่าสุด
-    </span>
-    <h1>ข่าวสารและกิจกรรม</h1>
-    <p class="subtitle">ติดตามความเคลื่อนไหว กิจกรรม และประกาศต่างๆ จากศูนย์รับบริจาคโลหิตสุธาเวช</p>
+<!-- HERO -->
+<section class="n-hero">
+  <span class="drop d1"></span>
+  <span class="drop d2"></span>
+  <span class="drop d3"></span>
+  <div class="hero-inner">
+    <span class="hero-badge"><span class="icon">campaign</span> อัปเดตล่าสุด</span>
+    <h1>ข่าวสาร<span>และกิจกรรม</span></h1>
+    <p>ติดตามความเคลื่อนไหว กิจกรรม และประกาศต่างๆ จากศูนย์รับบริจาคโลหิตสุธาเวช</p>
   </div>
+</section>
+
+<div class="news-page">
 
   <!-- Loading -->
   <div class="loading" *ngIf="isLoading">
@@ -15,12 +18,20 @@
     <p>กำลังโหลดข่าวสาร...</p>
   </div>
 
+  <div class="section-head" *ngIf="!isLoading && posts.length > 0">
+    <h2>ประกาศทั้งหมด</h2>
+    <span class="count">{{ posts.length }} รายการ</span>
+  </div>
+
   <!-- News Grid -->
   <div class="news-grid" *ngIf="!isLoading && posts.length > 0">
-    <div class="news-card" *ngFor="let post of posts">
+    <div class="news-card" *ngFor="let post of posts; let i = index"
+         [class.featured]="i === 0 && posts.length > 1" (click)="openPost(post)">
       <div class="news-img-wrap">
-        <img src="/assets/news-placeholder.jpg" [alt]="post.Toppic">
-        <span class="news-cat">ACTIVITY</span>
+        <div class="news-img-bg" *ngIf="post.image" [style.background-image]="'url(' + post.image + ')'"></div>
+        <img [src]="post.image || '/assets/news-placeholder.jpg'" [alt]="post.Toppic" [class.is-poster]="post.image">
+        <span class="news-cat">{{ i === 0 ? 'ล่าสุด' : 'ACTIVITY' }}</span>
+        <span class="news-zoom" *ngIf="post.image"><span class="icon">zoom_in</span> ดูโปสเตอร์</span>
       </div>
       <div class="news-body">
         <p class="news-date" *ngIf="post.Start_time">
@@ -29,6 +40,7 @@
         </p>
         <h3>{{ post.Toppic }}</h3>
         <p class="news-text">{{ post.Text || 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>
+        <span class="read-more">อ่านต่อ <span class="icon">arrow_forward</span></span>
       </div>
     </div>
   </div>
@@ -40,4 +52,26 @@
     <p>โปรดติดตามข่าวสารและกิจกรรมใหม่ๆ จากเราเร็วๆ นี้</p>
   </div>
 
+</div>
+
+<!-- รายละเอียดข่าว / โปสเตอร์ฉบับเต็ม -->
+<div class="post-modal-backdrop" *ngIf="selectedPost" (click)="closePost()">
+  <div class="post-modal" (click)="$event.stopPropagation()">
+    <button class="post-modal-close" (click)="closePost()" aria-label="ปิด">
+      <span class="icon">close</span>
+    </button>
+    <div class="post-modal-media" *ngIf="selectedPost.image">
+      <img [src]="selectedPost.image" [alt]="selectedPost.Toppic" class="post-modal-img">
+    </div>
+    <div class="post-modal-body">
+      <span class="modal-tag">ประกาศ</span>
+      <h3>{{ selectedPost.Toppic }}</h3>
+      <p class="news-date" *ngIf="selectedPost.Start_time">
+        <span class="icon">calendar_today</span>
+        {{ selectedPost.Start_time | date:'d MMMM yyyy' }}
+        <span *ngIf="selectedPost.location"> · <span class="icon">location_on</span> {{ selectedPost.location }}</span>
+      </p>
+      <p class="news-text full">{{ selectedPost.Text || 'ไม่มีรายละเอียดเพิ่มเติม' }}</p>
+    </div>
+  </div>
 </div>

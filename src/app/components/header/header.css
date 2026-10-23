@@ -126,12 +126,12 @@
 .logo:hover { opacity: .9; }
 
 .logo img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 10px;
+  height: 48px;
+  width: auto;
+  flex-shrink: 0;
   background: #fff;
-  padding: 3px;
+  padding: 4px 12px;
+  border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,.15);
 }
 

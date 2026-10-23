@@ -1,83 +1,97 @@
-<section class="contact-section">
-  <div class="contact-container">
-
-    <div class="contact-header">
-      <h1 class="contact-title">ติดต่อเรา</h1>
-      <p class="contact-subtitle">
-        ร่วมสนับสนุนการบริจาคโลหิตเพื่อช่วยชีวิตเพื่อนมนุษย์
-        หากคุณมีข้อสงสัยหรือต้องการสอบถามข้อมูลเพิ่มเติม ทีมงานของเราพร้อมให้บริการ
-      </p>
-    </div>
-
-    <div class="contact-grid">
-
-      <!-- CONTACT INFO -->
-      <div class="contact-info">
-        <h3>ข้อมูลการติดต่อ</h3>
-
-        <div class="info-box">
-          <div class="info-icon"><span class="icon">call</span></div>
-          <div class="info-text">
-            <span>สายด่วน</span>
-            <h4>02-XXX-XXXX</h4>
-            <p>จันทร์ - ศุกร์ 08:30 - 16:30</p>
-          </div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-icon"><span class="icon">mail</span></div>
-          <div class="info-text">
-            <span>อีเมล</span>
-            <h4>contact&#64;suttavet.com</h4>
-            <p>ตอบกลับภายใน 24 ชั่วโมง</p>
-          </div>
-        </div>
-
-        <div class="info-box">
-          <div class="info-icon"><span class="icon">location_on</span></div>
-          <div class="info-text">
-            <span>ที่อยู่</span>
-            <p>123 ถนนสุขุมวิท แขวงคลองตัน<br>เขตคลองเตย กรุงเทพมหานคร 10110</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CONTACT FORM -->
-      <div class="contact-form">
-        <h3>ส่งข้อความถึงเรา</h3>
-
-        <div class="form-row">
-          <input type="text" placeholder="ชื่อของคุณ">
-          <input type="email" placeholder="example@email.com">
-        </div>
-
-        <select>
-          <option>สอบถามการบริจาคโลหิต</option>
-          <option>ข้อเสนอแนะ</option>
-          <option>อื่นๆ</option>
-        </select>
-
-        <textarea placeholder="พิมพ์ข้อความของคุณ" rows="5"></textarea>
-
-        <button class="contact-btn">
-          ส่งข้อความ
-          <span class="icon">arrow_forward</span>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- EMERGENCY -->
-    <div class="emergency-box">
-      <div class="emergency-text">
-        <h4>ต้องการความช่วยเหลือฉุกเฉิน?</h4>
-        <p>สำหรับเหตุเร่งด่วน กรุณาติดต่อสายด่วน สภากาชาดไทย</p>
-      </div>
-      <button class="emergency-btn">
-        <span class="icon">call</span>
-        1664
-      </button>
-    </div>
-
+<!-- HERO -->
+<section class="c-hero">
+  <span class="drop d1"></span>
+  <span class="drop d2"></span>
+  <span class="drop d3"></span>
+  <div class="hero-inner">
+    <span class="hero-badge"><span class="icon">support_agent</span> ติดต่อเรา</span>
+    <h1>มีคำถาม <span>เราพร้อมช่วยเหลือ</span></h1>
+    <p>สอบถามเรื่องการบริจาคโลหิต ข้อเสนอแนะ หรือปัญหาการใช้งานระบบ ทีมงานพร้อมให้บริการ</p>
   </div>
 </section>
+
+<div class="contact-container">
+
+  <!-- ช่องทางติดต่อ -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon"><span class="icon">call</span></div>
+      <span class="label">สายด่วน</span>
+      <h4>02-XXX-XXXX</h4>
+      <p>จันทร์ - ศุกร์ 08:30 - 16:30</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon"><span class="icon">mail</span></div>
+      <span class="label">อีเมล</span>
+      <h4>contact&#64;suttavet.com</h4>
+      <p>ตอบกลับภายใน 24 ชั่วโมง</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon"><span class="icon">location_on</span></div>
+      <span class="label">ที่อยู่</span>
+      <h4>ศูนย์รับบริจาคโลหิตสุธาเวช</h4>
+      <p>123 ถนนสุขุมวิท แขวงคลองตัน เขตคลองเตย กรุงเทพมหานคร 10110</p>
+    </div>
+  </div>
+
+  <!-- ฟอร์ม + ฉุกเฉิน -->
+  <div class="main-grid">
+
+    <form class="contact-form" (ngSubmit)="submit()" #f="ngForm">
+      <h3>ส่งข้อความถึงเรา</h3>
+      <p class="form-sub">กรอกข้อมูลด้านล่าง เราจะติดต่อกลับโดยเร็วที่สุด</p>
+
+      <div class="sent" *ngIf="sent">
+        <span class="icon">check_circle</span>
+        <div><strong>ส่งข้อความเรียบร้อย</strong><p>ขอบคุณที่ติดต่อ เราจะตอบกลับโดยเร็วที่สุด</p></div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>ชื่อของคุณ</label>
+          <input type="text" name="name" [(ngModel)]="form.name" required placeholder="ชื่อ-นามสกุล">
+        </div>
+        <div class="field">
+          <label>อีเมล</label>
+          <input type="email" name="email" [(ngModel)]="form.email" required placeholder="example@email.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>หัวข้อ</label>
+        <select name="topic" [(ngModel)]="form.topic">
+          <option>สอบถามการบริจาคโลหิต</option>
+          <option>ข้อเสนอแนะ</option>
+          <option>ปัญหาการใช้งานระบบ</option>
+          <option>อื่นๆ</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>ข้อความ</label>
+        <textarea name="message" [(ngModel)]="form.message" required rows="5" placeholder="พิมพ์ข้อความของคุณ"></textarea>
+      </div>
+
+      <button type="submit" class="contact-btn" [disabled]="f.invalid">
+        ส่งข้อความ <span class="icon">arrow_forward</span>
+      </button>
+    </form>
+
+    <aside class="side">
+      <div class="emergency-box">
+        <span class="em-icon"><span class="icon">emergency</span></span>
+        <h4>ต้องการความช่วยเหลือฉุกเฉิน?</h4>
+        <p>สำหรับเหตุเร่งด่วน กรุณาติดต่อสายด่วน สภากาชาดไทย</p>
+        <a class="emergency-btn" href="tel:1664"><span class="icon">call</span> 1664</a>
+      </div>
+
+      <div class="tip-box">
+        <h4>ก่อนติดต่อ ลองดูที่นี่</h4>
+        <a routerLink="/donor-guide"><span class="icon">menu_book</span> คู่มือผู้บริจาค <span class="icon go">arrow_forward</span></a>
+        <a routerLink="/location"><span class="icon">location_on</span> สถานที่บริจาค <span class="icon go">arrow_forward</span></a>
+        <a routerLink="/news"><span class="icon">campaign</span> ข่าวสารกิจกรรม <span class="icon go">arrow_forward</span></a>
+      </div>
+    </aside>
+
+  </div>
+</div>

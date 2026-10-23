@@ -1,35 +1,36 @@
 <main class="main-content">
 
-  <header class="content-header">
-    <div class="header-title">
+  <!-- ═════════ BANNER ═════════ -->
+  <header class="page-banner">
+    <span class="deco d1"></span>
+    <span class="deco d2"></span>
+    <div class="banner-inner">
+      <span class="banner-chip"><span class="icon">dashboard</span> Dashboard</span>
       <h2>แผงควบคุมหลัก</h2>
       <p>ภาพรวมการจองคิวบริจาคโลหิตประจำวันของโรงพยาบาลสุทธาเวช</p>
     </div>
   </header>
 
+  <!-- ═════════ KPI ═════════ -->
   <section class="kpi-grid" *ngIf="data">
     <div class="kpi-card">
-      <div class="kpi-header-row">
-        <div class="kpi-icon-box bg-red-light text-red"><span class="icon">group</span></div>
-      </div>
+      <div class="kpi-icon-box"><span class="icon">group</span></div>
       <div class="kpi-body">
         <span class="kpi-label">จำนวนผู้บริจาคทั้งหมด</span>
         <h3 class="kpi-value">{{ data.totalDonors | number }} <small>คน</small></h3>
       </div>
     </div>
+
     <div class="kpi-card">
-      <div class="kpi-header-row">
-        <div class="kpi-icon-box bg-red-light text-red"><span class="icon">calendar_today</span></div>
-      </div>
+      <div class="kpi-icon-box orange"><span class="icon">calendar_today</span></div>
       <div class="kpi-body">
         <span class="kpi-label">การจองวันนี้</span>
         <h3 class="kpi-value">{{ data.todayBookings }} <small>รายการ</small></h3>
       </div>
     </div>
+
     <div class="kpi-card">
-      <div class="kpi-header-row">
-        <div class="kpi-icon-box bg-gray-light text-gray"><span class="icon">cancel</span></div>
-      </div>
+      <div class="kpi-icon-box gray"><span class="icon">cancel</span></div>
       <div class="kpi-body">
         <span class="kpi-label">รายการที่ยกเลิก</span>
         <h3 class="kpi-value">{{ data.cancelledToday }} <small>รายการ</small></h3>
@@ -37,46 +38,63 @@
     </div>
   </section>
 
-  <section class="activity-section">
-    <div class="section-card">
-      <div class="card-header">
+  <!-- ═════════ ACTIVITY ═════════ -->
+  <section class="section-card">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="title-ic"><span class="icon">history</span></span>
         <h3>กิจกรรมล่าสุด</h3>
-        <a href="#" class="link-view-all">ดูทั้งหมด</a>
       </div>
-      <div class="table-responsive">
-        <table class="dashboard-table">
-          <thead>
-            <tr>
-              <th>ชื่อ-นามสกุล</th>
-              <th>เวลานัดหมาย</th>
-              <th>ประเภทเลือด</th>
-              <th>สถานะ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of data?.recentActivity">
-              <td>{{ item.name }}</td>
-              <td class="text-muted">{{ formatTime(item.time) }}</td>
-              <td><span class="blood-badge">{{ item.bloodType }}</span></td>
-              <td><span class="status-badge" [ngClass]="statusClass(item.status)">{{ statusLabel(item.status) }}</span></td>
-            </tr>
-          </tbody>
-        </table>
+      <a href="#" class="link-view-all">ดูทั้งหมด <span class="icon">arrow_forward</span></a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="dashboard-table">
+        <thead>
+          <tr>
+            <th>ชื่อ-นามสกุล</th>
+            <th>เวลานัดหมาย</th>
+            <th>หมู่เลือด</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data?.recentActivity">
+            <td>
+              <div class="person">
+                <span class="avatar">{{ (item.name || '?').charAt(0) }}</span>
+                <span class="person-name">{{ item.name }}</span>
+              </div>
+            </td>
+            <td class="text-muted">{{ formatTime(item.time) }}</td>
+            <td><span class="blood-badge">{{ item.bloodType || '-' }}</span></td>
+            <td><span class="status-badge" [ngClass]="statusClass(item.status)">{{ statusLabel(item.status) }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-row" *ngIf="data && !data.recentActivity?.length">
+        <span class="icon">inbox</span>
+        <p>ยังไม่มีกิจกรรมล่าสุด</p>
       </div>
     </div>
   </section>
 
-  <section class="bottom-grid">
-    <div class="section-card chart-card">
-      <div class="card-header">
+  <!-- ═════════ CHART ═════════ -->
+  <section class="section-card chart-card">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="title-ic"><span class="icon">bar_chart</span></span>
         <h3>สถิติการรับบริจาครายวัน</h3>
       </div>
-      <div class="mock-chart-container">
-        <div class="chart-bars" *ngIf="data">
-          <div class="bar-wrapper" *ngFor="let day of days; let i = index">
-            <div class="bar" [style.height.%]="barHeight(data.weeklyStats[i])"></div>
-            <span>{{ day }}</span>
-          </div>
+    </div>
+
+    <div class="mock-chart-container">
+      <div class="chart-bars" *ngIf="data">
+        <div class="bar-wrapper" *ngFor="let day of days; let i = index">
+          <span class="bar-val">{{ data.weeklyStats[i] }}</span>
+          <div class="bar" [style.height.%]="barHeight(data.weeklyStats[i])"></div>
+          <span class="bar-day">{{ day }}</span>
         </div>
       </div>
     </div>

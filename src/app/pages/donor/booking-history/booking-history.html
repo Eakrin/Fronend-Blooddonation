@@ -1,11 +1,39 @@
+<!-- HERO -->
+<section class="h-hero">
+  <span class="drop d1"></span>
+  <span class="drop d2"></span>
+  <span class="drop d3"></span>
+  <div class="hero-inner">
+    <span class="hero-badge"><span class="icon">history</span> ประวัติของฉัน</span>
+    <h1>ประวัติการบริจาคของฉัน</h1>
+    <p>ติดตามรายการจองคิวบริจาคโลหิตทั้งหมดของคุณ</p>
+  </div>
+</section>
+
 <div class="history-container">
 
-  <div class="page-header">
-    <div>
-      <h1>ประวัติการบริจาคของฉัน</h1>
-      <p class="subtitle">ติดตามรายการจองคิวบริจาคโลหิตทั้งหมดของคุณ</p>
+  <!-- สรุป -->
+  <div class="summary" *ngIf="!isLoading">
+    <div class="sum-item">
+      <span class="sum-ic"><span class="icon">list_alt</span></span>
+      <div><strong>{{ bookings.length }}</strong><small>จองทั้งหมด</small></div>
     </div>
-    <div class="total-badge">ทั้งหมด {{ bookings.length }} รายการ</div>
+    <div class="sum-item ok">
+      <span class="sum-ic"><span class="icon">volunteer_activism</span></span>
+      <div><strong>{{ countOf('success') }}</strong><small>บริจาคสำเร็จ</small></div>
+    </div>
+    <div class="sum-item wait">
+      <span class="sum-ic"><span class="icon">hourglass_empty</span></span>
+      <div><strong>{{ countOf('waiting') }}</strong><small>รอดำเนินการ</small></div>
+    </div>
+  </div>
+
+  <!-- แท็บกรอง -->
+  <div class="filters" *ngIf="!isLoading && bookings.length > 0">
+    <button class="f-btn" [class.active]="filter === 'all'" (click)="filter = 'all'">ทั้งหมด</button>
+    <button class="f-btn" [class.active]="filter === 'success'" (click)="filter = 'success'">บริจาคสำเร็จ</button>
+    <button class="f-btn" [class.active]="filter === 'waiting'" (click)="filter = 'waiting'">รอดำเนินการ</button>
+    <button class="f-btn" [class.active]="filter === 'other'" (click)="filter = 'other'">ยกเลิก / อื่นๆ</button>
   </div>
 
   <!-- Loading -->
@@ -14,18 +42,23 @@
     <p>กำลังโหลด...</p>
   </div>
 
-  <!-- มีประวัติ -->
-  <div class="history-list" *ngIf="!isLoading && bookings.length > 0">
-    <div class="history-card" *ngFor="let b of bookings; let i = index">
-      <div class="history-num">{{ i + 1 }}</div>
-      <div class="history-icon">
-        <span class="icon">water_drop</span>
+  <!-- รายการ -->
+  <div class="history-list" *ngIf="!isLoading && filtered.length > 0">
+    <div class="history-card" *ngFor="let b of filtered" [ngClass]="statusKey(b)">
+
+      <div class="date-block">
+        <strong>{{ b.booking_datetime | date:'d' }}</strong>
+        <small>{{ b.booking_datetime | date:'MMM yy' }}</small>
       </div>
+
       <div class="history-info">
         <p class="history-date">{{ b.booking_datetime | date:'d MMMM yyyy' }}</p>
-        <p class="history-time">เวลา {{ b.booking_datetime | date:'HH:mm' }} น.</p>
-        <p class="history-id">รหัสจอง #{{ b.Booking_ID }}</p>
+        <p class="history-meta">
+          <span><span class="icon">schedule</span> {{ b.booking_datetime | date:'HH:mm' }} น.</span>
+          <span><span class="icon">tag</span> รหัสจอง #{{ b.Booking_ID }}</span>
+        </p>
       </div>
+
       <div class="history-right">
         <div class="history-status" [ngClass]="statusKey(b)">
           <span class="icon">{{ getStatusIcon(b) }}</span>
@@ -36,6 +69,12 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- กรองแล้วไม่พบ -->
+  <div class="empty-state small" *ngIf="!isLoading && bookings.length > 0 && filtered.length === 0">
+    <span class="icon">search_off</span>
+    <h3>ไม่พบรายการในหมวดนี้</h3>
   </div>
 
   <!-- ไม่มีประวัติ -->

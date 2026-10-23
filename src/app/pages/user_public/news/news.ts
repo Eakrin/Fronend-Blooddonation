@@ -12,6 +12,7 @@ import { environment } from '../../../../environments/environment';
 export class News implements OnInit {
   posts: any[] = [];
   isLoading = true;
+  selectedPost: any = null; // ประกาศที่กดเปิดดู (โปสเตอร์ฉบับเต็ม)
 
   constructor(private http: HttpClient) {}
 
@@ -31,5 +32,13 @@ export class News implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  openPost(post: any) {
+    this.selectedPost = post;
+  }
+
+  closePost() {
+    this.selectedPost = null;
   }
 }

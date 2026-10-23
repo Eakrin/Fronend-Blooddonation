@@ -84,11 +84,12 @@ export class Location implements OnInit {
   }
 
   get filteredLocations() {
-    if (!this.searchText) return this.locations;
-    return this.locations.filter(
-      (l) =>
-        l.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        (l.address || '').toLowerCase().includes(this.searchText.toLowerCase()),
+    const q = (this.searchText || '').trim().toLowerCase();
+    if (!q) return this.locations;
+    return this.locations.filter((l) =>
+      [l.name, l.address, l.phone, l.email]
+        .map((v) => (v || '').toString().toLowerCase())
+        .some((v) => v.includes(q)),
     );
   }
 

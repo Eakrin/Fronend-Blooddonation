@@ -5,6 +5,14 @@ import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
+interface LocationGroup {
+  name: string;
+  total: number;
+  pending: number;
+  approved: number;
+  overdue: number;
+}
+
 @Component({
   selector: 'app-home-staff',
   standalone: true,
@@ -20,9 +28,19 @@ export class HomeStaff implements OnInit {
   filterDate = ''; // รูปแบบ yyyy-MM-dd
   isLoading = false;
 
+  // สถานที่ที่เลือกดูอยู่ (null = หน้าเลือกสถานที่)
+  selectedLocation: string | null = null;
+  locationSearch = '';
+
   // แบ่งหน้า: รองรับกรณีมีผู้จองจำนวนมาก
   page = 1;
   readonly pageSize = 10;
+
+  // ── หน้าต่างดูคำตอบแบบประเมิน ──
+  answersOpen = false;
+  answersLoading = false;
+  answersBooking: any = null;
+  answersData: any = null;
 
   constructor(private http: HttpClient) {}
 
@@ -46,6 +64,54 @@ export class HomeStaff implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  // ── แยกตามสถานที่ ──
+  locationOf(b: any): string {
+    return b.location_name || 'ไม่ระบุสถานที่';
+  }
+
+  // รายการจองในขอบเขตที่เลือกอยู่ (ทุกสถานที่ หรือเฉพาะสถานที่ที่เลือก)
+  get scoped(): any[] {
+    if (!this.selectedLocation) return this.bookings;
+    return this.bookings.filter(
+      (b) => this.locationOf(b) === this.selectedLocation,
+    );
+  }
+
+  // การ์ดสถานที่ (เรียงสถานที่ที่มีงานค้างขึ้นก่อน)
+  get locationGroups(): LocationGroup[] {
+    const map = new Map<string, LocationGroup>();
+    for (const b of this.bookings) {
+      const name = this.locationOf(b);
+      if (!map.has(name)) {
+        map.set(name, { name, total: 0, pending: 0, approved: 0, overdue: 0 });
+      }
+      const g = map.get(name)!;
+      if (b.booking_status !== 'cancelled') g.total++;
+      if (b.booking_status === 'pending') g.pending++;
+      if (b.booking_status === 'approved') g.approved++;
+      if (this.isOverdue(b)) g.overdue++;
+    }
+    const q = this.locationSearch.trim().toLowerCase();
+    return Array.from(map.values())
+      .filter((g) => !q || g.name.toLowerCase().includes(q))
+      .sort(
+        (a, b) =>
+          b.overdue - a.overdue ||
+          b.pending - a.pending ||
+          a.name.localeCompare(b.name, 'th'),
+      );
+  }
+
+  selectLocation(name: string) {
+    this.selectedLocation = name;
+    this.clearFilters();
+  }
+
+  backToLocations() {
+    this.selectedLocation = null;
+    this.clearFilters();
   }
 
   // วันที่ (ตามเวลาท้องถิ่น) ในรูปแบบ yyyy-MM-dd ใช้เทียบกับตัวกรองวันที่
@@ -76,7 +142,7 @@ export class HomeStaff implements OnInit {
 
   // รายการที่ผ่านตัวกรองทั้งหมด (เรียงรายการที่ต้องลงมือขึ้นก่อน แล้วเรียงตามวันที่จองใหม่ -> เก่า)
   get filteredBookings() {
-    const list = this.bookings.filter((b) => {
+    const list = this.scoped.filter((b) => {
       const matchSearch =
         !this.searchText ||
         `${b.name} ${b.lastname}`
@@ -151,9 +217,9 @@ export class HomeStaff implements OnInit {
     if (this.currentPage < this.totalPages) this.page = this.currentPage + 1;
   }
 
-  // จำนวนในแต่ละแท็บ (นับตามการค้นหา/วันที่ปัจจุบัน)
+  // จำนวนในแต่ละแท็บ (นับตามสถานที่ที่เลือก การค้นหา และวันที่ปัจจุบัน)
   countTab(tab: string): number {
-    return this.bookings.filter((b) => {
+    return this.scoped.filter((b) => {
       const matchSearch =
         !this.searchText ||
         `${b.name} ${b.lastname}`
@@ -183,6 +249,58 @@ export class HomeStaff implements OnInit {
           alert(err.error?.message || 'เกิดข้อผิดพลาด');
         },
       });
+  }
+
+  // ── ดูคำตอบแบบประเมินรายข้อ ──
+  openAnswers(b: any) {
+    this.answersBooking = b;
+    this.answersData = null;
+    this.answersLoading = true;
+    this.answersOpen = true;
+
+    const token = localStorage.getItem('token');
+    this.http
+      .get(
+        `${environment.apiUrl}/api/health-assessment/by-booking/${b.Booking_ID}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.answersData = res;
+          this.answersLoading = false;
+        },
+        error: () => {
+          this.answersLoading = false;
+          this.answersData = null;
+        },
+      });
+  }
+
+  closeAnswers() {
+    this.answersOpen = false;
+    this.answersBooking = null;
+    this.answersData = null;
+  }
+
+  // ข้อที่ตอบไม่เข้าเกณฑ์ (ต้องให้เจ้าหน้าที่พิจารณา)
+  get riskyAnswers(): any[] {
+    return (this.answersData?.answers || []).filter((a: any) => a.risky);
+  }
+
+  // ข้อที่ตอบเข้าเกณฑ์
+  get okAnswers(): any[] {
+    return (this.answersData?.answers || []).filter((a: any) => !a.risky);
+  }
+
+  answerLabel(v: boolean | null): string {
+    return v === true ? 'ใช่' : v === false ? 'ไม่ใช่' : '-';
+  }
+
+  // อนุมัติ/ปฏิเสธจากในหน้าต่างดูคำตอบ
+  decideFromModal(status: string) {
+    if (!this.answersBooking) return;
+    this.updateStatus(this.answersBooking.Booking_ID, status);
+    this.closeAnswers();
   }
 
   getStatusLabel(status: string): string {
@@ -226,8 +344,9 @@ export class HomeStaff implements OnInit {
     return this.isWaitingReview(b) && this.getWaitHours(b) >= 24;
   }
 
+  // จำนวนเกิน 24 ชม. ในขอบเขตที่เลือกอยู่
   get overdueCount(): number {
-    return this.bookings.filter((b) => this.isOverdue(b)).length;
+    return this.scoped.filter((b) => this.isOverdue(b)).length;
   }
 
   // ช่วงเวลาที่จอง เช่น "09:30 - 15:00" (ขอบเขต 1.3.2.4)
@@ -247,15 +366,16 @@ export class HomeStaff implements OnInit {
     return `${name?.charAt(0) || ''}${lastname?.charAt(0) || ''}`;
   }
 
+  // ตัวเลขสรุปด้านบน: ถ้าเลือกสถานที่อยู่จะนับเฉพาะสถานที่นั้น
   get totalToday(): number {
-    return this.bookings.filter((b) => b.booking_status !== 'cancelled').length;
+    return this.scoped.filter((b) => b.booking_status !== 'cancelled').length;
   }
 
   get totalApproved(): number {
-    return this.bookings.filter((b) => b.booking_status === 'approved').length;
+    return this.scoped.filter((b) => b.booking_status === 'approved').length;
   }
 
   get totalPending(): number {
-    return this.bookings.filter((b) => b.booking_status === 'pending').length;
+    return this.scoped.filter((b) => b.booking_status === 'pending').length;
   }
 }

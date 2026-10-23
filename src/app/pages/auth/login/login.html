@@ -1,108 +1,100 @@
 <div class="login-container">
 
-  <div class="left">
-    <div class="welcome">
+  <div class="login-card">
 
-      <span class="badge">
-        <span class="icon">opacity</span>
-        โครงการบริจาคโลหิตออนไลน์
-      </span>
+    <!-- ซ้าย: ข้อความต้อนรับ -->
+    <div class="left">
+      <span class="drop d1"></span>
+      <span class="drop d2"></span>
+      <span class="drop d3"></span>
 
-      <h1>
-        ยินดีต้อนรับสู่ <br>
-        <span>สุทธาเวช Blood Center</span>
-      </h1>
+      <div class="welcome">
+        <span class="badge"><span class="icon">opacity</span> โครงการบริจาคโลหิตออนไลน์</span>
 
-      <p class="desc">
-        การบริจาคของคุณช่วยต่อชีวิตผู้ป่วย <br>
-        มาร่วมเป็นส่วนหนึ่งในการให้ที่ยิ่งใหญ่
-      </p>
+        <h1>
+          ยินดีต้อนรับสู่
+          <span>สุทธาเวช Blood Center</span>
+        </h1>
 
-      <div class="stats">
-        <div class="box">
-          <h3>1,200+</h3>
-          <p>ผู้บริจาคเดือนนี้</p>
+        <p class="desc">การบริจาคของคุณช่วยต่อชีวิตผู้ป่วย มาร่วมเป็นส่วนหนึ่งในการให้ที่ยิ่งใหญ่</p>
+
+        <div class="features">
+          <div class="feature-item">
+            <div class="feature-icon"><span class="icon">verified_user</span></div>
+            <div><strong>จองคิวออนไลน์ปลอดภัย</strong><small>เลือกวัน เวลา และสถานที่ได้เอง</small></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><span class="icon">notifications</span></div>
+            <div><strong>แจ้งเตือนนัดหมายอัตโนมัติ</strong><small>ไม่พลาดวันบริจาค</small></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon"><span class="icon">history</span></div>
+            <div><strong>ติดตามประวัติการบริจาค</strong><small>ดูย้อนหลังได้ทันที</small></div>
+          </div>
         </div>
-        <div class="box">
-          <h3>24/7</h3>
-          <p>จองคิวได้ตลอดเวลา</p>
-        </div>
-      </div>
 
-      <div class="features">
-        <div class="feature-item" style="animation-delay: .05s">
-          <div class="feature-icon"><span class="icon">verified</span></div>
-          <span>ระบบจองคิวออนไลน์ที่ปลอดภัย</span>
-        </div>
-        <div class="feature-item" style="animation-delay: .15s">
-          <div class="feature-icon"><span class="icon">notifications</span></div>
-          <span>แจ้งเตือนนัดหมายอัตโนมัติ</span>
-        </div>
-        <div class="feature-item" style="animation-delay: .25s">
-          <div class="feature-icon"><span class="icon">history</span></div>
-          <span>ติดตามประวัติการบริจาคได้ทันที</span>
+        <div class="stats">
+          <div class="box"><h3>24/7</h3><p>จองคิวได้ตลอดเวลา</p></div>
+          <div class="box"><h3>3 เดือน</h3><p>บริจาคได้ทุกๆ ครั้ง</p></div>
         </div>
       </div>
-
-      <img src="assets/blood.png" class="blood-img" alt="Blood Donation">
-
     </div>
-  </div>
 
-  <div class="v-divider"></div>
+    <!-- ขวา: ฟอร์ม -->
+    <div class="right">
+      <div class="login-box">
 
-  <div class="right">
-    <div class="login-box">
-
-      <div class="logo-area">
-        <div class="logo-circle"><span class="icon">opacity</span></div>
-        <h2>เข้าสู่ระบบ</h2>
-        <p class="sub">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
-      </div>
-
-      <div class="input-group">
-        <label class="input-label">อีเมล</label>
-        <div class="input-wrapper">
-          <span class="icon input-icon">mail</span>
-          <input type="email" placeholder="example@email.com" [(ngModel)]="email">
+        <div class="logo-area">
+          <div class="logo-circle"><span class="icon">opacity</span></div>
+          <h2>เข้าสู่ระบบ</h2>
+          <p class="sub">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
         </div>
-      </div>
 
-      <div class="input-group">
-        <label class="input-label">รหัสผ่าน</label>
-        <div class="input-wrapper">
-          <span class="icon input-icon">lock</span>
-          <input type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password">
+        <div class="input-group">
+          <label class="input-label">อีเมล</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">mail</span>
+            <input type="email" placeholder="example@email.com" [(ngModel)]="email" (keyup.enter)="login()">
+          </div>
         </div>
+
+        <div class="input-group">
+          <label class="input-label">รหัสผ่าน</label>
+          <div class="input-wrapper">
+            <span class="icon input-icon">lock</span>
+            <input #pw type="password" placeholder="อย่างน้อย 8 ตัวอักษร" [(ngModel)]="password" (keyup.enter)="login()">
+            <button type="button" class="eye" (click)="pw.type = pw.type === 'password' ? 'text' : 'password'" aria-label="แสดง/ซ่อนรหัสผ่าน">
+              <span class="icon">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="forgot"><a href="#">ลืมรหัสผ่าน?</a></div>
+
+        <button class="login-btn" (click)="login()">
+          <span>เข้าสู่ระบบ</span>
+          <span class="icon">arrow_forward</span>
+        </button>
+
+        <div class="divider"><span>หรือ</span></div>
+
+        <button class="google-btn" (click)="loginWithGoogle()" [disabled]="isGoogleLoading">
+          <svg class="google-logo" width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          {{ isGoogleLoading ? 'กำลังเชื่อมต่อ...' : 'Continue with Google' }}
+        </button>
+
+        <p class="register">
+          ยังไม่มีบัญชี?
+          <span routerLink="/register">สมัครสมาชิก</span>
+        </p>
+
       </div>
-
-      <div class="forgot">
-        <a href="#">ลืมรหัสผ่าน?</a>
-      </div>
-
-      <button class="login-btn" (click)="login()">
-        <span>เข้าสู่ระบบ</span>
-        <span class="icon">arrow_forward</span>
-      </button>
-
-      <div class="divider"><span>หรือ</span></div>
-
-      <button class="google-btn" (click)="loginWithGoogle()" [disabled]="isGoogleLoading">
-                <svg class="google-logo" width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
-          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-        </svg>
-        {{ isGoogleLoading ? 'กำลังเชื่อมต่อ...' : 'Continue with Google' }}
-      </button>
-
-      <p class="register">
-        ยังไม่มีบัญชี?
-        <span routerLink="/register">สมัครสมาชิก</span>
-      </p>
-
     </div>
-  </div>
 
+  </div>
 </div>

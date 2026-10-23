@@ -5,6 +5,7 @@ import { Location } from './pages/user_public/location/location';
 import { Contact } from './pages/user_public/contact/contact';
 import { DonationProcess } from './pages/user_public/donation-process/donation-process';
 import { News } from './pages/user_public/news/news';
+import { DonorGuide } from './pages/user_public/donor-guide/donor-guide';
 
 import { Login } from './pages/auth/login/login';
 import { Register } from './pages/auth/register/register';
@@ -31,7 +32,9 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'location', component: Location },
   { path: 'news', component: News },
+  { path: 'donation-process', component: DonationProcess },
   { path: 'contact', component: Contact },
+  { path: 'donor-guide', component: DonorGuide },
 
   { path: 'login', component: Login },
   { path: 'register', component: Register },

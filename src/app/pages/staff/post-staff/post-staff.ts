@@ -27,6 +27,12 @@ export class PostStaff implements OnInit {
   donationDays: any[] = [];
   editingId: number | null = null;
 
+  // ── รูปโปสเตอร์ (อัปโหลดขึ้น Cloudinary ผ่าน backend ระบบจะตัด/ย่อเป็น 1600x640 ให้เอง) ──
+  imageFile: File | null = null; // ไฟล์ใหม่ที่เลือก
+  imagePreview = ''; // ภาพตัวอย่าง (ไฟล์ใหม่ หรือรูปเดิมตอนแก้ไข)
+  removeImage = false; // กดลบรูปเดิมตอนแก้ไข
+  readonly maxImageMB = 10;
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
@@ -49,6 +55,41 @@ export class PostStaff implements OnInit {
     this.endTime = String(s.End_time).slice(0, 5);
     this.locationId = s.Location_ID;
     this.donationDayId = s.DonationD_ID;
+  }
+
+  // เลือกไฟล์รูป: เช็กชนิดและขนาด แล้วทำภาพตัวอย่าง
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files[0];
+    if (!file) return;
+
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      this.errorMsg = 'รองรับเฉพาะไฟล์ JPG, PNG หรือ WEBP';
+      input.value = '';
+      return;
+    }
+    if (file.size > this.maxImageMB * 1024 * 1024) {
+      this.errorMsg = `ไฟล์รูปต้องไม่เกิน ${this.maxImageMB} MB`;
+      input.value = '';
+      return;
+    }
+
+    this.errorMsg = '';
+    this.imageFile = file;
+    this.removeImage = false;
+
+    const reader = new FileReader();
+    reader.onload = () => (this.imagePreview = String(reader.result));
+    reader.readAsDataURL(file);
+  }
+
+  // ลบรูป (ทั้งไฟล์ที่เพิ่งเลือก และรูปเดิมที่เคยบันทึกไว้)
+  clearImage(fileInput?: HTMLInputElement) {
+    this.imageFile = null;
+    this.imagePreview = '';
+    this.removeImage = true;
+    if (fileInput) fileInput.value = '';
   }
 
   loadDonationDays() {
@@ -104,13 +145,15 @@ export class PostStaff implements OnInit {
     this.isLoading = true;
     this.errorMsg = '';
 
-    const data = {
-      Toppic: this.topic,
-      Text: this.text,
-      DonationD_ID: this.donationDayId,
-      Start_time: `${this.donationDate} ${this.startTime}`,
-      End_time: `${this.donationDate} ${this.endTime}`,
-    };
+    // ส่งเป็น FormData เพราะมีไฟล์รูปแนบไปด้วย (browser จะตั้ง Content-Type ให้เอง)
+    const data = new FormData();
+    data.append('Toppic', this.topic);
+    data.append('Text', this.text || '');
+    data.append('DonationD_ID', String(this.donationDayId));
+    data.append('Start_time', `${this.donationDate} ${this.startTime}`);
+    data.append('End_time', `${this.donationDate} ${this.endTime}`);
+    if (this.imageFile) data.append('image', this.imageFile);
+    if (this.removeImage && !this.imageFile) data.append('remove_image', '1');
 
     const req = this.editingId
       ? this.http.put(
@@ -152,6 +195,11 @@ export class PostStaff implements OnInit {
     this.startTime = start.toTimeString().slice(0, 5);
     this.endTime = end.toTimeString().slice(0, 5);
 
+    // แสดงรูปเดิมของประกาศนี้ (ถ้ามี) ไม่แนบไฟล์ใหม่ = คงรูปเดิม
+    this.imageFile = null;
+    this.removeImage = false;
+    this.imagePreview = post.image || '';
+
     // เลือกช่วงรับบริจาคเดิมใน dropdown
     const match = this.donationDays.find(
       (d) =>
@@ -184,5 +232,8 @@ export class PostStaff implements OnInit {
     this.text = '';
     this.editingId = null;
     this.errorMsg = '';
+    this.imageFile = null;
+    this.imagePreview = '';
+    this.removeImage = false;
   }
 }

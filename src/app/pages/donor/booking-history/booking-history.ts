@@ -15,6 +15,9 @@ export class BookingHistory implements OnInit {
   bookings: any[] = [];
   isLoading = true;
 
+  // ตัวกรองรายการ: all = ทั้งหมด, success = บริจาคสำเร็จ, waiting = รอดำเนินการ, other = ยกเลิก/อื่นๆ
+  filter: 'all' | 'success' | 'waiting' | 'other' = 'all';
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
@@ -36,6 +39,23 @@ export class BookingHistory implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  // จัดกลุ่มสถานะเพื่อใช้กับตัวกรองและตัวเลขสรุป
+  private group(b: any): 'success' | 'waiting' | 'other' {
+    const key = this.statusKey(b);
+    if (key === 'completed') return 'success';
+    if (key === 'pending' || key === 'approved') return 'waiting';
+    return 'other';
+  }
+
+  countOf(g: 'success' | 'waiting' | 'other'): number {
+    return this.bookings.filter((b) => this.group(b) === g).length;
+  }
+
+  get filtered(): any[] {
+    if (this.filter === 'all') return this.bookings;
+    return this.bookings.filter((b) => this.group(b) === this.filter);
   }
 
   cancelBooking(bookingId: number) {

@@ -26,7 +26,6 @@ export class RecordStaff implements OnInit {
   locationName: string | null = null;
   isLoadingDonor = true;
 
-  // ตาม ER: ผู้บริจาคเป็นคนตอบแบบประเมินเอง เจ้าหน้าที่ดูผลอย่างเดียว (Health_Assessment ล่าสุดของผู้บริจาค)
   assessmentResult: string | null = null;
   assessmentDate: string | null = null;
 
@@ -50,6 +49,7 @@ export class RecordStaff implements OnInit {
   height: number | null = null;
   weight: number | null = null;
   bloodVolume: number | null = null;
+  bloodType = ''; // ✅ ใหม่: หมู่เลือด (เติมจากข้อมูลผู้บริจาคให้ก่อน แก้ได้)
 
   donationStatus: 'completed' | 'deferred' | 'incomplete' = 'completed';
 
@@ -92,6 +92,10 @@ export class RecordStaff implements OnInit {
             age: res.age,
             blood_type: res.blood_type || '',
           };
+          this.bloodType = res.blood_type || ''; // ✅ ใหม่
+          // ✅ ใหม่: เติมส่วนสูง/น้ำหนักที่ผู้บริจาคกรอกไว้ให้ก่อน เจ้าหน้าที่แก้เป็นค่าที่วัดจริงได้
+          this.height = res.height ? Number(res.height) : null;
+          this.weight = res.weight ? Number(res.weight) : null;
           this.locationName = res.location_name;
           this.assessmentResult = res.assessment_result;
           this.assessmentDate = res.assessment_date
@@ -152,7 +156,6 @@ export class RecordStaff implements OnInit {
 
     const token = localStorage.getItem('token');
 
-    // เจ้าหน้าที่บันทึกเฉพาะส่วนของเจ้าหน้าที่ (Donation_Record) ไม่ส่งผลประเมินอีก
     const payload = {
       bookingId: this.bookingId,
       donation_datetime: `${this.serviceDate} ${this.serviceTime}:00`,
@@ -163,6 +166,7 @@ export class RecordStaff implements OnInit {
       blood_volume: this.bloodVolume,
       height: this.height,
       weight: this.weight,
+      blood_type: this.bloodType || null, // ✅ ใหม่
       donationTypeId: this.donationTypeId,
     };
 

@@ -1,15 +1,29 @@
 <main class="main-content">
 
-  <header class="content-header">
-    <div class="search-box">
-      <span class="icon search-icon">search</span>
-      <input type="text" placeholder="ค้นหาชื่อ, อีเมล...">
+  <!-- ═════════ BANNER ═════════ -->
+  <header class="page-banner">
+    <span class="deco d1"></span>
+    <span class="deco d2"></span>
+    <div class="banner-inner">
+      <div class="banner-text">
+        <span class="banner-chip"><span class="icon">badge</span> Staff Management</span>
+        <h2>จัดการเจ้าหน้าที่</h2>
+        <p>เพิ่ม แก้ไข และระงับการใช้งานบัญชีเจ้าหน้าที่และผู้ดูแลระบบ</p>
+      </div>
+
+      <div class="banner-actions">
+        <div class="search-box">
+          <span class="icon search-icon">search</span>
+          <input type="text" placeholder="ค้นหาชื่อ, อีเมล...">
+        </div>
+        <button class="btn-primary" (click)="openModal()">
+          <span class="icon">add</span> เพิ่มเจ้าหน้าที่
+        </button>
+      </div>
     </div>
-    <button class="btn-primary" (click)="openModal()">
-      <span class="icon">add</span> เพิ่มเจ้าหน้าที่
-    </button>
   </header>
 
+  <!-- ═════════ KPI ═════════ -->
   <section class="kpi-grid">
     <div class="kpi-card total">
       <div class="kpi-icon-wrapper"><span class="icon">badge</span></div>
@@ -22,109 +36,130 @@
       <div class="kpi-icon-wrapper"><span class="icon">check_circle</span></div>
       <div class="kpi-info">
         <span class="kpi-label">กำลังใช้งาน</span>
-        <h2 class="kpi-value text-success">{{ activeCount }} <small>คน</small></h2>
+        <h2 class="kpi-value">{{ activeCount }} <small>คน</small></h2>
       </div>
     </div>
     <div class="kpi-card suspended">
       <div class="kpi-icon-wrapper"><span class="icon">block</span></div>
       <div class="kpi-info">
         <span class="kpi-label">ระงับการใช้งาน</span>
-        <h2 class="kpi-value text-warning">{{ suspendedCount }} <small>คน</small></h2>
+        <h2 class="kpi-value">{{ suspendedCount }} <small>คน</small></h2>
       </div>
     </div>
   </section>
 
+  <!-- ═════════ เจ้าหน้าที่ ═════════ -->
   <section class="table-container">
-  <div class="card-header" style="padding: 16px 20px 0;">
-    <h3>เจ้าหน้าที่</h3>
-  </div>
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>ชื่อ-นามสกุล</th>
-        <th>อีเมล</th>
-        <th>บทบาท</th>
-        <th>สถานะ</th>
-        <th class="text-center">จัดการ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let staff of staffList">
-        <td>
-          <div class="user-profile">
-            <div class="avatar av-1">{{ staff.name?.charAt(0) }}</div>
-            <span class="user-name">{{ staff.name }} {{ staff.lastname }}</span>
-          </div>
-        </td>
-        <td class="text-muted">{{ staff.email }}</td>
-        <td class="text-muted">{{ staff.role }}</td>
-        <td>
-          <span class="badge"
-            [class.badge-success]="staff.status === 'active'"
-            [class.badge-suspended]="staff.status === 'suspended'">
-            {{ staff.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
-          </span>
-        </td>
-        <td>
-          <div class="action-buttons">
-            <button class="btn-icon edit-btn" (click)="openEditModal(staff)">
-              <span class="icon">edit</span>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <footer class="table-footer">
-    <span class="entry-info">ทั้งหมด {{ staffList.length }} รายการ</span>
-  </footer>
-</section>
+    <div class="card-header">
+      <div class="card-title">
+        <span class="title-ic"><span class="icon">groups</span></span>
+        <h3>เจ้าหน้าที่</h3>
+      </div>
+      <span class="count-pill">{{ staffList.length }} คน</span>
+    </div>
 
-<section class="table-container">
-  <div class="card-header" style="padding: 16px 20px 0;">
-    <h3>ผู้ดูแลระบบ</h3>
-  </div>
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th>ชื่อ</th>
-        <th>อีเมล</th>
-        <th>บทบาท</th>
-        <th>สถานะ</th>
-        <th class="text-center">จัดการ</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let admin of adminList">
-        <td>
-          <div class="user-profile">
-            <div class="avatar av-1">{{ admin.name?.charAt(0) }}</div>
-            <span class="user-name">{{ admin.name }}</span>
-          </div>
-        </td>
-        <td class="text-muted">{{ admin.email }}</td>
-        <td class="text-muted">ผู้ดูแลระบบ</td>
-        <td>
-          <span class="badge"
-            [class.badge-success]="admin.status === 'active'"
-            [class.badge-suspended]="admin.status === 'suspended'">
-            {{ admin.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
-          </span>
-        </td>
-        <td>
-          <div class="action-buttons">
-            <button class="btn-icon edit-btn" (click)="toggleAdminStatus(admin)">
-              <span class="icon">{{ admin.status === 'active' ? 'block' : 'check_circle' }}</span>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <footer class="table-footer">
-    <span class="entry-info">ทั้งหมด {{ adminList.length }} รายการ</span>
-  </footer>
-</section>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ชื่อ-นามสกุล</th>
+            <th>อีเมล</th>
+            <th>บทบาท</th>
+            <th>สถานะ</th>
+            <th class="text-center">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let staff of staffList">
+            <td>
+              <div class="user-profile">
+                <div class="avatar">{{ staff.name?.charAt(0) }}</div>
+                <span class="user-name">{{ staff.name }} {{ staff.lastname }}</span>
+              </div>
+            </td>
+            <td class="text-muted">{{ staff.email }}</td>
+            <td><span class="role-pill">{{ staff.role }}</span></td>
+            <td>
+              <span class="badge"
+                [class.badge-success]="staff.status === 'active'"
+                [class.badge-suspended]="staff.status === 'suspended'">
+                <span class="dot"></span>
+                {{ staff.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon edit-btn" (click)="openEditModal(staff)" title="แก้ไข">
+                  <span class="icon">edit</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="table-footer">
+      <span class="entry-info">ทั้งหมด {{ staffList.length }} รายการ</span>
+    </footer>
+  </section>
+
+  <!-- ═════════ ผู้ดูแลระบบ ═════════ -->
+  <section class="table-container">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="title-ic"><span class="icon">admin_panel_settings</span></span>
+        <h3>ผู้ดูแลระบบ</h3>
+      </div>
+      <span class="count-pill">{{ adminList.length }} คน</span>
+    </div>
+
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ชื่อ</th>
+            <th>อีเมล</th>
+            <th>บทบาท</th>
+            <th>สถานะ</th>
+            <th class="text-center">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let admin of adminList">
+            <td>
+              <div class="user-profile">
+                <div class="avatar">{{ admin.name?.charAt(0) }}</div>
+                <span class="user-name">{{ admin.name }}</span>
+              </div>
+            </td>
+            <td class="text-muted">{{ admin.email }}</td>
+            <td><span class="role-pill dark">ผู้ดูแลระบบ</span></td>
+            <td>
+              <span class="badge"
+                [class.badge-success]="admin.status === 'active'"
+                [class.badge-suspended]="admin.status === 'suspended'">
+                <span class="dot"></span>
+                {{ admin.status === 'active' ? 'กำลังใช้งาน' : 'ระงับการใช้งาน' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon edit-btn" (click)="toggleAdminStatus(admin)"
+                  [title]="admin.status === 'active' ? 'ระงับการใช้งาน' : 'เปิดใช้งาน'">
+                  <span class="icon">{{ admin.status === 'active' ? 'block' : 'check_circle' }}</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="table-footer">
+      <span class="entry-info">ทั้งหมด {{ adminList.length }} รายการ</span>
+    </footer>
+  </section>
 
   <footer class="app-footer">
     © 2026 โรงพยาบาลสุทธาเวช - ระบบบริหารจัดการเจ้าหน้าที่และคิวบริจาคโลหิต
@@ -132,10 +167,11 @@
 
 </main>
 
-<!-- Create Modal -->
+<!-- ═════════ Create Modal ═════════ -->
 <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()">
   <div class="modal-card" (click)="$event.stopPropagation()">
     <div class="modal-header">
+      <span class="deco d1"></span>
       <div class="modal-title-group">
         <div class="modal-icon"><span class="icon">person_add</span></div>
         <div>
@@ -209,10 +245,11 @@
   </div>
 </div>
 
-<!-- Edit Modal -->
+<!-- ═════════ Edit Modal ═════════ -->
 <div class="modal-backdrop" *ngIf="isEditModalOpen" (click)="closeEditModal()">
   <div class="modal-card" (click)="$event.stopPropagation()">
     <div class="modal-header">
+      <span class="deco d1"></span>
       <div class="modal-title-group">
         <div class="modal-icon"><span class="icon">manage_accounts</span></div>
         <div>
